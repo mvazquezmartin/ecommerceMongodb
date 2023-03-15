@@ -9,21 +9,37 @@ class ProductManager {
 
   async addProduct(item) {
     try {
-      const { title, description, price, thumbnail, code, stock } = item;
-      if (!title || !description || !price || !thumbnail || !code || !stock) {
-        console.log("Todos los campos son necesarios.");
+      if (!item) {
+        console.log("El objeto enviado es undefined.");
         return;
       }
-      if (this.uniqueCode(code)) return;
-      const newProduct = {
-        id: this.idCounter,
+      const {
         title,
         description,
         price,
         thumbnail,
         code,
         stock,
+        status = true,
+      } = item;
+      if (!title || !description || !price || !thumbnail || !code || !stock) {
+        console.log("Todos los campos son necesarios.");
+        return;
+      }
+      if (this.uniqueCode(code)) return;
+      const lastProduct = await this.getLastProduct();
+      const lastId = lastProduct ? lastProduct.id + 1 : 1;
+      const newProduct = {
+        id: lastId,
+        title,
+        description,
+        price,
+        thumbnail,
+        code,
+        stock,
+        status,
       };
+      await this.readFile();
       this.products.push(newProduct);
       this.idCounter++;
       await this.saveFile();
@@ -35,7 +51,10 @@ class ProductManager {
   async getProducts() {
     try {
       await this.readFile();
-      return this.products;
+      const productStatusTrue = this.products.filter(
+        (prod) => prod.status === true
+      );
+      return productStatusTrue;
     } catch (error) {
       console.log(error);
     }
@@ -61,6 +80,7 @@ class ProductManager {
       await this.readFile();
       const index = this.products.findIndex((prod) => prod.id === id);
       if (index !== -1) {
+        delete updated.id;
         if (this.uniqueCode(updated.code)) return null;
         this.products[index] = { ...this.products[index], ...updated };
         await this.saveFile();
@@ -79,11 +99,11 @@ class ProductManager {
       await this.readFile();
       const index = this.products.findIndex((prod) => prod.id === id);
       if (index !== -1) {
-        this.products.splice(index, 1);
+        this.products[index].status = false;
         await this.saveFile();
-        console.log("Product removed!");
+        console.log("Producto Eliminado");
       } else {
-        console.log("Not found.");
+        console.log("No se encontro el producto");
       }
     } catch (error) {
       console.log(error);
@@ -116,6 +136,16 @@ class ProductManager {
     }
   }
 
+  async getLastProduct() {
+    try {
+      await this.readFile();
+      const lastProd = this.products[this.products.length - 1];
+      return lastProd;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async deleteAll() {
     try {
       await fs.promises.writeFile(this.path, "");
@@ -124,14 +154,21 @@ class ProductManager {
       console.log(error);
     }
   }
+
+  async status() {
+    try {
+      await this.readFile();
+      this.products.forEach((item) => (item.status = true));
+      await this.saveFile();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 module.exports = ProductManager;
 
-
-
-
-
+// const file = "../file/productos.json";
 // const productManager = new ProductManager(file);
 // async function main() {
 //   await productManager.deleteAll();
@@ -177,6 +214,8 @@ module.exports = ProductManager;
 //   await productManager.deleteProduct(2);
 //   const allProducts = await productManager.getProducts();
 //   console.log(allProducts);
+//   const lastprod = await productManager.getLastProduct()
+//   console.log(lastprod)
 // }
 
 // main();

@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-class ProductManager {
+class ProductManager {  
   constructor(path) {
     this.products = [];
     this.idCounter = 1;
@@ -54,7 +54,8 @@ class ProductManager {
       const productStatusTrue = this.products.filter(
         (prod) => prod.status === true
       );
-      return productStatusTrue;
+      this.products = productStatusTrue;
+      return this.products;
     } catch (error) {
       console.log(error);
     }
@@ -62,7 +63,7 @@ class ProductManager {
 
   async getProductById(id) {
     try {
-      await this.readFile();
+      await this.getProducts();
       const product = this.products.find((product) => product.id === id);
       if (product) {
         return product;
@@ -108,6 +109,20 @@ class ProductManager {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async reduceStock(id, quantity) {
+    try {
+      await this.getProducts();
+      const index = this.products.findIndex((prod) => prod.id === id);
+      if (index !== -1) {
+        this.products[index].stock -= quantity;
+        if (this.products[index].stock < 0) this.products[index].status = false;
+        await this.saveFile();
+      } else {
+        console.log("No se encontro el producto");
+      }
+    } catch (error) {}
   }
 
   async saveFile() {
@@ -164,58 +179,10 @@ class ProductManager {
       console.log(error);
     }
   }
+
+  async status50() {
+    const fiftyFifty = () => {};
+  }
 }
 
 module.exports = ProductManager;
-
-// const file = "../file/productos.json";
-// const productManager = new ProductManager(file);
-// async function main() {
-//   await productManager.deleteAll();
-//   await productManager.addProduct({
-//     title: "Producto 1",
-//     description: "Esto es una descripcion del prod 1",
-//     price: 100,
-//     thumbnail: "estoEsUnaImg1.jpg",
-//     code: "Code001",
-//     stock: 20,
-//   });
-
-//   await productManager.addProduct({
-//     title: "Producto 2",
-//     description: "Esto es una descripcion del prod 2",
-//     price: 200,
-//     thumbnail: "estoEsUnaImg2.jpg",
-//     code: "Code002",
-//     stock: 20,
-//   });
-
-//   await productManager.addProduct({
-//     title: "Producto 3",
-//     description: "Esto es una descripcion del prod 3",
-//     price: 300,
-//     thumbnail: "estoEsUnaImg3.jpg",
-//     code: "Code003",
-//     stock: 30,
-//   });
-
-//   const product01 = await productManager.getProductById(1);
-//   console.log(product01);
-
-//   const product3 = await productManager.getProductById(2);
-//   console.log(product3);
-
-//   const updatedProduct = await productManager.updateProduct(1, {
-//     title: "Esto es un cambio",
-//     price: 6969,
-//     code: "Code102",
-//   });
-//   console.log("Update:",updatedProduct);
-//   await productManager.deleteProduct(2);
-//   const allProducts = await productManager.getProducts();
-//   console.log(allProducts);
-//   const lastprod = await productManager.getLastProduct()
-//   console.log(lastprod)
-// }
-
-// main();

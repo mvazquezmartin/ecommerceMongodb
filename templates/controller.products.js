@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 const ProductManager = require("../src/productManager");
-const file = "../file/productos.json";
+const file = "./file/productos.json";
 const productManager = new ProductManager(file);
 
 // ALL PRODUCTS
@@ -63,9 +63,10 @@ router.delete("/:pid", async (req, res) => {
   }
 });
 
-// router.put("/status", async(req, res) =>{
-//   await productManager.status()
-//   res.json({ message: "status true" })
-// })
+// STATUS TRUE 
+router.put("/status", async(req, res) =>{
+  await productManager.status()
+  res.json({ message: "status true" })
+})
 
 module.exports = router;

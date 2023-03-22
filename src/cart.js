@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-class Cart {
+class Cart {    
   constructor(path) {
     this.carts = [];
     this.idCounter = 1;
@@ -18,6 +18,15 @@ class Cart {
     } catch (error) {
       console.log(error);
       return null;
+    }
+  }
+
+  async getCarts(){
+    try{
+      await this.readFile()
+      return this.carts
+    }catch(error){
+      console.log(error)
     }
   }
 
@@ -75,7 +84,7 @@ class Cart {
     try {
       await fs.promises.writeFile(
         this.path,
-        JSON.stringify(this.carts, null, 2)
+        JSON.stringify(this.carts)
       );
     } catch (error) {
       console.log(error);

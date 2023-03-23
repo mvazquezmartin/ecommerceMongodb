@@ -1,10 +1,10 @@
 const fs = require("fs");
+const file = "./file/productos.json";
 
-class ProductManager {  
-  constructor(path) {
+class ProductManager {
+  constructor() {
     this.products = [];
     this.idCounter = 1;
-    this.path = path;
   }
 
   async addProduct(item) {
@@ -127,7 +127,7 @@ class ProductManager {
 
   async saveFile() {
     try {
-      await fs.promises.writeFile(this.path, JSON.stringify(this.products));
+      await fs.promises.writeFile(file, JSON.stringify(this.products));
     } catch (error) {
       console.log(error);
     }
@@ -135,7 +135,7 @@ class ProductManager {
 
   async readFile() {
     try {
-      const data = await fs.promises.readFile(this.path, "utf-8");
+      const data = await fs.promises.readFile(file, "utf-8");
       if (data) this.products = JSON.parse(data);
     } catch (error) {
       console.log(error);
@@ -163,7 +163,7 @@ class ProductManager {
 
   async deleteAll() {
     try {
-      await fs.promises.writeFile(this.path, "");
+      await fs.promises.writeFile(file, "");
       this.products = [];
     } catch (error) {
       console.log(error);

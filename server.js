@@ -22,13 +22,13 @@ const httpServer = app.listen(PORT, () => {
 
 const io = new Server(httpServer);
 
-io.on('connection', socket =>{
-  console.log(`Cliente conectado con id: ${socket.id}`)
+io.on("connection", (socket) => {
+  console.log(`Cliente conectado con id: ${socket.id}`);
 
-  socket.on('nuevoProducto', (producto) => {
-    console.log(`Se agregó un nuevo producto: ${producto}`);
-    productos.push(producto);
-    io.emit('productos', productos);
+  // socket.on("nuevoProducto", (producto) => {
+  //   console.log(`Se agregó un nuevo producto: ${producto}`);
+  //   productos.push(producto);
+  //   io.emit("productos", productos);
+  // });
+  socket.emit('msj', 'Este mensaje se enviará a todos los clientes excepto al cliente que inició la conexión');
 });
-})
-

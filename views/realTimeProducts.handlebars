@@ -11,19 +11,25 @@
               class="m-1 btn btn-primary"
               type="submit"
               value="Buscar"
-              id="btnMainBuscar"
+              id="btnMainFind"
             />
             <input
               class="m-1 btn btn-primary"
               type="submit"
-              value="Agregar / Modificar"
-              id="btnMainAgregar"
+              value="Agregar"
+              id="btnMainAdd"
+            />
+            <input
+              class="m-1 btn btn-primary"
+              type="submit"
+              value="Modificar"
+              id="btnMainModify"
             />
             <input
               class="m-1 btn btn-primary"
               type="submit"
               value="Borrar"
-              id="btnBorrar"
+              id="btnMainDelete"
             />
           </div>
           <div class="container" id="inputDatos"></div>
@@ -32,11 +38,5 @@
           <div id="cardProductos" class="container d-flex flex-wrap"></div>
         </div>
 
-<form id="formulario-producto">
-  <label for="nombre">Nombre:</label>
-  <input type="text" id="nombre" name="nombre" />
-  <button type="submit">Agregar producto</button>
-</form>
-
 <script src="/socket.io/socket.io.js"></script>
-<script type="module" src="../../public/app.js"></script>
+<script type="module" src="../public/js/realTimeProd.js"></script>

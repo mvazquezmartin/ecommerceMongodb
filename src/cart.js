@@ -1,10 +1,10 @@
 const fs = require("fs");
+const file = "./file/cart.json";
 
-class Cart {    
-  constructor(path) {
+class Cart {
+  constructor() {
     this.carts = [];
     this.idCounter = 1;
-    this.path = path;
   }
 
   async createCart() {
@@ -21,12 +21,12 @@ class Cart {
     }
   }
 
-  async getCarts(){
-    try{
-      await this.readFile()
-      return this.carts
-    }catch(error){
-      console.log(error)
+  async getCarts() {
+    try {
+      await this.readFile();
+      return this.carts;
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -65,7 +65,7 @@ class Cart {
 
   async readFile() {
     try {
-      const data = await fs.promises.readFile(this.path, "utf-8");
+      const data = await fs.promises.readFile(file, "utf-8");
       this.carts = JSON.parse(data);
       if (this.carts.length === 0) {
         this.idCounter = 1;
@@ -82,10 +82,7 @@ class Cart {
 
   async saveFile() {
     try {
-      await fs.promises.writeFile(
-        this.path,
-        JSON.stringify(this.carts)
-      );
+      await fs.promises.writeFile(file, JSON.stringify(this.carts));
     } catch (error) {
       console.log(error);
     }
@@ -93,7 +90,7 @@ class Cart {
 
   async deleteAllCarts() {
     try {
-      await fs.promises.writeFile(this.path, "");
+      await fs.promises.writeFile(file, "");
       this.carts = [];
     } catch (error) {
       console.log(error);

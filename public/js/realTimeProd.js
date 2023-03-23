@@ -8,15 +8,34 @@ const btnMainMododify = document.getElementById("btnMainModify");
 const btnMainDelete = document.getElementById("btnMainDelete");
 
 const socket = io();
+socket.on("msj", (res) => {
+  console.log(res);
+});
 
-const renderProducts = () =>{
-} 
+const renderProducts = () => {
+  cardProductos.innerHTML = "";
+  socket.on("listProducts", (products) => {
+    renderProductos(products);
+  });
+};
 
 const renderInputFind = () => {
   inputRenderfind();
-  socket.on("msj", (res) =>{
-    console.log(res)
-  })
+  renderProducts();
+  const btnBuscar = document.getElementById("btnAccionBuscar");
+  const prodId = document.getElementById("prodId");
+  btnBuscar.addEventListener("click", () => {
+    cardProductos.innerHTML = "";
+    const id = parseInt(prodId.value);
+    socket.emit("getProductById", id);
+  });
+  socket.on("productById", (product) => {
+    if (product) {
+      renderProductos(product);
+    } else {
+      console.log("no se encontro el id");
+    }
+  });
 };
 
 const renderInputAdd = () => {
@@ -43,6 +62,7 @@ btnMainAdd.addEventListener("click", renderInputAdd);
 btnMainMododify.addEventListener("click", renderInputModify);
 btnMainDelete.addEventListener("click", renderInputDelete);
 
+renderProducts();
 // const formulario = document.getElementById("formulario-producto");
 // formulario.addEventListener("submit", (event) => {
 //   event.preventDefault();

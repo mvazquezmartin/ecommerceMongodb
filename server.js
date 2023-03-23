@@ -1,11 +1,14 @@
 const express = require("express");
 const handlebars = require("express-handlebars");
+const axios = require("axios");
 const { Server } = require("socket.io");
 const router = require("./routes/router");
+const ProductManager = require("./src/productManager");
 
 const app = express();
 const PORT = 8080;
-
+const productManager = new ProductManager();
+const urlProducts = "http://localhost:8080/api/products/";
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
@@ -22,13 +25,21 @@ const httpServer = app.listen(PORT, () => {
 
 const io = new Server(httpServer);
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
   console.log(`Cliente conectado con id: ${socket.id}`);
 
-  // socket.on("nuevoProducto", (producto) => {
-  //   console.log(`Se agregó un nuevo producto: ${producto}`);
-  //   productos.push(producto);
-  //   io.emit("productos", productos);
-  // });
-  socket.emit('msj', 'Este mensaje se enviará a todos los clientes excepto al cliente que inició la conexión');
+  socket.emit("msj", "Este mensaje se enviará a todos los clientes");
+
+  socket.emit("listProducts", await productManager.getProducts());
+
+  socket.on("getProductById", async (id) => {
+    try {
+      const response = await axios.get(`${urlProducts}${id}`);
+      const product = response.data;
+      socket.emit("productById", product);
+    } catch (error) {
+      console.log(error);
+      socket.emit("productById", null);
+    }
+  });
 });

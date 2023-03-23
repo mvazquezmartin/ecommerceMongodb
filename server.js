@@ -42,4 +42,21 @@ io.on("connection", async (socket) => {
       socket.emit("productById", null);
     }
   });
+
+  socket.on("addProduct", async () => {
+    try {
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  socket.on("deleteProduct", async (id) => {
+    try {
+      await axios.delete(`${urlProducts}${id}`).then((response) => {
+        console.log("la rta fue:", response);
+      });
+    } catch (error) {
+      console.log("Hubo un error:", error);
+    }
+  });
 });

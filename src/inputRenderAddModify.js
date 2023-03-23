@@ -1,11 +1,11 @@
-export const inputRenderAddModify = () => {
+export const inputRenderAddModify = (btn) => {
   inputDatos.innerHTML = "";
   cardProductos.innerHTML = "";
   //reqProduct();
   //INPUT AGREGAR&MODIFICAR ESTRUCTURA
   const miNodo = document.createElement("form");
   miNodo.classList.add("d-flex", "flex-column", "my-1");
-  miNodo.setAttribute("id", "formProducto")
+  miNodo.setAttribute("id", "formProducto");
   // TITULO ID
   const miNodoTitleId = document.createElement("div");
   miNodoTitleId.textContent = "ID";
@@ -22,6 +22,30 @@ export const inputRenderAddModify = () => {
   miNodoInputNombre.classList.add("mb-1");
   miNodoInputNombre.setAttribute("type", "text");
   miNodoInputNombre.setAttribute("name", "title");
+  // TITULO DESCRIPTION PRODUCTO
+  const miNodoTitleDescription = document.createElement("div");
+  miNodoTitleDescription.textContent = "DETALLE";
+  // INPUT DESCRIPTION PRODUCTO
+  const miNodoInputDescription = document.createElement("input");
+  miNodoInputDescription.classList.add("mb-1");
+  miNodoInputDescription.setAttribute("type", "text");
+  miNodoInputDescription.setAttribute("name", "description");
+  // TITULO THUMBNAIL PRODUCTO
+  const miNodoTitleThumbnail = document.createElement("div");
+  miNodoTitleThumbnail.textContent = "IMG";
+  // INPUT THUMBNAIL PRODUCTO
+  const miNodoInputThumbnail = document.createElement("input");
+  miNodoInputThumbnail.classList.add("mb-1");
+  miNodoInputThumbnail.setAttribute("type", "text");
+  miNodoInputThumbnail.setAttribute("name", "thumbnail");
+  // TITULO CODE
+  const miNodoTitleCode = document.createElement("div");
+  miNodoTitleCode.textContent = "CODE"
+  // INPUT THUMBNAIL PRODUCTO
+  const miNodoInputCode = document.createElement("input");
+  miNodoInputCode.classList.add("mb-1");
+  miNodoInputCode.setAttribute("type", "text");
+  miNodoInputCode.setAttribute("name", "code");
   // TITULO PRECIO
   const miNodoTitlePrecio = document.createElement("div");
   miNodoTitlePrecio.textContent = "PRECIO";
@@ -53,13 +77,25 @@ export const inputRenderAddModify = () => {
   miNodoBtnModificar.setAttribute("id", "btnAccionModificar");
   miNodoBtnModificar.textContent = "MODIFICAR";
   //INSERTAR MINODO
-  miNodo.appendChild(miNodoTitleId);
-  miNodo.appendChild(miNodoInputId);
+  // miNodo.appendChild(miNodoTitleId);
+  // miNodo.appendChild(miNodoInputId);
   miNodo.appendChild(miNodoTitleNombre);
   miNodo.appendChild(miNodoInputNombre);
+  miNodo.appendChild(miNodoTitleDescription);
+  miNodo.appendChild(miNodoInputDescription);
+  miNodo.appendChild(miNodoTitleThumbnail)
+  miNodo.appendChild(miNodoInputThumbnail)
+  miNodo.appendChild(miNodoTitleCode)
+  miNodo.appendChild(miNodoInputCode)
   miNodo.appendChild(miNodoTitlePrecio);
   miNodo.appendChild(miNodoInputPrecio);
   miNodo.appendChild(miNodoTitleCantidad);
   miNodo.appendChild(miNodoInputCantidad);
-  inputDatos.appendChild(miNodo);
-}
+  if (btn) {
+    miNodo.appendChild(miNodoBtnAgregar);
+    inputDatos.appendChild(miNodo);
+  } else {
+    miNodo.appendChild(miNodoBtnModificar);
+    inputDatos.appendChild(miNodo);
+  }
+};

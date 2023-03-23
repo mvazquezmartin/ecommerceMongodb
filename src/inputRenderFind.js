@@ -1,4 +1,4 @@
-export const inputRenderfind = () => {
+export const inputRenderfind = (btn) => {
   inputDatos.innerHTML = "";
   cardProductos.innerHTML = "";  
   //BUSCAR INPUT ESTRUCTURA
@@ -19,9 +19,21 @@ export const inputRenderfind = () => {
   miNodoBtnBuscar.setAttribute("value", "Buscar");
   miNodoBtnBuscar.setAttribute("id", "btnAccionBuscar");
   miNodoBtnBuscar.textContent = "Buscar";
+  //BTN BORRAR
+  const miNodoBtnBorrar = document.createElement("button");
+  miNodoBtnBorrar.classList.add("m-1", "btn", "btn-danger");
+  miNodoBtnBorrar.setAttribute("type", "submit");
+  miNodoBtnBorrar.setAttribute("value", "Buscar");
+  miNodoBtnBorrar.setAttribute("id", "btnAccionBorrar");
+  miNodoBtnBorrar.textContent = "Borrar";
   //INSERTAR MINODO
   miNodo.appendChild(miNodoTitulo);
   miNodo.appendChild(miNodoIdInput);
-  miNodo.appendChild(miNodoBtnBuscar);
-  inputDatos.appendChild(miNodo);
+  if(btn){
+    miNodo.appendChild(miNodoBtnBuscar);
+    inputDatos.appendChild(miNodo);    
+  }else{
+    miNodo.appendChild(miNodoBtnBorrar)
+    inputDatos.appendChild(miNodo)
+  }
 };

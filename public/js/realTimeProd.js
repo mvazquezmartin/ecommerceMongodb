@@ -20,8 +20,7 @@ const renderProducts = () => {
 };
 
 const renderInputFind = () => {
-  inputRenderfind();
-  renderProducts();
+  inputRenderfind(true);
   const btnBuscar = document.getElementById("btnAccionBuscar");
   const prodId = document.getElementById("prodId");
   btnBuscar.addEventListener("click", () => {
@@ -39,7 +38,24 @@ const renderInputFind = () => {
 };
 
 const renderInputAdd = () => {
-  inputRenderAddModify();
+  inputRenderAddModify(true);
+  const newProductForm = document.getElementById("formProducto");
+  newProductForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const data = new FormData(newProductForm);
+    const obj = {};
+
+    data.forEach((value, key) => (obj[key] = value));
+
+    fetch("/api/products/", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(obj),
+    });
+  });
 };
 
 const renderInputModify = () => {
@@ -48,12 +64,17 @@ const renderInputModify = () => {
 
 const renderInputDelete = () => {
   inputRenderfind();
+  const btnBorrar = document.getElementById("btnAccionBorrar")
+  const prodId = document.getElementById("prodId")
+  btnBorrar.addEventListener("click", ()=>{
+    cardProductos.innerHTML = "";
+    const id = parseInt(prodId.value);
+    socket.emit('deleteProduct', id)
+  })
 };
-
 socket.on("productos", (productos) => {
   const listaProductos = document.getElementById("cardProductos");
   listaProductos.innerHTML = "";
-
   renderProductos(productos);
 });
 

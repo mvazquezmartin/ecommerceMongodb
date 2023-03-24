@@ -178,11 +178,7 @@ class ProductManager {
     } catch (error) {
       console.log(error);
     }
-  }
-
-  async status50() {
-    const fiftyFifty = () => {};
-  }
+  } 
 }
 
 module.exports = ProductManager;

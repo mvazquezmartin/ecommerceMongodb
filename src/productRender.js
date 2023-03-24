@@ -1,5 +1,6 @@
 const cardProducto = document.getElementById("cardProductos");
 export const renderProductos = (data) => {
+  cardProducto.innerHTML=""
   const reqData = Array.isArray(data) ? data : [data];
   reqData.forEach((producto) => {
     //ESTRUCTURA

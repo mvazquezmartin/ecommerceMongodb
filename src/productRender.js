@@ -1,5 +1,5 @@
-const cardProducto = document.getElementById("cardProductos");
 export const renderProductos = (data) => {
+  const cardProducto = document.getElementById("cardProductos");
   cardProducto.innerHTML=""
   const reqData = Array.isArray(data) ? data : [data];
   reqData.forEach((producto) => {

@@ -1,7 +1,6 @@
 export const inputRenderAddModify = (btn) => {
   inputDatos.innerHTML = "";
-  cardProductos.innerHTML = "";
-  //reqProduct();
+  cardProductos.innerHTML = "";  
   //INPUT AGREGAR&MODIFICAR ESTRUCTURA
   const miNodo = document.createElement("form");
   miNodo.classList.add("d-flex", "flex-column", "my-1");
@@ -14,6 +13,7 @@ export const inputRenderAddModify = (btn) => {
   miNodoInputId.classList.add("mb-1");
   miNodoInputId.setAttribute("type", "number");
   miNodoInputId.setAttribute("name", "id");
+  miNodoInputId.setAttribute("id", "prodId");
   // TITULO NOMBRE PRODUCTO
   const miNodoTitleNombre = document.createElement("div");
   miNodoTitleNombre.textContent = "NOMBRE";
@@ -40,7 +40,7 @@ export const inputRenderAddModify = (btn) => {
   miNodoInputThumbnail.setAttribute("name", "thumbnail");
   // TITULO CODE
   const miNodoTitleCode = document.createElement("div");
-  miNodoTitleCode.textContent = "CODE"
+  miNodoTitleCode.textContent = "CODE";
   // INPUT THUMBNAIL PRODUCTO
   const miNodoInputCode = document.createElement("input");
   miNodoInputCode.classList.add("mb-1");
@@ -76,25 +76,37 @@ export const inputRenderAddModify = (btn) => {
   miNodoBtnModificar.setAttribute("value", "Modificar");
   miNodoBtnModificar.setAttribute("id", "btnAccionModificar");
   miNodoBtnModificar.textContent = "MODIFICAR";
-  //INSERTAR MINODO
-  // miNodo.appendChild(miNodoTitleId);
-  // miNodo.appendChild(miNodoInputId);
-  miNodo.appendChild(miNodoTitleNombre);
-  miNodo.appendChild(miNodoInputNombre);
-  miNodo.appendChild(miNodoTitleDescription);
-  miNodo.appendChild(miNodoInputDescription);
-  miNodo.appendChild(miNodoTitleThumbnail)
-  miNodo.appendChild(miNodoInputThumbnail)
-  miNodo.appendChild(miNodoTitleCode)
-  miNodo.appendChild(miNodoInputCode)
-  miNodo.appendChild(miNodoTitlePrecio);
-  miNodo.appendChild(miNodoInputPrecio);
-  miNodo.appendChild(miNodoTitleCantidad);
-  miNodo.appendChild(miNodoInputCantidad);
+  //INSERTAR MINODO  
   if (btn) {
+    miNodo.appendChild(miNodoTitleNombre);
+    miNodo.appendChild(miNodoInputNombre);
+    miNodo.appendChild(miNodoTitleDescription);
+    miNodo.appendChild(miNodoInputDescription);
+    miNodo.appendChild(miNodoTitleThumbnail);
+    miNodo.appendChild(miNodoInputThumbnail);
+    miNodo.appendChild(miNodoTitleCode);
+    miNodo.appendChild(miNodoInputCode);
+    miNodo.appendChild(miNodoTitlePrecio);
+    miNodo.appendChild(miNodoInputPrecio);
+    miNodo.appendChild(miNodoTitleCantidad);
+    miNodo.appendChild(miNodoInputCantidad);
     miNodo.appendChild(miNodoBtnAgregar);
     inputDatos.appendChild(miNodo);
   } else {
+    miNodo.appendChild(miNodoTitleId);
+    miNodo.appendChild(miNodoInputId);
+    miNodo.appendChild(miNodoTitleNombre);
+    miNodo.appendChild(miNodoInputNombre);
+    miNodo.appendChild(miNodoTitleDescription);
+    miNodo.appendChild(miNodoInputDescription);
+    miNodo.appendChild(miNodoTitleThumbnail);
+    miNodo.appendChild(miNodoInputThumbnail);
+    miNodo.appendChild(miNodoTitleCode);
+    miNodo.appendChild(miNodoInputCode);
+    miNodo.appendChild(miNodoTitlePrecio);
+    miNodo.appendChild(miNodoInputPrecio);
+    miNodo.appendChild(miNodoTitleCantidad);
+    miNodo.appendChild(miNodoInputCantidad);
     miNodo.appendChild(miNodoBtnModificar);
     inputDatos.appendChild(miNodo);
   }

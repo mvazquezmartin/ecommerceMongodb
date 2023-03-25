@@ -87,11 +87,10 @@ class ProductManager {
         await this.saveFile();
         return this.products[index];
       } else {
-        console.log("Not found.");
-        return null;
+        throw new Error("Not found.");        
       }
     } catch (error) {
-      console.log(error);
+      throw new Error(error)
     }
   }
 

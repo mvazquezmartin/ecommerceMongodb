@@ -94,7 +94,13 @@ const renderInputModify = () => {
         codeInput.value = data.code;
         priceInput.value = data.price;
         stockInput.value = data.stock;
-      });
+      })
+      .catch(erro=>{
+        Swal.fire({
+          icon: "error",
+          title: "No hay producto con ese ID",
+        });
+      })
   });
 
   newProductForm.addEventListener("submit", (e) => {
@@ -118,7 +124,13 @@ const renderInputModify = () => {
           icon: "success",
           title: "Producto Agregado",
         });
-      });
+      })
+      .catch(error=>{
+        Swal.fire({
+          icon: "error",
+          title: "Todos los campos son obligatorios",
+        });        
+      })
   });
 };
 

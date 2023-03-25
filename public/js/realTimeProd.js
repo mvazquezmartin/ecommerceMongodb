@@ -95,12 +95,12 @@ const renderInputModify = () => {
         priceInput.value = data.price;
         stockInput.value = data.stock;
       })
-      .catch(erro=>{
+      .catch((erro) => {
         Swal.fire({
           icon: "error",
           title: "No hay producto con ese ID",
         });
-      })
+      });
   });
 
   newProductForm.addEventListener("submit", (e) => {
@@ -122,15 +122,15 @@ const renderInputModify = () => {
         if (!response.ok) throw new Error("Error al agregar producto");
         Swal.fire({
           icon: "success",
-          title: "Producto Agregado",
+          title: "Producto Modificador!",
         });
       })
-      .catch(error=>{
+      .catch((error) => {
         Swal.fire({
           icon: "error",
           title: "Todos los campos son obligatorios",
-        });        
-      })
+        });
+      });
   });
 };
 
@@ -154,12 +154,12 @@ const renderInputDelete = () => {
           title: "Producto Eliminado",
         });
       })
-      .catch(error=>{
+      .catch((error) => {
         Swal.fire({
           icon: "error",
           title: `No se encontro producto con ID: ${id}`,
-        });        
-      })
+        });
+      });
   });
 };
 
@@ -171,3 +171,20 @@ btnMainDelete.addEventListener("click", renderInputDelete);
 socket.on("listProducts", (products) => {
   renderProductos(products);
 });
+
+const limit = document.getElementById("limit");
+const range = document.getElementById("range");
+
+range.textContent = limit.value;
+
+const emitLimit = ()=>{
+  const value = limit.value
+  socket.emit("limit", value);
+}
+
+limit.addEventListener("input", () => {
+  range.textContent = limit.value;
+  emitLimit()
+});
+
+emitLimit()

@@ -6,7 +6,7 @@ const router = require("./routes/router");
 
 const app = express();
 const PORT = 8080;
-const urlProducts = "http://localhost:8080/api/products/";
+const urlProducts = "http://localhost:8080/api/products?limit=";
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
@@ -24,15 +24,17 @@ const httpServer = app.listen(PORT, () => {
 const io = new Server(httpServer);
 
 io.on("connection", async (socket) => {
-  console.log(`Cliente conectado con id: ${socket.id}`); 
+  console.log(`Cliente conectado con id: ${socket.id}`);
 
-  axios
-    .get(urlProducts)
-    .then((response)=>{
-      const product = response.data
-      socket.emit("listProducts", product)
-    })
-    .catch((error)=>{
-      console.log(error)
-    })  
+  socket.on("limit", (id) => {
+    axios
+      .get(`${urlProducts}${id}`)
+      .then((response) => {
+        const product = response.data;
+        socket.emit("listProducts", product);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
 });

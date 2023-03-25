@@ -23,8 +23,7 @@ class ProductManager {
         status = true,
       } = item;
       if (!title || !description || !price || !thumbnail || !code || !stock) {
-        console.log("Todos los campos son necesarios.");
-        return;
+        throw new Error("Todos los campos son necesarios.");        
       }
       if (this.uniqueCode(code)) return;
       const lastProduct = await this.getLastProduct();
@@ -45,6 +44,7 @@ class ProductManager {
       await this.saveFile();
     } catch (error) {
       console.log(error);
+      throw new Error(error.message);
     }
   }
 
@@ -104,10 +104,10 @@ class ProductManager {
         await this.saveFile();
         console.log("Producto Eliminado");
       } else {
-        console.log("No se encontro el producto");
+        throw new Error("No se encontro el producto");
       }
     } catch (error) {
-      console.log(error);
+      throw new Error(error)
     }
   }
 
@@ -178,7 +178,7 @@ class ProductManager {
     } catch (error) {
       console.log(error);
     }
-  } 
+  }
 }
 
 module.exports = ProductManager;

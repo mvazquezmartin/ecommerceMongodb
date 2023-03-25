@@ -30,6 +30,10 @@ export const renderProductos = (data) => {
     const miNodoId = document.createElement("p");
     miNodoId.classList.add("card-text");
     miNodoId.textContent = `PROD ID: ${producto.id}`;
+    //DESCRIPTION
+    const miNodoDescription = document.createElement("p")
+    miNodoDescription.classList.add("card-text")
+    miNodoDescription.textContent = producto.description
     //PRECIO
     const miNodoPrecio = document.createElement("p");
     miNodoPrecio.classList.add("card-text");
@@ -43,6 +47,7 @@ export const renderProductos = (data) => {
     miNodo.appendChild(miNodoBodyCard);
     miNodoBodyCard.appendChild(miNodoTitle);
     miNodoBodyCard.appendChild(miNodoId);
+    miNodoBodyCard.appendChild(miNodoDescription)
     miNodoBodyCard.appendChild(miNodoUnidades);
     miNodoBodyCard.appendChild(miNodoPrecio);
     cardProducto.appendChild(miNodo);

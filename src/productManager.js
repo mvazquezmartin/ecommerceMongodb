@@ -82,7 +82,7 @@ class ProductManager {
       const index = this.products.findIndex((prod) => prod.id === id);
       if (index !== -1) {
         delete updated.id;
-        if (this.uniqueCode(updated.code)) return null;
+        //if (this.uniqueCode(updated.code)) return null;
         this.products[index] = { ...this.products[index], ...updated };
         await this.saveFile();
         return this.products[index];

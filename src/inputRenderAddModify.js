@@ -1,6 +1,5 @@
 export const inputRenderAddModify = (btn) => {
-  inputDatos.innerHTML = "";
-  cardProductos.innerHTML = "";  
+  inputDatos.innerHTML = "";    
   //INPUT AGREGAR&MODIFICAR ESTRUCTURA
   const miNodo = document.createElement("form");
   miNodo.classList.add("d-flex", "flex-column", "my-1");

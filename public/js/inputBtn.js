@@ -1,3 +1,6 @@
+//ESTABA TENIENDO UNOS PROBLEMAS, Y PARA ENCONTRAR LA
+//SOLUCION, DESTRIPE EL CODIGO. POR ESO EXISTE ESTA VISTA.
+
 import { inputRenderAddModify } from "../../src/inputRenderAddModify.js";
 import { inputRenderfind } from "../../src/inputRenderFind.js";
 import { renderProductos } from "../../src/productRender.js";
@@ -72,7 +75,7 @@ const renderInputModify = () => {
   
   newProductForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    
+
     const id = parseInt(prodId.value);
     const data = new FormData(newProductForm);
     const obj = {};
@@ -94,8 +97,7 @@ const renderInputDelete = () => {
   const prodId = document.getElementById("prodId");
   btnBorrar.addEventListener("click", (e) => {
     e.preventDefault();
-    const id = parseInt(prodId.value);
-    console.log(id);
+    const id = parseInt(prodId.value);    
     fetch(`${urlProducts}${id}`, {
       headers: {
         "Content-Type": "application/json",

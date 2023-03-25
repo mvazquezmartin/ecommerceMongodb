@@ -1,6 +1,5 @@
 export const inputRenderfind = (btn) => {
-  inputDatos.innerHTML = "";
-  cardProductos.innerHTML = "";  
+  inputDatos.innerHTML = "";    
   //BUSCAR INPUT ESTRUCTURA
   const miNodo = document.createElement("div");
   miNodo.classList.add("my-1", "d-flex", "flex-column");

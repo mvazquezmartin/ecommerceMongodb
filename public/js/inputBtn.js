@@ -50,18 +50,13 @@ const renderInputModify = () => {
   const prodId = document.getElementById("prodId");
   
   prodId.addEventListener("focusout", () => {
-    const id = parseInt(prodId.value);
-    console.log(id)
+    const id = parseInt(prodId.value);    
     fetch(`${urlProducts}${id}`)
       .then((response) => response.json())
       .then((data) => {
         const titleInput = document.querySelector('input[name="title"]');
-        const descriptionInput = document.querySelector(
-          'input[name="description"]'
-        );
-        const thumbnailInput = document.querySelector(
-          'input[name="thumbnail"]'
-        );
+        const descriptionInput = document.querySelector('input[name="description"]');
+        const thumbnailInput = document.querySelector('input[name="thumbnail"]');
         const codeInput = document.querySelector('input[name="code"]');
         const priceInput = document.querySelector('input[name="price"]');
         const stockInput = document.querySelector('input[name="stock"]');
@@ -77,6 +72,7 @@ const renderInputModify = () => {
   
   newProductForm.addEventListener("submit", (e) => {
     e.preventDefault();
+    
     const id = parseInt(prodId.value);
     const data = new FormData(newProductForm);
     const obj = {};

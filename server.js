@@ -24,9 +24,7 @@ const httpServer = app.listen(PORT, () => {
 const io = new Server(httpServer);
 
 io.on("connection", async (socket) => {
-  console.log(`Cliente conectado con id: ${socket.id}`);
-
-  socket.emit("msj", "Este mensaje se enviará a todos los clientes");
+  console.log(`Cliente conectado con id: ${socket.id}`); 
 
   axios
     .get(urlProducts)

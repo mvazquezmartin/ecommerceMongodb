@@ -1,0 +1,49 @@
+<div class="container-fluid">
+  <div class="row">
+    <h1 class="text-center">PRODUCTOS</h1>
+  </div>
+  <div class="row">
+    <div class="col-12 col-lg-3 border-end border-bottom border-white border-3">
+      <div class="container d-flex flex-column justify-content-center">
+        <input
+          class="m-1 btn btn-primary"
+          type="submit"
+          value="Buscar"
+          id="btnMainFind"
+        />
+        <input
+          class="m-1 btn btn-primary"
+          type="submit"
+          value="Agregar"
+          id="btnMainAdd"
+        />
+        <input
+          class="m-1 btn btn-primary"
+          type="submit"
+          value="Modificar"
+          id="btnMainModify"
+        />
+        <input
+          class="m-1 btn btn-primary"
+          type="submit"
+          value="Borrar"
+          id="btnMainDelete"
+        />
+      </div>
+      <div class="container">
+        <label for="">LIMITE RANGE ITEMS</label> 
+        <br>
+        <input type="range" min="5" max="150" step="5" id="limit">
+        <span id="range"></span>
+      </div>
+      <div class="container" id="inputDatos"></div>
+    </div>    
+    <div class="col-12 col-lg-9">
+      <div id="cardProductos" class="container d-flex flex-wrap justify-content-center" ></div>
+    </div>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>   
+<script type="module" src="../public/js/realTimeProd.js"></script>

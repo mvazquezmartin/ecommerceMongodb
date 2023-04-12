@@ -4,7 +4,7 @@ const collectionName = "messages";
 
 const collectionSchema = new mongoose.Schema({
   user: String,
-  messages: String,
+  message: String,
 });
 
 const Messages = mongoose.model(collectionName, collectionSchema);

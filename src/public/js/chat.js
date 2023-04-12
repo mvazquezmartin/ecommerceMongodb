@@ -45,13 +45,22 @@ const swal = async () => {
 
 socket.on("messageLogs", (data) => {
   const log = document.getElementById("messageLogs");
-  let messages = "";
+  let messages = [];
 
   data.forEach((message) => {
-    messages = messages + `${message.user}: ${message.message}</br>`;
+    messages.push({ user: message.user, message: message.message });
+  });
+  fetch("/chat", {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify(messages),
   });
 
-  log.innerHTML = messages;
+  log.innerHTML = messages
+    .map((message) => `${message.user}: ${message.message}</br>`)
+    .join("");
 });
 
 swal();

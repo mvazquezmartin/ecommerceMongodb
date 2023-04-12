@@ -1,13 +1,17 @@
 const { Router } = require("express");
 const router = Router();
 const ProductManager = require("../dao/productManager");
+const ProductDao = require("../dao/product.dao");
+const Products = require("../dao/models/products.model");
 
 const productManager = new ProductManager();
+const productDao = new ProductDao()
 
 // ALL PRODUCTS
 router.get("/", async (req, res) => {
-  const limit = parseInt(req.query.limit);
-  const products = await productManager.getProducts();
+  const limit = parseInt(req.query.limit);  
+  //const products = await productManager.getProducts();  
+  const products = await productDao.getProductsDb()  
   if (!limit || isNaN(limit)) {
     res.json(products);
   } else {
@@ -31,7 +35,8 @@ router.get("/:pid", async (req, res) => {
 router.post("/", async (req, res) => {
   const item = req.body;
   try {
-    await productManager.addProduct(item);
+    //await productManager.addProduct(item);
+    await productDao.addProductDb(item)
     res.status(201).send("Producto agregado");
   } catch (error) {
     res.status(500).send(error);

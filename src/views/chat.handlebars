@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="row text-center">
+    <h2>Chat</h2>
+  </div>
+  <div class="row">
+    <div class="col-12 d-flex justify-content-center my-3">
+      <input type="text" id="chatBox" placeholder="Tu mensaje" />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4"></div>
+    <div class="col-12 col-lg-4 border border-primary">
+      <label for="" class="text-primary">Mensajes</label>
+      <p id="messageLogs"></p>
+    </div>
+    <div class="col-lg-4"></div>
+  </div>
+</div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="../public/js/chat.js"></script>

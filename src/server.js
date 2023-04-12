@@ -7,6 +7,7 @@ const { PORT } = require("./config/app.config");
 const mongoConnect = require("../db");
 
 const app = express();
+const messages = []
 
 const urlProducts = "http://localhost:8080/api/products?limit=";
 app.use(express.json());
@@ -41,4 +42,14 @@ io.on("connection", async (socket) => {
         console.log(error);
       });
   });
+
+  socket.on('newUser', user => {
+    socket.broadcast.emit('userConnected', user)
+    socket.emit('messageLogs', messages)
+  })
+
+  socket.on('message', data => {
+    messages.push(data)
+    io.emit('messageLogs', messages)    
+  })
 });

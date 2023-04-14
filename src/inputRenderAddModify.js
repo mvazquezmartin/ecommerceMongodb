@@ -10,7 +10,7 @@ export const inputRenderAddModify = (btn) => {
   // INPUT ID
   const miNodoInputId = document.createElement("input");
   miNodoInputId.classList.add("mb-1");
-  miNodoInputId.setAttribute("type", "number");
+  //miNodoInputId.setAttribute("type", "number");
   miNodoInputId.setAttribute("name", "id");
   miNodoInputId.setAttribute("id", "prodId");
   // TITULO NOMBRE PRODUCTO

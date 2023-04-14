@@ -6,7 +6,7 @@ const collectionSchema = new mongoose.Schema({
   title: String,
   description: String,
   price: Number,
-  thumbanail: String,
+  thumbnail: String,
   code: String,
   stock: Number,
   status: Boolean,

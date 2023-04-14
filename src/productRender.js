@@ -29,7 +29,7 @@ export const renderProductos = (data) => {
     //ID PRODUCTO
     const miNodoId = document.createElement("p");
     miNodoId.classList.add("card-text");
-    miNodoId.textContent = `PROD ID: ${producto.id}`;
+    miNodoId.textContent = `PROD ID: ${producto._id}`;
     //DESCRIPTION
     const miNodoDescription = document.createElement("p")
     miNodoDescription.classList.add("card-text")

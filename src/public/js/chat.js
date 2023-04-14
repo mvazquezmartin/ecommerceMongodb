@@ -15,6 +15,7 @@ const swal = async () => {
     });
 
     const user = result.value;
+    //const message = chatBox.value
 
     socket.emit("newUser", user);
 
@@ -34,6 +35,16 @@ const swal = async () => {
       if (e.key === "Enter") {
         if (chatBox.value.trim().length > 0) {
           socket.emit("message", { user, message: chatBox.value });
+
+          const message = chatBox.value;
+          fetch("/chat", {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            method: "POST",
+            body: JSON.stringify({ user, message }),
+          });
+
           chatBox.value = "";
         }
       }
@@ -49,13 +60,6 @@ socket.on("messageLogs", (data) => {
 
   data.forEach((message) => {
     messages.push({ user: message.user, message: message.message });
-  });
-  fetch("/chat", {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-    body: JSON.stringify(messages),
   });
 
   log.innerHTML = messages

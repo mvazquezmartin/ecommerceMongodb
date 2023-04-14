@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const Products = require("./models/products.model");
 
 class ProductDao {
@@ -20,10 +21,18 @@ class ProductDao {
   }
 
   async getProductByIdDb(id) {
-    try {
-      return await Products.find(id);
+    try {        
+      return await Products.findById(id);
     } catch (error) {
-      return error;
+      return error     
+    }
+  }
+  
+  async addManyDb(data){
+    try{
+      return await Products.insertMany(data)
+    }catch(error){
+      return error
     }
   }
 }

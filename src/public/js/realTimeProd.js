@@ -17,6 +17,7 @@ const renderInputFind = () => {
   const prodId = document.getElementById("prodId");
   btnBuscar.addEventListener("click", () => {
     const id = prodId.value;
+
     fetch(`${urlProducts}${id}`)
       .then((response) => response.json())
       .then((data) => {
@@ -87,7 +88,7 @@ const renderInputModify = () => {
         const codeInput = document.querySelector('input[name="code"]');
         const priceInput = document.querySelector('input[name="price"]');
         const stockInput = document.querySelector('input[name="stock"]');
-
+        
         titleInput.value = data.title;
         descriptionInput.value = data.description;
         thumbnailInput.value = data.thumbnail;
@@ -95,7 +96,7 @@ const renderInputModify = () => {
         priceInput.value = data.price;
         stockInput.value = data.stock;
       })
-      .catch((erro) => {
+      .catch((error) => {
         Swal.fire({
           icon: "error",
           title: "No hay producto con ese ID",
@@ -177,14 +178,14 @@ const range = document.getElementById("range");
 
 range.textContent = limit.value;
 
-const emitLimit = ()=>{
-  const value = limit.value
+const emitLimit = () => {
+  const value = limit.value;
   socket.emit("limit", value);
-}
+};
 
 limit.addEventListener("input", () => {
   range.textContent = limit.value;
-  emitLimit()
+  emitLimit();
 });
 
-emitLimit()
+emitLimit();

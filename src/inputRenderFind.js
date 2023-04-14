@@ -9,7 +9,7 @@ export const inputRenderfind = (btn) => {
   //INPUT ID
   const miNodoIdInput = document.createElement("input");
   miNodoIdInput.classList.add("mb-1");
-  miNodoIdInput.setAttribute("type", "number");
+  //miNodoIdInput.setAttribute("type", "number");
   miNodoIdInput.setAttribute("id", "prodId");
   //BTN BUSCAR
   const miNodoBtnBuscar = document.createElement("button");

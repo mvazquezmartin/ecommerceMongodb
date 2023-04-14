@@ -2,6 +2,7 @@ const { Router } = require("express");
 const router = Router();
 const ProductManager = require("../dao/productManager");
 const ProductDao = require("../dao/product.dao");
+const { isValidObjectId } = require("mongoose");
 
 const productManager = new ProductManager();
 const productDao = new ProductDao();
@@ -21,19 +22,15 @@ router.get("/", async (req, res) => {
 // PRODUCT BY ID
 router.get("/:pid", async (req, res) => {
   try {
-    const id = req.params.pid;    
+    const id = req.params.pid;
     //const product = await productManager.getProductById(id);
-    const product = await productDao.getProductByIdDb(id);
-    console.log(product, "test")
-    if (!product == null) {
-      res.json(product);
-    } else {
-      res.status(404);
-      res.send({message: 'ERROR 404'});
-    }
+    if (!isValidObjectId(id)) throw new Error("ID invalido")
+    const product = await productDao.getProductByIdDb(id);    
+    res.json(product);
   } catch (error) {
-    console.log(error);
-    res.json({ error });
+    res.status(404);
+    res.send({ message: "ERROR 404" });
+    console.log(error);    
   }
 });
 
@@ -54,7 +51,8 @@ router.put("/:pid", async (req, res) => {
   const id = req.params.pid;
   const update = req.body;
   try {
-    await productManager.updateProduct(id, update);
+    //await productManager.updateProduct(id, update);
+    await productDao.updateProductDb(id, update)
     res.status(201).send("Producto modificado exitosamente");
   } catch (error) {
     res.status(500).send(error);
@@ -63,9 +61,10 @@ router.put("/:pid", async (req, res) => {
 
 // DELETE BY ID
 router.delete("/:pid", async (req, res) => {
-  const id = parseInt(req.params.pid);
+  const id = req.params.pid;
   try {
-    await productManager.deleteProduct(id);
+    //await productManager.deleteProduct(id);    
+    await productDao.deleteProductDb(id)
     res.json({ message: "Producto eliminado" });
   } catch (error) {
     console.error(error);

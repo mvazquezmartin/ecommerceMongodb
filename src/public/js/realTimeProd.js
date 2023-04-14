@@ -17,13 +17,13 @@ const renderInputFind = () => {
   const prodId = document.getElementById("prodId");
   btnBuscar.addEventListener("click", () => {
     const id = prodId.value;
-
+    console.log(id)
     fetch(`${urlProducts}${id}`)
-      .then((response) => response.json())
+      .then((response) => response.json())      
       .then((data) => {
         renderProductos(data);
       })
-      .catch((error) => {
+      .catch((error) => {        
         Swal.fire({
           icon: "error",
           title: "Oops...",

@@ -6,7 +6,7 @@ class ProductDao {
 
   async getProductsDb() {
     try {
-      return await Products.find();
+      return await Products.find({status:true});
     } catch (error) {
       return error;
     }
@@ -22,9 +22,26 @@ class ProductDao {
 
   async getProductByIdDb(id) {
     try {        
-      return await Products.findById(id);
-    } catch (error) {
-      return error     
+      return await Products.findOne({_id: id});
+    } catch (error) {      
+        return error      
+    }
+  }
+
+  async updateProductDb(id, update){
+    try{
+      return await Products.updateOne({_id: id}, update)
+    } catch(error){
+      return error
+    }
+  }
+
+  async deleteProductDb(id){
+    try{      
+      return await Products.updateOne({_id: id}, {status: false})      
+    }catch(error){
+      console.log(error)
+      return error
     }
   }
   

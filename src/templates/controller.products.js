@@ -28,9 +28,9 @@ router.get("/:pid", async (req, res) => {
     const product = await productDao.getProductByIdDb(id);    
     res.json(product);
   } catch (error) {
-    res.status(404);
-    res.send({ message: "ERROR 404" });
+    console.log("entro al error")
     console.log(error);    
+    res.status(404).send({ message: "ID INVALIDO" });
   }
 });
 

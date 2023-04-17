@@ -8,8 +8,8 @@ const mongoConnect = require("../db");
 
 const app = express();
 const messages = []
-
 const urlProducts = "http://localhost:8080/api/products?limit=";
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));

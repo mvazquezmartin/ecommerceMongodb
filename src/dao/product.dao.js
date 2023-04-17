@@ -1,4 +1,3 @@
-const { default: mongoose } = require("mongoose");
 const Products = require("./models/products.model");
 
 class ProductDao {

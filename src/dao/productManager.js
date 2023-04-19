@@ -1,5 +1,5 @@
 const fs = require("fs");
-const file = "./file/productos.json";
+const file = "./file/productos2.json";
 
 class ProductManager {
   constructor() {

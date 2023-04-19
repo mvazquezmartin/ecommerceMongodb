@@ -11,6 +11,14 @@ class ProductDao {
     }
   }
 
+  async filterProductsDb(params){
+    try{
+      return await Products.filterProducts(params)
+    }catch(error){
+      return error
+    }
+  }
+
   async addProductDb(item) {
     try {
       return await Products.create(item);

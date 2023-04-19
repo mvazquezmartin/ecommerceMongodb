@@ -7,29 +7,56 @@ const { isValidObjectId } = require("mongoose");
 const productManager = new ProductManager();
 const productDao = new ProductDao();
 
-// ALL PRODUCTS
-router.get("/", async (req, res) => {
-  const limit = parseInt(req.query.limit);
-  //const products = await productManager.getProducts();
-  const products = await productDao.getProductsDb();
-  if (!limit || isNaN(limit)) {
+//PRODUCTS BY PARAMS
+router.get("/params", async (req, res) => {
+  try {
+    const params = req.body;
+    const products = await productDao.filterProductsDb(params);
+    if (products.length === 0)
+      return res.json({ message: "No se encontro producto" });
     res.json(products);
-  } else {
-    res.json(products.slice(0, limit));
+  } catch (error) {
+    res.json({ message: error });
   }
 });
+
+// ALL PRODUCTS
+router.get("/", async (req, res) => {
+  try {
+    const { query, limit = 10, page = 1, sort } = req.query;
+    const options = {
+      page: parseInt(page, 10),
+      limit: parseInt(limit, 10),
+      sort: sort ? { price: sort === "asc" ? 1 : -1 } : undefined,
+    };
+    const result = await productDao.paginateProduct(query, options);
+    res.json(result);
+  } catch (error) {
+    res.json({ message: error });
+  }
+});
+//   const limit = parseInt(req.query.limit);
+//   //const products = await productManager.getProducts();
+//   //await productDao.addManyDb(products)
+//   const products = await productDao.getProductsDb();
+//   if (!limit || isNaN(limit)) {
+//     res.json(products);
+//   } else {
+//     res.json(products.slice(0, limit));
+//   }
+// });
 
 // PRODUCT BY ID
 router.get("/:pid", async (req, res) => {
   try {
     const id = req.params.pid;
     //const product = await productManager.getProductById(id);
-    if (!isValidObjectId(id)) throw new Error("ID invalido")
-    const product = await productDao.getProductByIdDb(id);    
+    if (!isValidObjectId(id)) throw new Error("ID invalido");
+    const product = await productDao.getProductByIdDb(id);
     res.json(product);
   } catch (error) {
-    console.log("entro al error")
-    console.log(error);    
+    console.log("entro al error");
+    console.log(error);
     res.status(404).send({ message: "ID INVALIDO" });
   }
 });
@@ -52,7 +79,7 @@ router.put("/:pid", async (req, res) => {
   const update = req.body;
   try {
     //await productManager.updateProduct(id, update);
-    await productDao.updateProductDb(id, update)
+    await productDao.updateProductDb(id, update);
     res.status(201).send("Producto modificado exitosamente");
   } catch (error) {
     res.status(500).send(error);
@@ -63,8 +90,8 @@ router.put("/:pid", async (req, res) => {
 router.delete("/:pid", async (req, res) => {
   const id = req.params.pid;
   try {
-    //await productManager.deleteProduct(id);    
-    await productDao.deleteProductDb(id)
+    //await productManager.deleteProduct(id);
+    await productDao.deleteProductDb(id);
     res.json({ message: "Producto eliminado" });
   } catch (error) {
     console.error(error);

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const mongoosePaginate = require("mongoose-paginate-v2")
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const collectionName = "productos";
 
@@ -15,34 +15,42 @@ const collectionSchema = new mongoose.Schema({
 });
 
 //AGGREGATION PIPELINE CATEGORY, PRICEMIN, PRICEMAX, SORT
-collectionSchema.statics.filterProducts = function (params) {
+collectionSchema.statics.filterProducts = async (params) => {
   const pipeline = [];
+  if (
+    typeof params !== "object" ||
+    isNaN(params.priceMin) ||
+    isNaN(params.priceMax)
+  ) {
+    throw new Error("Parámetros inválidos");
+  }
 
   if (params.category) pipeline.push({ $match: { category: params.category } });
-  
-  if (params.priceMin || params.priceMax) {
-    const priceFilter = {};
-    if (params.priceMin) priceFilter.$gte = params.priceMin;
-    if (params.priceMax) priceFilter.$lte = params.priceMax;
-    pipeline.push({ $match: { price: priceFilter } });
-  }
+
+  const priceFilter = {};
+  if (params.priceMin) priceFilter.$gte = params.priceMin;
+  if (params.priceMax) priceFilter.$lte = params.priceMax;
+  if (Object.keys(priceFilter).length > 0) pipeline.push({ $match: { price: priceFilter } });
 
   if (params.sort) {
     const sortField = "price";
-    const sortOrder = (params.sort === "asc") ? 1 : -1;
+    const sortOrder = params.sort === "asc" ? 1 : -1;
     pipeline.push({ $sort: { [sortField]: sortOrder } });
   }
+
+  pipeline.push({ $limit: params.limit || 10 });
+
+  const options = {
+    page: params.page || 1,
+    limit: params.limit || 10
+   };
+   const result = await this.aggregate(pipeline).paginateProduct(options); 
   
-  return this.aggregate(pipeline);
+   return result
 };
 
 //MONGOOSE-PAGINATE-V2
-collectionSchema.plugin(mongoosePaginate)
-collectionSchema.statics.paginateProduct = async function(query, options){
-  const result = await this.paginate(query, options)
-  return result
-}
-
+collectionSchema.plugin(mongoosePaginate);
 const Products = mongoose.model(collectionName, collectionSchema);
 
 module.exports = Products;

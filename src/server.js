@@ -2,6 +2,9 @@ const express = require("express");
 const handlebars = require("express-handlebars");
 const axios = require("axios");
 const { Server } = require("socket.io");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+const MongoStore = require("connect-mongo")
 const router = require("./routes/router");
 const { PORT } = require("./config/app.config");
 const mongoConnect = require("../db");
@@ -13,6 +16,18 @@ const urlProducts = "http://localhost:8080/api/products?limit=";
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
+app.use(cookieParser())
+app.use(session({
+  store: MongoStore.create({
+    mongoUrl:'mongodb+srv://mvm:admin@ecommerce.j1lfbb9.mongodb.net/?retryWrites=true&w=majority',
+    mongoOptions: {useNewUrlParser: true, useUnifiedTopology:true},
+    ttl: 15,
+  }),
+  secret:"miCookie",
+  resave: false,
+  saveUninitialized: false,  
+}))
+
 
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");

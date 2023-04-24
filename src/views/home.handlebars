@@ -1,13 +1,27 @@
 <div class="container">
   <div class="row">
-<h1 class="text-center">Listado de productos</h1>
+    <div class="col-12 d-flex justify-content-end mt-2">
+      <form action="" id="login">
+        <label for="">Email</label>
+        <input type="email" name="email" />
+        <label for="">Password</label>
+        <input type="password" name="password" />
+        <button type="submit" class="btn btn-primary" id="loginBtn">Login</button>
+        <button type="submit" class="btn btn-info" onclick="location.href='/singup'">SingUp</button>
+      </form>
+    </div>
   </div>
-  <div class="row">    
-  <div class="col-12">
-  <div id="cardProductos" class="container d-flex flex-wrap justify-content-center">
-
+  <div class="row">
+    <h1 class="text-center">Listado de productos</h1>
   </div>
-  </div>
+  <div class="row">
+    <div class="col-12">
+      <div
+        id="cardProductos"
+        class="container d-flex flex-wrap justify-content-center"
+      >
+      </div>
+    </div>
   </div>
 </div>
 

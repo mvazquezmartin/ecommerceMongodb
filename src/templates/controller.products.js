@@ -23,16 +23,18 @@ router.get("/params", async (req, res) => {
 // ALL PRODUCTS
 router.get("/", async (req, res) => {
   try {
-    const { query, limit = 10, page = 1, sort } = req.query;
-    const options = {
-      page: parseInt(page, 10),
-      limit: parseInt(limit, 10),
-      sort: sort ? { price: sort === "asc" ? 1 : -1 } : undefined,
-    };
-    const result = await productDao.paginateProduct(query, options);
-    res.json(result);
+    const limit = parseInt(req.query.limit);
+    //const products = await productManager.getProducts();
+    //await productDao.addManyDb(products)
+    const products = await productDao.getProductsDb();
+    if (!limit || isNaN(limit)) {
+      res.json(products);
+    } else {
+      res.json(products.slice(0, limit));
+    }
   } catch (error) {
-    res.json({ message: error });
+    console.log(error)
+    res.status(500).send({ message: "internal error server" });
   }
 });
 //   const limit = parseInt(req.query.limit);

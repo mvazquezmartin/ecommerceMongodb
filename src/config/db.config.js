@@ -1,9 +1,7 @@
-require("dotenv").config();
+require("dotenv").config({path: '../.env'});
 
 module.exports = {
-  dbAdmin: 'mvm',
-  dbPassword: 'admin',
-  dbHost: 'ecommerce.j1lfbb9.mongodb.net',
+  dbAdmin: process.env.DB_ADMIN,
+  dbPassword: process.env.DB_PASSWORD,
+  dbHost: process.env.DB_HOST,
 };
-
-//dotenv no me esta funcionando

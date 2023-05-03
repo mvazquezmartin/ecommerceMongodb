@@ -1,44 +1,48 @@
-const { Router } = require('express')
-const Users = require('../dao/models/user.model')
+const { Router } = require("express");
+const Users = require("../dao/models/user.model");
+const { passwordValidate } = require("../utils/cryptPassword.util");
 
-const router = Router()
+const router = Router();
 
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    const { email, password } = req.body
+    const { email, password } = req.body;
 
-    const user = await Users.findOne({ email })
-    console.log(user)
+    const user = await Users.findOne({ email });
+    console.log(user);
+
     if (!user)
       return res.status(400).json({
-        status: 'error',
-        error: 'El usuario y la contraseña no coincide',
-      })
+        status: "error",
+        error: "El usuario y la contraseña no coincide",
+      });
 
-    if (user.password !== password)
+    const isPwValid = passwordValidate(password, user);
+    if (!isPwValid)
       return res.status(400).json({
-        status: 'error',
-        error: 'El usuario y la contraseña no coincide',
-      })
+        status: "error",
+        error: "El usuario y la contraseña no coincide",
+      });
 
     req.session.user = {
       first_name: user.first_name,
       last_name: user.last_name,
       email: user.email,
-    }
+      role: 'user',
+    };
 
-    res.json({ status: 'success', message: 'Sesión iniciada' })
+    res.json({ status: "success", message: "Sesión iniciada" });
   } catch (error) {
-    console.log(error.message)
-    res.status(500).json({ status: 'error', error: 'Internal Server Error' })
+    console.log(error.message);
+    res.status(500).json({ status: "error", error: "Internal Server Error" });
   }
-})
+});
 
-router.get('/logout', (req, res) => {
-  req.session.destroy(error => {
-    if (error) return res.json({ error })
-    res.redirect('/home')
-  })
-})
+router.get("/logout", (req, res) => {
+  req.session.destroy((error) => {
+    if (error) return res.json({ error });
+    res.redirect("/home");
+  });
+});
 
-module.exports = router
+module.exports = router;

@@ -1,27 +1,31 @@
 const { Router } = require("express");
 const Users = require("../dao/models/user.model");
 const { createHash } = require("../utils/cryptPassword.util");
+const passport = require("passport");
 
 const router = Router();
 
-router.post("/", async (req, res) => {
-  try {
-    const { first_name, last_name, email, age, password } = req.body;
-    const newUserInfo = {
-      first_name,
-      last_name,
-      email,
-      age,
-      password: createHash(password),
-    };
-
-    const user = await Users.create(newUserInfo);
-
-    res.status(201).json({ status: "success", message: user });
-  } catch (error) {
-    console.log(error.message);
-    res.status(500).json({ status: "error", error: "Internal server error" });
+router.post(
+  "/",
+  passport.authenticate("register", { failureRedirect: "/users/failregister" }),
+  async (req, res) => {
+    try {
+      res
+        .status(201)
+        .json({ status: "success", message: "Usuario registrado" });
+    } catch (error) {
+      console.log(error.message);
+      if (error.code === 11000) {
+        return res.status(400).json({ status: "error", error: "User existed" });
+      }
+      res.status(500).json({ status: "error", error: "Internal server error" });
+    }
   }
+);
+
+router.get("/failregister", (req, res) => {
+  console.log("falló estrategia de registro");
+  res.json({ error: "Failed register" });
 });
 
 module.exports = router;

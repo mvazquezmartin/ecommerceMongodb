@@ -5,8 +5,10 @@ const homeController = require("../templates/controller.home");
 const inputController = require("../templates/controller.input");
 const chatController = require("../templates/controller.chat");
 const userController = require("../templates/controller.user");
-const singUpController = require("../templates/controller.singUp")
+const singUpController = require("../templates/controller.singUp");
 const authController = require("../templates/controller.auth");
+const loginController = require("../templates/controller.login")
+
 
 const router = (app) => {
   app.use("/api/products", productController);
@@ -16,8 +18,9 @@ const router = (app) => {
   app.use("/home", homeController);
   app.use("/chat", chatController);
   app.use("/user", userController);
-  app.use("/singup", singUpController)
-  app.use("/auth", authController);
+  app.use("/login", loginController);
+  app.use("/singup", singUpController);
+  app.use("/auth", authController);  
 };
 
 module.exports = router;

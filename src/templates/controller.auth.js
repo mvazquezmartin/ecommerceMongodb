@@ -21,14 +21,30 @@ router.post(
         first_name: req.user.first_name,
         last_name: req.user.last_name,
         email: req.user.email,
-        role: "user",
       };
 
-      res.json({ status: "success", message: "Sesión iniciada" });
+      res.json({
+        status: "success",
+        message: "Sesión iniciada",
+        name: req.session.user.first_name,
+      });
     } catch (error) {
       console.log(error.message);
       res.status(500).json({ status: "error", error: "Internal Server Error" });
     }
+  }
+);
+
+router.get(
+  "/google", 
+  passport.authenticate("google", { scope: ["profile", "email"] }));
+
+router.get(
+  "/googlecallback",
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  async (req, res) => {
+    req.session.user = req.user;
+    res.redirect("/home");
   }
 );
 

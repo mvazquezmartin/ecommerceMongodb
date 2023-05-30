@@ -11,6 +11,10 @@ const collectionSchema = new mongoose.Schema({
   },
   age: Number,
   password: String,
+  role: {
+    type: String,
+    default: "user",
+  },
 });
 
 const Users = mongoose.model(collectionName, collectionSchema);

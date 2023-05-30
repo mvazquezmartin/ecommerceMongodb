@@ -1,12 +1,12 @@
 const passport = require("passport");
 const local = require("passport-local");
-const Users = require("../dao/models/user.model");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-//const GithubStrategy = require("passport-github2");
+const UsersDao = require("../dao/users.dao");
 const { passwordValidate, createHash } = require("../utils/cryptPassword.util");
-require("dotenv").config({ path: "../.env" });
+require("dotenv").config();
 
 const LocalStrategy = local.Strategy;
+const Users = new UsersDao();
 
 const initializePassport = () => {
   passport.use(
@@ -16,7 +16,7 @@ const initializePassport = () => {
       async (req, username, password, done) => {
         try {
           const { first_name, last_name, email, age, password } = req.body;
-          const user = await Users.findOne({ email: username });
+          const user = await Users.findUser(username);
           if (user) {
             console.log("Usuario ya existe");
             return done(null, false);
@@ -30,7 +30,7 @@ const initializePassport = () => {
             password: createHash(password),
           };
 
-          const newUser = await Users.create(newUserInfo);
+          const newUser = await Users.createUser(newUserInfo);
 
           done(null, newUser);
         } catch (error) {
@@ -46,7 +46,7 @@ const initializePassport = () => {
       { usernameField: "email" },
       async (username, password, done) => {
         try {
-          const user = await Users.findOne({ email: username });
+          const user = await Users.findUser(username);
           if (!user) {
             console.log("El usuario no existe");
             return done(null, false);
@@ -68,12 +68,12 @@ const initializePassport = () => {
       {
         clientID: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
-        callbackURL: "http://localhost:8080/auth/googlecallback",              
+        callbackURL: "http://localhost:8080/auth/googlecallback",
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
           console.log(profile);
-          const user = await Users.findOne({ email: profile._json.email });
+          const user = await Users.findUser(profile._json.email);
 
           if (!user) {
             const newUserInfo = {
@@ -83,7 +83,7 @@ const initializePassport = () => {
               email: profile._json.email,
               password: "",
             };
-            const newUser = await Users.create(newUserInfo);
+            const newUser = await Users.createUser(newUserInfo);
             return done(null, newUser);
           }
 
@@ -100,7 +100,7 @@ const initializePassport = () => {
   });
 
   passport.deserializeUser(async (id, done) => {
-    const user = await Users.findById(id);
+    const user = await Users.findUserById(id);
     done(null, user);
   });
 };

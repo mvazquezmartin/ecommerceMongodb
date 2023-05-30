@@ -1,63 +1,32 @@
 const Products = require("./models/products.model");
 
 class ProductDao {
-  constructor() {}
-
   async getProductsDb() {
-    try {
-      return await Products.find({status:true});
-    } catch (error) {
-      return error;
-    }
+    return await Products.find({ status: true });
   }
 
-  async filterProductsDb(params){
-    try{
-      return await Products.filterProducts(params)
-    }catch(error){
-      return error
-    }
+  async filterProductsDb(params) {
+    return await Products.filterProducts(params);
   }
 
   async addProductDb(item) {
-    try {
-      return await Products.create(item);
-    } catch (error) {
-      return error;
-    }
+    return await Products.create(item);
   }
 
   async getProductByIdDb(id) {
-    try {        
-      return await Products.findOne({_id: id});
-    } catch (error) {      
-        return error      
-    }
+    return await Products.findOne({ _id: id });
   }
 
-  async updateProductDb(id, update){
-    try{
-      return await Products.updateOne({_id: id}, update)
-    } catch(error){
-      return error
-    }
+  async updateProductDb(id, update) {
+    return await Products.updateOne({ _id: id }, update);
   }
 
-  async deleteProductDb(id){
-    try{      
-      return await Products.updateOne({_id: id}, {status: false})      
-    }catch(error){
-      console.log(error)
-      return error
-    }
+  async deleteProductDb(id) {
+    return await Products.updateOne({ _id: id }, { status: false });
   }
-  
-  async addManyDb(data){
-    try{
-      return await Products.insertMany(data)
-    }catch(error){
-      return error
-    }
+
+  async addManyDb(data) {
+    return await Products.insertMany(data);
   }
 }
 

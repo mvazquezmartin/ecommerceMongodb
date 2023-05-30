@@ -1,6 +1,6 @@
-import { inputRenderAddModify } from "../../inputRenderAddModify.js";
-import { inputRenderfind } from "../../inputRenderFind.js";
-import { renderProductos } from "../../productRender.js";
+import { inputRenderAddModify } from "../js/render/inputRenderAddModify.js";
+import { inputRenderfind } from "../js/render/inputRenderFind.js";
+import { renderProductos } from "../js/render/productRender.js";
 
 const socket = io();
 

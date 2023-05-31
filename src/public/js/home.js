@@ -1,4 +1,4 @@
-import { renderProductos } from "../../productRender.js";
+import { renderProductos } from "../js/render/productRender.js";
 
 const url = "/api/products";
 

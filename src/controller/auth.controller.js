@@ -15,7 +15,7 @@ router.post("/", async (req, res) => {
       password,
     };
 
-    const { access_token, error } = await userService.validate(userInfo);
+    const { access_token, error } = await userService.authenticate(userInfo);
 
     if (error) return res.status(400).json({ error });
 
@@ -28,6 +28,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+// PASSPORT-GOOGLE-OAUTH20
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["profile", "email"] })

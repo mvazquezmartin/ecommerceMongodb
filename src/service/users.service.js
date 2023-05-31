@@ -1,12 +1,10 @@
-const UsersDao = require("../dao/users.dao");
 const { createHash, passwordValidate } = require("../utils/cryptPassword.util");
 const { generateToken } = require("../utils/jwt.util");
-
-const Users = new UsersDao();
+const usersStore = require("../store/user.store");
 
 const create = async (userInfo) => {
   try {
-    const user = await Users.findUser(userInfo.email);
+    const user = await usersStore.getOne(userInfo.email);
     if (user) return { error: "That email is already registered" };
 
     const pwHashed = createHash(userInfo.password);
@@ -19,7 +17,7 @@ const create = async (userInfo) => {
       password: pwHashed,
     };
 
-    const newUser = await Users.createUser(newUserInfo);
+    const newUser = await usersStore.create(newUserInfo);
     const access_token = generateToken({ email: newUserInfo.email });
 
     return { user: newUser, access_token };
@@ -28,9 +26,9 @@ const create = async (userInfo) => {
   }
 };
 
-const validate = async (userInfo) => {
+const authenticate = async (userInfo) => {
   try {
-    const user = await Users.findUser(userInfo.email);
+    const user = await usersStore.getOne(userInfo.email);
 
     if (!user) return { error: "Username and Password don't match" };
     if (!passwordValidate(userInfo.password, user))
@@ -38,7 +36,7 @@ const validate = async (userInfo) => {
 
     const access_token = generateToken({ email: user.email, role: user.role });
 
-    return  access_token ;
+    return access_token;
   } catch (error) {
     throw error;
   }
@@ -46,5 +44,5 @@ const validate = async (userInfo) => {
 
 module.exports = {
   create,
-  validate,
+  authenticate,
 };

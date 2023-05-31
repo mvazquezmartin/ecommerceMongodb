@@ -19,24 +19,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 app.use(cookieParser());
-app.use(
-  session({
-    store: MongoStore.create({
-      mongoUrl:
-        "mongodb+srv://mvm:admin@ecommerce.j1lfbb9.mongodb.net/?retryWrites=true&w=majority",
-      mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
-      ttl: 15,
-    }),
-    secret: "miCookie",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
 initializePassport()
 app.use(passport.initialize())
-app.use(passport.session())
-
 
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");

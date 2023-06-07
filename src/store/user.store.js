@@ -3,16 +3,16 @@ const UsersDao = require("../dao/users.dao");
 const Users = new UsersDao();
 
 const create = async (newUserInfo) => {
-  return await Users.createUser(newUserInfo);
+  return await Users.create(newUserInfo);
 };
 
 const getOne = async (item) => {
   const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(item);
 
   if (isEmail) {
-    return await Users.findUser(item);
+    return await Users.getOne(item);
   } else {
-    return await Users.findUserById(item);
+    return await Users.getOneById(item);
   }
 };
 

@@ -1,15 +1,15 @@
 const Users = require("./models/user.model");
 
 class UsersDao {
-  async findUser(email) {
+  async getOne(email) {
     return await Users.findOne({ email: email });
   }
 
-  async createUser(newUser) {
+  async create(newUser) {
     return await Users.create(newUser);
   }
 
-  async findUserById(id) {
+  async getOneById(id) {
     return await Users.findById(id);
   }
 }

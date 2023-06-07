@@ -11,7 +11,7 @@ const productDao = new ProductDao();
 router.get("/params", async (req, res) => {
   try {
     const params = req.body;
-    const products = await productDao.filterProductsDb(params);
+    const products = await productDao.filter(params);
     if (products.length === 0)
       return res.json({ message: "No se encontro producto" });
     res.json(products);
@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
     const limit = parseInt(req.query.limit);
     //const products = await productManager.getProducts();
     //await productDao.addManyDb(products)
-    const products = await productDao.getProductsDb();
+    const products = await productDao.getAll();
     if (!limit || isNaN(limit)) {
       res.json(products);
     } else {
@@ -54,7 +54,7 @@ router.get("/:pid", async (req, res) => {
     const id = req.params.pid;
     //const product = await productManager.getProductById(id);
     if (!isValidObjectId(id)) throw new Error("ID invalido");
-    const product = await productDao.getProductByIdDb(id);
+    const product = await productDao.getOneById(id);
     res.json(product);
   } catch (error) {
     console.log("entro al error");
@@ -68,7 +68,7 @@ router.post("/", async (req, res) => {
   const item = req.body;
   try {
     //await productManager.addProduct(item);
-    await productDao.addProductDb(item);
+    await productDao.create(item);
     res.status(201).send("Producto agregado");
   } catch (error) {
     res.status(500).send(error);
@@ -81,7 +81,7 @@ router.put("/:pid", async (req, res) => {
   const update = req.body;
   try {
     //await productManager.updateProduct(id, update);
-    await productDao.updateProductDb(id, update);
+    await productDao.update(id, update);
     res.status(201).send("Producto modificado exitosamente");
   } catch (error) {
     res.status(500).send(error);
@@ -93,7 +93,7 @@ router.delete("/:pid", async (req, res) => {
   const id = req.params.pid;
   try {
     //await productManager.deleteProduct(id);
-    await productDao.deleteProductDb(id);
+    await productDao.delete(id);
     res.json({ message: "Producto eliminado" });
   } catch (error) {
     console.error(error);

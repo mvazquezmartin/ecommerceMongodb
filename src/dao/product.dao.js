@@ -1,31 +1,31 @@
 const Products = require("./models/products.model");
 
 class ProductDao {
-  async getProductsDb() {
+  async getAll() {
     return await Products.find({ status: true });
   }
 
-  async filterProductsDb(params) {
+  async filter(params) {
     return await Products.filterProducts(params);
   }
 
-  async addProductDb(item) {
+  async create(item) {
     return await Products.create(item);
   }
 
-  async getProductByIdDb(id) {
+  async getOneById(id) {
     return await Products.findOne({ _id: id });
   }
 
-  async updateProductDb(id, update) {
+  async update(id, update) {
     return await Products.updateOne({ _id: id }, update);
   }
 
-  async deleteProductDb(id) {
+  async delete(id) {
     return await Products.updateOne({ _id: id }, { status: false });
   }
 
-  async addManyDb(data) {
+  async createMany(data) {
     return await Products.insertMany(data);
   }
 }

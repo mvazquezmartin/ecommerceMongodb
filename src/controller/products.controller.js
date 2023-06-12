@@ -3,6 +3,8 @@ const router = Router();
 const ProductManager = require("../dao/productManager");
 const ProductDao = require("../dao/product.dao");
 const { isValidObjectId } = require("mongoose");
+const passport = require("passport");
+const authorization = require("../middlewares/authorization.middleware");
 
 const productManager = new ProductManager();
 const productDao = new ProductDao();
@@ -33,7 +35,7 @@ router.get("/", async (req, res) => {
       res.json(products.slice(0, limit));
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).send({ message: "internal error server" });
   }
 });
@@ -64,48 +66,68 @@ router.get("/:pid", async (req, res) => {
 });
 
 // NEW PRODUCT
-router.post("/", async (req, res) => {
-  const item = req.body;
-  try {
-    //await productManager.addProduct(item);
-    await productDao.create(item);
-    res.status(201).send("Producto agregado");
-  } catch (error) {
-    res.status(500).send(error);
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  authorization("admin"),
+  async (req, res) => {
+    const item = req.body;
+    try {
+      //await productManager.addProduct(item);
+      await productDao.create(item);
+      res.status(201).send("Producto agregado");
+    } catch (error) {
+      res.status(500).send(error);
+    }
   }
-});
+);
 
 // UPDATE PRODUCT
-router.put("/:pid", async (req, res) => {
-  const id = req.params.pid;
-  const update = req.body;
-  try {
-    //await productManager.updateProduct(id, update);
-    await productDao.update(id, update);
-    res.status(201).send("Producto modificado exitosamente");
-  } catch (error) {
-    res.status(500).send(error);
+router.put(
+  "/:pid",
+  passport.authenticate("jwt", { session: false }),
+  authorization("admin"),
+  async (req, res) => {
+    const id = req.params.pid;
+    const update = req.body;
+    try {
+      //await productManager.updateProduct(id, update);
+      await productDao.update(id, update);
+      res.status(201).send("Producto modificado exitosamente");
+    } catch (error) {
+      res.status(500).send(error);
+    }
   }
-});
+);
 
 // DELETE BY ID
-router.delete("/:pid", async (req, res) => {
-  const id = req.params.pid;
-  try {
-    //await productManager.deleteProduct(id);
-    await productDao.delete(id);
-    res.json({ message: "Producto eliminado" });
-  } catch (error) {
-    console.error(error);
-    res.status(500);
-    res.send('<img src="https://http.cat/500">');
+router.delete(
+  "/:pid",
+  passport.authenticate("jwt", { session: false }),
+  authorization("admin"),
+  async (req, res) => {
+    const id = req.params.pid;
+    try {
+      //await productManager.deleteProduct(id);
+      await productDao.delete(id);
+      res.json({ message: "Producto eliminado" });
+    } catch (error) {
+      console.error(error);
+      res.status(500);
+      res.send('<img src="https://http.cat/500">');
+    }
   }
-});
+);
 
 // STATUS TRUE
-router.put("/status", async (req, res) => {
-  await productManager.status();
-  res.json({ message: "status true" });
-});
+router.put(
+  "/status",
+  passport.authenticate("jwt", { session: false }),
+  authorization("admin"),
+  async (req, res) => {
+    await productManager.status();
+    res.json({ message: "status true" });
+  }
+);
 
 module.exports = router;

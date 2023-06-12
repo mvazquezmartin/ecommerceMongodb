@@ -1,22 +1,15 @@
 const { Router } = require("express");
 const userService = require("../service/users.service");
+const UserDTO = require("../dtos/user.dto");
 
 const router = Router();
 
 //REGISTER USER
 router.post("/", async (req, res) => {
   try {
-    const { first_name, last_name, email, age, password } = req.body;
+    const newUserInfo = new UserDTO(req.body);    
 
-    const userInfo = {
-      first_name,
-      last_name,
-      email,
-      age,
-      password,
-    };
-
-    const { user, access_token, error } = await userService.create(userInfo);
+    const { user, access_token, error } = await userService.create(newUserInfo);
 
     if (error) return res.status(400).json({ error });
 

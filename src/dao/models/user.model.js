@@ -10,6 +10,7 @@ const collectionSchema = new mongoose.Schema({
     unique: true,
   },
   age: Number,
+  phone: String,
   password: String,
   role: {
     type: String,

@@ -22,6 +22,7 @@ router.post("/", async (req, res) => {
     res.cookie("authToken", access_token, { httpOnly: true }).json({
       success: true,
       redirectUrl: "/home",
+      access_token: access_token,
     });
   } catch (error) {
     res.status(500).json({ status: "Error", error: "Internal Server Error" });

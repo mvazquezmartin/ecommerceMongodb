@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
-const collectionName = "user";
+const userCollection = "user";
 
-const collectionSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   first_name: String,
   last_name: String,
   email: {
@@ -18,6 +18,6 @@ const collectionSchema = new mongoose.Schema({
   },
 });
 
-const Users = mongoose.model(collectionName, collectionSchema);
+const Users = mongoose.model(userCollection, userSchema);
 
 module.exports = Users;

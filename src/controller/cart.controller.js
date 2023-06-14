@@ -1,11 +1,13 @@
 const { Router } = require("express");
-const router = Router();
+const passport = require("passport");
 const Cart = require("../dao/cart");
 const ProductManager = require("../dao/productManager");
 const file = "./file/cart.json";
 const fileProd = "./file/productos.json";
 const cart = new Cart(file);
 const productManager = new ProductManager(fileProd);
+const authorization = require("../middlewares/authorization.middleware");
+const router = Router();
 
 // GET ALL CARTS
 router.get("/", async (req, res) => {

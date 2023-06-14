@@ -3,11 +3,11 @@ const jwt = require("passport-jwt");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const usersStore = require("../store/user.store");
 const { PRIVATEKEY } = require("../utils/jwt.util");
+const cookieExtractor = require("../utils/cookieExtractor.util");
 require("dotenv").config();
 
 //------------------------ DEPRECADO POR JWT ------------------------------------
 const local = require("passport-local");
-const cookieExtractor = require("../utils/cookieExtractor.util");
 const { passwordValidate, createHash } = require("../utils/cryptPassword.util");
 const LocalStrategy = local.Strategy;
 // -------------------------------------------------------------------------------

@@ -5,7 +5,7 @@ const homeController = require("../controller/home.controller");
 const inputController = require("../controller/input.controller");
 const chatController = require("../controller/chat.controller");
 const userController = require("../controller/user.controller");
-const singUpController = require("../controller/singup.controller");
+const signUpController = require("../controller/signup.controller");
 const authController = require("../controller/auth.controller");
 const loginController = require("../controller/login.controller");
 
@@ -18,7 +18,7 @@ const router = (app) => {
   app.use("/chat", chatController);
   app.use("/user", userController);
   app.use("/login", loginController);
-  app.use("/singup", singUpController);
+  app.use("/signup", signUpController);
   app.use("/auth", authController);
 };
 

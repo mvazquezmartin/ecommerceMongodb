@@ -58,8 +58,7 @@ router.get("/:pid", async (req, res) => {
     if (!isValidObjectId(id)) throw new Error("ID invalido");
     const product = await productDao.getOneById(id);
     res.json(product);
-  } catch (error) {
-    console.log("entro al error");
+  } catch (error) {    
     console.log(error);
     res.status(404).send({ message: "ID INVALIDO" });
   }

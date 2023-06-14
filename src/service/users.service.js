@@ -1,6 +1,9 @@
 const { createHash, passwordValidate } = require("../utils/cryptPassword.util");
 const { generateToken } = require("../utils/jwt.util");
 const usersStore = require("../store/user.store");
+const MailAdapter = require("../adapters/mail.adapter");
+
+const mail = new MailAdapter();
 
 const create = async (userInfo) => {
   try {
@@ -14,11 +17,14 @@ const create = async (userInfo) => {
       last_name: userInfo.last_name,
       email: userInfo.email,
       age: userInfo.age,
+      phone: userInfo.phone,
       password: pwHashed,
     };
 
     const newUser = await usersStore.create(newUserInfo);
     const access_token = generateToken({ email: newUserInfo.email });
+
+    await mail.send(newUserInfo);
 
     return { user: newUser, access_token };
   } catch (error) {
@@ -36,7 +42,7 @@ const authenticate = async (userInfo) => {
 
     const access_token = generateToken({ email: user.email, role: user.role });
 
-    return access_token;
+    return { access_token };
   } catch (error) {
     throw error;
   }

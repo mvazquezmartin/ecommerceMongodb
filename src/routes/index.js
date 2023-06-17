@@ -8,6 +8,7 @@ const userController = require("../controller/user.controller");
 const signUpController = require("../controller/signup.controller");
 const authController = require("../controller/auth.controller");
 const loginController = require("../controller/login.controller");
+const ticketController = require("../controller/ticket.controller");
 
 const router = (app) => {
   app.use("/api/products", productController);
@@ -20,6 +21,7 @@ const router = (app) => {
   app.use("/login", loginController);
   app.use("/signup", signUpController);
   app.use("/auth", authController);
+  app.use("/ticket", ticketController);
 };
 
 module.exports = router;

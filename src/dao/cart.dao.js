@@ -1,29 +1,30 @@
 const Carts = require("./models/cart.model");
 
 class CartDao {
-  constructor() {}
+  
 
-  async getCartsDb() {
-    try {
-      return await Carts.find();
-    } catch (error) {
-      return error;
+  async getAll() {    
+      return await Carts.find();      
     }
+
+  async create() {
+    const info = {
+      products: []
+    }
+    return await Carts.create(info)    
   }
 
-  async createCartDb() {
-    try {
-    } catch (error) {}
+  async getOneById(id) {
+    return await Carts.findById(id)
   }
 
-  async getCartByIdDb() {
-    try {
-    } catch (error) {}
+  async addProduct(cid, pid) {
+    const cart = await Carts.findById(cid)
+    
   }
 
-  async addProductCartDb() {
-    try {
-    } catch (error) {}
+  async delete(id){
+    await Carts.deleteOne({ _id: id })
   }
 }
 

@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate-v2");
 
-const collectionName = "productos";
+const productsCollection = "productos";
 
-const collectionSchema = new mongoose.Schema({
+const productsSchema = new mongoose.Schema({
   title: String,
   description: String,
   price: Number,
@@ -15,7 +15,7 @@ const collectionSchema = new mongoose.Schema({
 });
 
 //AGGREGATION PIPELINE CATEGORY, PRICEMIN, PRICEMAX, SORT
-collectionSchema.statics.filterProducts = async (params) => {
+productsSchema.statics.filterProducts = async (params) => {
   const pipeline = [];
   if (
     typeof params !== "object" ||
@@ -50,7 +50,7 @@ collectionSchema.statics.filterProducts = async (params) => {
 };
 
 //MONGOOSE-PAGINATE-V2
-collectionSchema.plugin(mongoosePaginate);
-const Products = mongoose.model(collectionName, collectionSchema);
+productsSchema.plugin(mongoosePaginate);
+const Products = mongoose.model(productsCollection, productsSchema);
 
 module.exports = Products;

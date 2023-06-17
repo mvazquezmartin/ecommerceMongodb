@@ -1,7 +1,6 @@
 const Carts = require("./models/cart.model");
 
-class CartDao {
-  
+class CartDao { 
 
   async getAll() {    
       return await Carts.find();      

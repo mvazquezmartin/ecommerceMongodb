@@ -9,6 +9,7 @@ const signUpController = require("../controller/signup.controller");
 const authController = require("../controller/auth.controller");
 const loginController = require("../controller/login.controller");
 const ticketController = require("../controller/ticket.controller");
+const mockController = require("../controller/mock.controller")
 
 const router = (app) => {
   app.use("/api/products", productController);
@@ -22,6 +23,7 @@ const router = (app) => {
   app.use("/signup", signUpController);
   app.use("/auth", authController);
   app.use("/ticket", ticketController);
+  app.use("/mockingproducts", mockController)
 };
 
 module.exports = router;

@@ -4,10 +4,11 @@ const axios = require("axios");
 const { Server } = require("socket.io");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
+const mongoConnect = require("../db");
 const router = require("./routes");
 const { PORT } = require("./config/app.config");
-const mongoConnect = require("../db");
 const initializePassport = require("./config/passport.config");
+const errorHandler = require("./middlewares/error.middleware");
 
 const app = express();
 const messages = [];
@@ -17,15 +18,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 app.use(cookieParser());
-initializePassport()
-app.use(passport.initialize())
+app.use(errorHandler);
+
+initializePassport();
+app.use(passport.initialize());
 
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
-mongoConnect();
 router(app);
+mongoConnect();
 
 const httpServer = app.listen(PORT, () => {
   console.log(`Servidor iniciado en el puerto ${PORT}`);

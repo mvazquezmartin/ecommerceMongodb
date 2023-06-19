@@ -1,13 +1,29 @@
 const { Router } = require("express");
 const userService = require("../service/users.service");
 const UserDTO = require("../dtos/user.dto");
+const CustomError = require("../errorHandlers/customError");
+const generateUserErrorInfo = require("../errorHandlers/infoError");
+const EnumErrors = require("../errorHandlers/errorNum");
 
 const router = Router();
 
 //REGISTER USER
 router.post("/", async (req, res) => {
   try {
-    const newUserInfo = new UserDTO(req.body);    
+    const newUserInfo = new UserDTO(req.body);
+
+    if (
+      !newUserInfo.first_name ||
+      !newUserInfo.last_name ||
+      !newUserInfo.email
+    ) {
+      CustomError.createError({
+        name: "User creation error",
+        cause: generateUserErrorInfo(newUserInfo),
+        message: "Error trying to create user",
+        code: EnumErrors.INVALID_TYPES_ERROR,
+      });
+    }
 
     const { user, access_token, error } = await userService.create(newUserInfo);
 
@@ -19,8 +35,8 @@ router.post("/", async (req, res) => {
       token: access_token,
     });
   } catch (error) {
-    console.log(error.message);
-    res.status(500).json({ status: "error", error: "Internal server error" });
+    console.log(error);
+    res.status(500).json({ error: error.message });
   }
 });
 

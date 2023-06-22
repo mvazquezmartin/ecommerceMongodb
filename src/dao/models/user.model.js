@@ -3,20 +3,44 @@ const mongoose = require("mongoose");
 const userCollection = "user";
 
 const userSchema = new mongoose.Schema({
-  first_name: String,
-  last_name: String,
+  first_name: {
+    type: String,
+    require: true,
+  },
+  last_name: {
+    type: String,
+    //require: true
+  },
   email: {
     type: String,
     unique: true,
+    index: true,
   },
-  age: Number,
-  phone: String,
-  password: String,
+  age: {
+    type: Number,
+    require: true,
+  },
+  password: {
+    type: String,
+    //require:true,
+  },
+  phone: {
+    type: String,
+    //require:true,
+  },
   role: {
     type: String,
     default: "user",
   },
+  id_cart: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "carts",
+  },
 });
+
+userSchema.pre("find", function(){
+  this.populate("carts")
+})
 
 const Users = mongoose.model(userCollection, userSchema);
 

@@ -38,7 +38,7 @@ class CartDao {
     }
   }
 
-  async gerProduct(cid, limit, page) {
+  async getProduct(cid, limit, page) {
     try {
       return await Carts.paginate(
         { _id: cid },

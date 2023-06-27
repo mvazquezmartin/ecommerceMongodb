@@ -1,22 +1,9 @@
 const TicketsDao = require("../dao/ticket.dao");
 
-const create = async (ticketData) => {
-  try {
-    return await TicketsDao.create(ticketData);
-  } catch (error) {
-    throw error;
+class TickerService {
+  async create(date, amount, purcharser) {
+    return await TicketsDao.create(date, amount, purcharser);
   }
-};
+}
 
-const getOneById = async (id) => {
-  try {
-    return await TicketsDao.getOneById(id);
-  } catch (error) {
-    throw error;
-  }
-};
-
-module.exports = {
-  create,
-  getOneById,
-};
+module.exports = TickerService;

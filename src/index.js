@@ -9,6 +9,8 @@ const router = require("./routes");
 const { PORT } = require("./config/app.config");
 const initializePassport = require("./config/passport.config");
 const errorHandler = require("./middlewares/error.middleware");
+const loggerMiddleware = require("./middlewares/logger.middleware");
+const addLogger = require("./utils/logger/logger.utils");
 
 const app = express();
 const messages = [];
@@ -19,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 app.use(cookieParser());
 app.use(errorHandler);
+app.use(loggerMiddleware);
 
 initializePassport();
 app.use(passport.initialize());

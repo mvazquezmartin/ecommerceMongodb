@@ -1,17 +1,17 @@
 const { Router } = require("express");
 const passport = require("passport");
-const Cart = require("../dao/cart");
-const ProductManager = require("../dao/productManager");
-const file = "./file/cart.json";
-const fileProd = "./file/productos.json";
-const cart = new Cart(file);
-const productManager = new ProductManager(fileProd);
 const authorization = require("../middlewares/authorization.middleware");
+const CartService = require("../service/cart.service");
+const ProductService = require("../service/product.service");
+
 const router = Router();
+const cartService = new CartService();
+const productService = new ProductService();
 
 // GET ALL CARTS
 router.get("/", async (req, res) => {
-  const carts = await cart.getCarts();
+  const carts = await cartService.get();
+
   if (carts.length === 0) {
     res.json({ message: "No hay carritos" });
   } else {
@@ -23,10 +23,11 @@ router.get("/", async (req, res) => {
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
-  authorization("admin"),
+  authorization("user"),
   async (req, res) => {
     try {
-      const newCart = await cart.createCart();
+      const newCart = await cartService.create();
+      console.log(newCart);
       res.status(201).json(newCart);
     } catch (error) {
       res.status(500).send(error);
@@ -34,15 +35,17 @@ router.post(
   }
 );
 
-// PRODUCT CART BY ID
+//CART BY ID
 router.get(
   "/:cid",
   passport.authenticate("jwt", { session: false }),
-  authorization("admin"),
+  authorization("user"),
   async (req, res) => {
     const id = parseInt(req.params.cid);
-    const cartFind = await cart.getCartById(id);
+    const cartFind = await cartService.getOne(id);
+
     if (!cartFind) res.status(404).json({ error: "Carrito no encontrado" });
+
     if (cartFind.products.length !== 0) {
       res.json(cartFind.products);
     } else {
@@ -58,24 +61,42 @@ router.post(
   authorization("user"),
   async (req, res) => {
     const { cid, pid } = req.params;
-    const product = await productManager.getProductById(parseInt(pid));
-    if (!product)
-      return res.status(400).json({ error: "No se encuentra el producto" });
     const { quantity } = req.body;
-    if (!quantity) {
-      return res.status(400).json({ error: "Falta especificar la cantidad" });
+    try {
+      const product = await productService.getOneById(pid);
+
+      if (!product) {
+        return res.status(400).json({ error: "No se encuentra el producto" });
+      }
+      if (!quantity) {
+        return res.status(400).json({ error: "Falta especificar la cantidad" });
+      }
+
+      const stock = await productService.checkStock(pid, quantity);
+
+      const cartAdd = await cartService.addProduct(cid, pid, quantity);
+
+      if (cartAdd) {
+        res.json(cartAdd);
+      } else {
+        res.status(404).json({ error: "Carrito o producto no encontrado" });
+      }
+    } catch (error) {
+      res.status(500).send(error);
     }
-    await productManager.reduceStock(parseInt(pid), quantity);
-    const cartAdd = await cart.addProductCart(
-      parseInt(cid),
-      parseInt(pid),
-      quantity
-    );
-    if (cartAdd) {
-      res.json(cartAdd);
-    } else {
-      res.status(404).json({ error: "Carrito o producto no encontrado" });
-    }
+  }
+);
+
+//PURCHASE
+router.get(
+  "/:cid/purchase",
+  passport.authenticate("jwt", { session: false }),
+  authorization("user"),
+  async (req, res) => {
+    try {
+      const { cid } = req.params;
+      const { limit = 1, page = 1, query } = req.query;
+    } catch (errpr) {}
   }
 );
 

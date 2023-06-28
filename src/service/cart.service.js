@@ -1,24 +1,38 @@
 const CartDao = require("../dao/cart.dao");
 
+const cartDao = new CartDao();
+
 class CartService {
   async create() {
-    return await CartDao.create;
+    return await cartDao.create();
   }
 
-  async addProduct(cid, pid) {
-    return await CartDao.addProduct(cid, pid);
+  async get() {
+    return await cartDao.get();
   }
 
-  async gerProduct(cid, limit, page) {
-    return await CartDao.getProduct(cid, limit, page);
+  async getOne(id) {
+    return await cartDao.getOne(id);
+  }
+
+  async addProduct(cid, pid, quantity) {
+    return await cartDao.addProduct(cid, pid, quantity);
+  }
+
+  async getProduct(cid, limit, page) {
+    return await cartDao.getProduct(cid, limit, page);
   }
 
   async deleteProduct(cid, limit, page) {
-    return await CartDao.deleteProduct(cid, limit, page);
+    return await cartDao.deleteProduct(cid, limit, page);
+  }
+
+  async checkStock(pid, quantity) {
+    return await cartDao.checkStock(pid, quantity);
   }
 
   async delete(id) {
-    return await CartDao.delete(id);
+    return await cartDao.delete(id);
   }
 }
 

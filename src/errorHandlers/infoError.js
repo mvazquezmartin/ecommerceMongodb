@@ -1,10 +1,35 @@
-const generateUserErrorInfo = (user) => {
-  return ` One or more properties were incomplete or not valid.
-  List of required properties:
-  first_name: needs to be a string, received: ${user.first_name}
-  last_name: needs to be a string, received: ${user.last_name}
-  email: needs to be a string, received: ${user.email}
-  `;
+require("colors");
+const enumErrors = require("./errorNum");
+
+const generateErrorInfo = (code, obj) => {
+  if (code === enumErrors.INVALID_TYPES_ERROR) {
+    const response = `Algunos de los datos son inválidos o inexistentes.
+      Lista de datos requeridos:
+          *first_name: debe ser un string, se recibió ${obj.first_name}.
+          *last_name: debe ser un string, se recibió ${obj.last_name}.
+          *email: debe ser un string, se recibió ${obj.email}.
+          *age: debe ser un number, se recibió ${obj.age}
+      `;
+    return response.red;
+  }
+
+  if (code === enumErrors.DATABASE_ERROR) {
+    const response = `Algunos de los datos son inválidos o inexistentes.
+      Lista de datos requeridos:
+          *User: debe ser un string, se recibió ${obj.dbUser}.
+          *Password: debe ser un string, se recibió ${obj.dbPassword}.
+          *Host: debe ser un string, se recibió ${obj.dbHost}.
+          *Name: debe ser un string, se recibió ${obj.dbName}.
+      `;
+    return response.red;
+  }
+
+  if (code === enumErrors.ROUTING_ERROR) {
+    const response = `Algunos de los datos son inválidos o inexistentes.
+      La ruta buscada no existe.
+      `;
+    return response.red;
+  }
 };
 
-module.exports = generateUserErrorInfo;
+module.exports = generateErrorInfo;

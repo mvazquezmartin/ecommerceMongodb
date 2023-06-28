@@ -1,38 +1,56 @@
 const Carts = require("./models/cart.model");
 
 class CartDao {
-  async create() {
+  async get() {
     try {
-      return await Carts.create();
+      return await Carts.find();
     } catch (error) {
       throw error.message;
     }
   }
 
-  async addProduct(cid, pid) {
+  async getOne(id) {
+    try {
+      return await Carts.findById(id);
+    } catch (error) {
+      throw error.message;
+    }
+  }
+
+  async create() {
+    try {
+      return await Carts.create({products:[]});
+    } catch (error) {
+      throw error.message;
+    }
+  }
+
+  async addProduct(cid, pid, quantity) {
     try {
       const cart = await Carts.findById(cid);
-      const prod = await cart.products.find((prod) => (prod.pid = -pid));
+      const prod = { product: pid, quantity: quantity };
+      cart.products.push(prod);
+      await Carts.findByIdAndUpdate(cid, cart);
+      return cart;
+      // if (prod !== undefined) {
+      //   await Carts.updateOne(
+      //     { _id: cid },
+      //     {
+      //       $set: {
+      //         "products.$[pid]": { pid: pid, quantity: prod.quantity + 1 },
+      //       },
+      //     },
+      //     {
+      //       arrayFilters: [{ "pid.pid": pid }],
+      //     }
+      //   );
+      // }
 
-      if (prod !== undefined) {
-        await Carts.updateOne(
-          { _id: cid },
-          {
-            $set: {
-              "products.$[pid]": { pid: pid, quantity: prod.quantity + 1 },
-            },
-          },
-          {
-            arrayFilters: [{ "pid.pid": pid }],
-          }
-        );
-      }
-
-      if (prod == undefined) {
-        await Carts.findByIdAndUpdate(cid, {
-          $push: { products: { pid: pid, quantity: 1 } },
-        });
-      }
+      // if (prod == undefined) {
+      //   await Carts.findByIdAndUpdate(cid, {
+      //     $push: { products: { pid: pid, quantity: 1 } },
+      //   });
+      // }
     } catch (error) {
       throw error.message;
     }

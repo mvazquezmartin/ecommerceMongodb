@@ -1,11 +1,11 @@
 const { Router } = require("express");
-const router = Router();
 const ProductManager = require("../dao/productManager");
 const ProductDao = require("../dao/product.dao");
 const { isValidObjectId } = require("mongoose");
 const passport = require("passport");
 const authorization = require("../middlewares/authorization.middleware");
 
+const router = Router();
 const productManager = new ProductManager();
 const productDao = new ProductDao();
 
@@ -58,7 +58,7 @@ router.get("/:pid", async (req, res) => {
     if (!isValidObjectId(id)) throw new Error("ID invalido");
     const product = await productDao.getOneById(id);
     res.json(product);
-  } catch (error) {    
+  } catch (error) {
     console.log(error);
     res.status(404).send({ message: "ID INVALIDO" });
   }

@@ -21,6 +21,11 @@ class ProductDao {
     return await Products.updateOne({ _id: id }, update);
   }
 
+  async checkStock(id, quantity) {
+    const prod = await Products.findById(id);
+    if (prod.stock < quantity) throw new Error("No hay stock suficiente");
+  }
+
   async delete(id) {
     return await Products.updateOne({ _id: id }, { status: false });
   }

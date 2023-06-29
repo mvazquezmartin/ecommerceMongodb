@@ -19,7 +19,7 @@ class CartDao {
 
   async create() {
     try {
-      return await Carts.create({products:[]});
+      return await Carts.create({ products: [] });
     } catch (error) {
       throw error.message;
     }
@@ -27,30 +27,19 @@ class CartDao {
 
   async addProduct(cid, pid, quantity) {
     try {
-      const cart = await Carts.findById(cid);
-      const prod = { product: pid, quantity: quantity };
-      cart.products.push(prod);
-      await Carts.findByIdAndUpdate(cid, cart);
-      return cart;
-      // if (prod !== undefined) {
-      //   await Carts.updateOne(
-      //     { _id: cid },
-      //     {
-      //       $set: {
-      //         "products.$[pid]": { pid: pid, quantity: prod.quantity + 1 },
-      //       },
-      //     },
-      //     {
-      //       arrayFilters: [{ "pid.pid": pid }],
-      //     }
-      //   );
-      // }
+      const cart = await Carts.findById(cid)      
+      if (!cart) throw new Error("Cart not found");
+      const prod = cart.products.find((p) => p.product.toString() === pid);
 
-      // if (prod == undefined) {
-      //   await Carts.findByIdAndUpdate(cid, {
-      //     $push: { products: { pid: pid, quantity: 1 } },
-      //   });
-      // }
+      if (prod) {
+        prod.quantity += quantity;
+      } else {
+        const newProd = { product: pid, quantity: quantity };
+        cart.products.push(newProd);
+      }
+
+      await cart.save();
+      return cart;
     } catch (error) {
       throw error.message;
     }
@@ -86,8 +75,8 @@ class CartDao {
     }
   }
 
-  async delete(id) {
-    await Carts.deleteOne({ _id: id });
+  async delete() {
+    await Carts.deleteMany()    
   }
 }
 

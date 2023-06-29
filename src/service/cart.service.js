@@ -31,8 +31,8 @@ class CartService {
     return await cartDao.checkStock(pid, quantity);
   }
 
-  async delete(id) {
-    return await cartDao.delete(id);
+  async delete() {
+    return await cartDao.delete();
   }
 }
 

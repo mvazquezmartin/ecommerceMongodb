@@ -72,7 +72,7 @@ router.post(
         return res.status(400).json({ error: "Falta especificar la cantidad" });
       }
 
-      const stock = await productService.checkStock(pid, quantity);
+      await productService.checkStock(pid, quantity);
 
       const cartAdd = await cartService.addProduct(cid, pid, quantity);
 
@@ -82,7 +82,7 @@ router.post(
         res.status(404).json({ error: "Carrito o producto no encontrado" });
       }
     } catch (error) {
-      res.status(500).send(error);
+      res.status(400).json(error.message);
     }
   }
 );
@@ -96,13 +96,13 @@ router.get(
     try {
       const { cid } = req.params;
       const { limit = 1, page = 1, query } = req.query;
-    } catch (errpr) {}
+    } catch (error) {}
   }
 );
 
 // DELETE ALL CARTS
 router.delete("/", async (req, res) => {
-  await cart.deleteAllCarts();
+  await cartService.delete()
   res.json({ message: "Carritos ELIMINADOS!" });
 });
 module.exports = router;

@@ -1,9 +1,15 @@
 const Tickets = require("./models/ticket.model");
 
 class TicketsDao {
-  async create(date, amount, purcharser) {
+  async create(ticket) {
     try {
-      return await Tickets.create(date, amount, purcharser);
+      const newTicket = {
+        code: ticket.code,
+        purchase_datetime: ticket.date,
+        amount: ticket.amount,
+        purchaser: ticket.purchaser,
+      };
+      return await Tickets.create(newTicket);
     } catch (error) {
       throw error.message;
     }

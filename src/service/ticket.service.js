@@ -1,9 +1,11 @@
 const TicketsDao = require("../dao/ticket.dao");
 
-class TickerService {
-  async create(date, amount, purcharser) {
-    return await TicketsDao.create(date, amount, purcharser);
+const ticketDao = new TicketsDao()
+
+class TicketService {
+  async create(ticket) {
+    return await ticketDao.create(ticket);
   }
 }
 
-module.exports = TickerService;
+module.exports = TicketService;

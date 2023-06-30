@@ -9,7 +9,7 @@ const ticketSchema = {
     unique: true,
   },
   purchase_datetime: {
-    type: Date,
+    type: String,
     required: true,
   },
   amount: {

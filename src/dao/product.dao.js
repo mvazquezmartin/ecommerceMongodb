@@ -23,7 +23,10 @@ class ProductDao {
 
   async checkStock(id, quantity) {
     const prod = await Products.findById(id);
-    if (prod.stock < quantity) throw new Error("No hay stock suficiente");
+    if (prod.stock < quantity)
+      throw new Error(
+        `No hay stock suficiente de ${prod.title}. Total Stock ${prod.stock}`
+      );
   }
 
   async delete(id) {

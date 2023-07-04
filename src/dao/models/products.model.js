@@ -11,7 +11,7 @@ const productsSchema = new mongoose.Schema({
   category: String,
   code: String,
   stock: Number,
-  status: Boolean,
+  status: { type: Boolean, default: true },
 });
 
 //AGGREGATION PIPELINE CATEGORY, PRICEMIN, PRICEMAX, SORT
@@ -30,7 +30,8 @@ productsSchema.statics.filterProducts = async (params) => {
   const priceFilter = {};
   if (params.priceMin) priceFilter.$gte = params.priceMin;
   if (params.priceMax) priceFilter.$lte = params.priceMax;
-  if (Object.keys(priceFilter).length > 0) pipeline.push({ $match: { price: priceFilter } });
+  if (Object.keys(priceFilter).length > 0)
+    pipeline.push({ $match: { price: priceFilter } });
 
   if (params.sort) {
     const sortField = "price";
@@ -42,11 +43,11 @@ productsSchema.statics.filterProducts = async (params) => {
 
   const options = {
     page: params.page || 1,
-    limit: params.limit || 10
-   };
-   const result = await this.aggregate(pipeline).paginateProduct(options); 
-  
-   return result
+    limit: params.limit || 10,
+  };
+  const result = await this.aggregate(pipeline).paginateProduct(options);
+
+  return result;
 };
 
 //MONGOOSE-PAGINATE-V2

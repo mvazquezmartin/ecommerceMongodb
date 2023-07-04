@@ -3,7 +3,7 @@ const { generateToken } = require("../utils/jwt.util");
 const usersStore = require("../store/user.store");
 const MailAdapter = require("../adapters/mail.adapter");
 
-const mail = new MailAdapter();
+const msg = new MailAdapter();
 
 const create = async (userInfo) => {
   try {
@@ -24,7 +24,7 @@ const create = async (userInfo) => {
     const newUser = await usersStore.create(newUserInfo);
     const access_token = generateToken({ email: newUserInfo.email });
 
-    await mail.send(newUserInfo);
+    await msg.send(newUserInfo);
 
     return { user: newUser, access_token };
   } catch (error) {

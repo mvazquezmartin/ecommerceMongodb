@@ -11,7 +11,6 @@ const productService = new ProductService();
 // GET ALL CARTS
 router.get("/", async (req, res) => {
   const carts = await cartService.get();
-
   if (carts.length === 0) {
     res.json({ message: "No hay carritos" });
   } else {

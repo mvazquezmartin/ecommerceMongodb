@@ -1,19 +1,19 @@
 const { Router } = require("express");
-const ProductManager = require("../dao/productManager");
-const ProductDao = require("../dao/product.dao");
-const { isValidObjectId } = require("mongoose");
 const passport = require("passport");
+const ProductManager = require("../dao/productManager");
+const { isValidObjectId } = require("mongoose");
 const authorization = require("../middlewares/authorization.middleware");
+const ProductService = require("../service/product.service");
 
 const router = Router();
 const productManager = new ProductManager();
-const productDao = new ProductDao();
+const productService = new ProductService();
 
 //PRODUCTS BY PARAMS
 router.get("/params", async (req, res) => {
   try {
     const params = req.body;
-    const products = await productDao.filter(params);
+    const products = await productService.filter(params);
     if (products.length === 0)
       return res.json({ message: "No se encontro producto" });
     res.json(products);
@@ -28,7 +28,7 @@ router.get("/", async (req, res) => {
     const limit = parseInt(req.query.limit);
     //const products = await productManager.getProducts();
     //await productDao.addManyDb(products)
-    const products = await productDao.getAll();
+    const products = await productService.getAll();
     if (!limit || isNaN(limit)) {
       res.json(products);
     } else {
@@ -56,7 +56,7 @@ router.get("/:pid", async (req, res) => {
     const id = req.params.pid;
     //const product = await productManager.getProductById(id);
     if (!isValidObjectId(id)) throw new Error("ID invalido");
-    const product = await productDao.getOneById(id);
+    const product = await productService.getOneById(id);
     res.json(product);
   } catch (error) {
     console.log(error);
@@ -73,7 +73,7 @@ router.post(
     const item = req.body;
     try {
       //await productManager.addProduct(item);
-      await productDao.create(item);
+      await productService.create(item);
       res.status(201).send("Producto agregado");
     } catch (error) {
       res.status(500).send(error);
@@ -91,7 +91,7 @@ router.put(
     const update = req.body;
     try {
       //await productManager.updateProduct(id, update);
-      await productDao.update(id, update);
+      await productService.update(id, update);
       res.status(201).send("Producto modificado exitosamente");
     } catch (error) {
       res.status(500).send(error);
@@ -108,7 +108,7 @@ router.delete(
     const id = req.params.pid;
     try {
       //await productManager.deleteProduct(id);
-      await productDao.delete(id);
+      await productService.delete(id);
       res.json({ message: "Producto eliminado" });
     } catch (error) {
       console.error(error);

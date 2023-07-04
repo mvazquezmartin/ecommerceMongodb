@@ -1,10 +1,11 @@
 class MessageRepository {
-  constructor(messageTool){
-    this.messageTool = messageTool
+  constructor(msgTool) {
+    this.messageTool = msgTool;
   }
-  async send(newUserInfo){
-    await this.messageTool.send(newUserInfo)
+  
+  async send(newUserInfo) {
+    await this.messageTool.send(newUserInfo);
   }
 }
 
-module.exports = MessageRepository
+module.exports = MessageRepository;

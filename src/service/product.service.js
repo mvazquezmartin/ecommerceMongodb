@@ -11,8 +11,7 @@ class ProductService {
     return await productDao.filter(params);
   }
 
-  async create(item) {
-    const { title, description, price, category, code, stock, status } = item;
+  async create(item) {    
     return await productDao.create(item);
   }
 

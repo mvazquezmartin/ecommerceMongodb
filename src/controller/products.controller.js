@@ -4,6 +4,7 @@ const ProductManager = require("../dao/productManager");
 const { isValidObjectId } = require("mongoose");
 const authorization = require("../middlewares/authorization.middleware");
 const ProductService = require("../service/product.service");
+const ProductDto = require("../dtos/products.dto");
 
 const router = Router();
 const productManager = new ProductManager();
@@ -26,8 +27,6 @@ router.get("/params", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const limit = parseInt(req.query.limit);
-    //const products = await productManager.getProducts();
-    //await productDao.addManyDb(products)
     const products = await productService.getAll();
     if (!limit || isNaN(limit)) {
       res.json(products);
@@ -39,16 +38,6 @@ router.get("/", async (req, res) => {
     res.status(500).send({ message: "internal error server" });
   }
 });
-//   const limit = parseInt(req.query.limit);
-//   //const products = await productManager.getProducts();
-//   //await productDao.addManyDb(products)
-//   const products = await productDao.getProductsDb();
-//   if (!limit || isNaN(limit)) {
-//     res.json(products);
-//   } else {
-//     res.json(products.slice(0, limit));
-//   }
-// });
 
 // PRODUCT BY ID
 router.get("/:pid", async (req, res) => {
@@ -70,9 +59,8 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   authorization("admin"),
   async (req, res) => {
-    const item = req.body;
+    const item = new ProductDto(req.body);
     try {
-      //await productManager.addProduct(item);
       await productService.create(item);
       res.status(201).send("Producto agregado");
     } catch (error) {
@@ -90,7 +78,6 @@ router.put(
     const id = req.params.pid;
     const update = req.body;
     try {
-      //await productManager.updateProduct(id, update);
       await productService.update(id, update);
       res.status(201).send("Producto modificado exitosamente");
     } catch (error) {
@@ -107,7 +94,6 @@ router.delete(
   async (req, res) => {
     const id = req.params.pid;
     try {
-      //await productManager.deleteProduct(id);
       await productService.delete(id);
       res.json({ message: "Producto eliminado" });
     } catch (error) {

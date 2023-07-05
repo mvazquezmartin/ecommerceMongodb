@@ -10,16 +10,7 @@ class ProductDao {
   }
 
   async create(item) {
-    const newProd = {
-      title,
-      description,
-      price,
-      category,
-      code,
-      stock,
-      status,
-    };
-    return await Products.create(newProd);
+    return await Products.create(item);
   }
 
   async getOneById(id) {

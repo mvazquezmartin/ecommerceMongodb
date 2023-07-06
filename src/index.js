@@ -1,7 +1,5 @@
 const express = require("express");
 const handlebars = require("express-handlebars");
-const axios = require("axios");
-const { Server } = require("socket.io");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const mongoConnect = require("../db");
@@ -9,11 +7,10 @@ const router = require("./routes");
 const { PORT } = require("./config/app.config");
 const initializePassport = require("./config/passport.config");
 const errorHandler = require("./middlewares/error.middleware");
+const setUpSocket = require("./config/socketio.config");
 //const loggerMiddleware = require("./middlewares/logger.middleware");
 
 const app = express();
-const messages = [];
-const urlProducts = "http://localhost:8080/api/products?limit=";
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -36,30 +33,4 @@ const httpServer = app.listen(PORT, () => {
   console.log(`Servidor iniciado en el puerto ${PORT}`);
 });
 
-const io = new Server(httpServer);
-
-io.on("connection", async (socket) => {
-  console.log(`Cliente conectado con id: ${socket.id}`);
-
-  socket.on("limit", (value) => {
-    axios
-      .get(`${urlProducts}${value}`)
-      .then((response) => {
-        const product = response.data;
-        socket.emit("listProducts", product);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  });
-
-  socket.on("newUser", (user) => {
-    socket.broadcast.emit("userConnected", user);
-    socket.emit("messageLogs", messages);
-  });
-
-  socket.on("message", (data) => {
-    messages.push(data);
-    io.emit("messageLogs", messages);
-  });
-});
+setUpSocket(httpServer);

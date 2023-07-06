@@ -1,9 +1,9 @@
 const twilio = require("twilio");
-require("dotenv").config();
-
-const ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
-const AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
-const SMS_NUMBER = process.env.TWILIO_NUMBER;
+const {
+  ACCOUNT_SID,
+  AUTH_TOKEN,
+  SMS_NUMBER,
+} = require("../config/twilio.config");
 
 class SmsAdapter {
   async sndMessage(newUserInfo) {

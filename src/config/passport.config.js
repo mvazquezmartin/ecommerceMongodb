@@ -2,14 +2,18 @@ const passport = require("passport");
 const jwt = require("passport-jwt");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const usersStore = require("../store/user.store");
-const { PRIVATEKEY } = require("../utils/jwt.util");
 const cookieExtractor = require("../utils/cookieExtractor.util");
-require("dotenv").config();
+const { PRIVATEKEY } = require("./jwt.config");
+const {
+  CLIENT_ID,
+  CLIENT_SECRET,
+  CALLBACK_URL,
+} = require("./oauthPassport.config");
 
 //------------------------ DEPRECADO POR JWT ------------------------------------
-const local = require("passport-local");
-const { passwordValidate, createHash } = require("../utils/cryptPassword.util");
-const LocalStrategy = local.Strategy;
+// const local = require("passport-local");
+// const { passwordValidate, createHash } = require("../utils/cryptPassword.util");
+// const LocalStrategy = local.Strategy;
 // -------------------------------------------------------------------------------
 
 const JWTStrategy = jwt.Strategy;
@@ -36,9 +40,9 @@ const initializePassport = () => {
     "google",
     new GoogleStrategy(
       {
-        clientID: process.env.CLIENT_ID,
-        clientSecret: process.env.CLIENT_SECRET,
-        callbackURL: "http://localhost:8080/auth/googlecallback",
+        clientID: CLIENT_ID,
+        clientSecret: CLIENT_SECRET,
+        callbackURL: CALLBACK_URL,
       },
       async (accessToken, refreshToken, profile, done) => {
         try {

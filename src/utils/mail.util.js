@@ -1,13 +1,13 @@
-const nodemailer = require("nodemailer")
-require("dotenv").config()
+const nodemailer = require("nodemailer");
+const { TRANSPORT } = require("../config/nodemailer.config");
 
 const transport = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   port: 587,
-  auth:{
-    user:"mevm1991@gmail.com",
-    pass: process.env.TRANSPORT_PW
-  }
-})
+  auth: {
+    user: "mevm1991@gmail.com",
+    pass: TRANSPORT,
+  },
+});
 
-module.exports = transport
+module.exports = transport;

@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require("uuid");
 const TicketsDao = require("../dao/ticket.dao");
 const ProductService = require("./product.service");
+const TicketDto = require("../dtos/tickets.dto");
 
 const ticketDao = new TicketsDao();
 const productService = new ProductService();
@@ -23,16 +24,11 @@ class TicketService {
       await productService.update(prod._id, { stock: updateStock });
     }
 
-    const date = new Date().toLocaleDateString();
     const code = uuidv4();
+    const date = new Date().toLocaleDateString();
     const purchaser = req.user.email;
 
-    const ticket = {
-      code,
-      date,
-      amount,
-      purchaser,
-    };
+    const ticket = new TicketDto(code, date, amount, purchaser);
 
     return ticket;
   }

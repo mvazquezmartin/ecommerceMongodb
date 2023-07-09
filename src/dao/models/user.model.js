@@ -30,6 +30,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
+    enum: ["admin", "user", "premium"],
     default: "user",
   },
   id_cart: {
@@ -38,9 +39,9 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.pre("find", function(){
-  this.populate("carts")
-})
+userSchema.pre("find", function () {
+  this.populate("carts");
+});
 
 const Users = mongoose.model(userCollection, userSchema);
 

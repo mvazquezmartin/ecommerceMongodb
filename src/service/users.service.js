@@ -2,8 +2,10 @@ const { createHash, passwordValidate } = require("../utils/cryptPassword.util");
 const { generateToken } = require("../utils/jwt.util");
 const usersStore = require("../store/user.store");
 const MailAdapter = require("../adapters/mail.adapter");
+const UsersDao = require("../dao/users.dao");
 
 const msg = new MailAdapter();
+const userDao = new UsersDao();
 
 const create = async (userInfo) => {
   try {
@@ -48,7 +50,17 @@ const authenticate = async (userInfo) => {
   }
 };
 
+const updatePw = async (email, pw) => {
+  try {
+    const newPw = createHash(pw);
+    return await userDao.updatePw(email, newPw);
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   create,
   authenticate,
+  updatePw,
 };

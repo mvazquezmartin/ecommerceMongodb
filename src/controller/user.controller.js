@@ -3,7 +3,9 @@ const userService = require("../service/users.service");
 const UserDTO = require("../dtos/user.dto");
 const CustomError = require("../errorHandlers/customError");
 const generateUserErrorInfo = require("../errorHandlers/infoError");
+const userStore = require("../store/user.store");
 const EnumErrors = require("../errorHandlers/errorNum");
+const { passwordValidate } = require("../utils/cryptPassword.util");
 
 const router = Router();
 
@@ -37,6 +39,22 @@ router.post("/", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });
+  }
+});
+
+router.post("/resetpassword", async (req, res) => {
+  try {
+    const { newPw, email } = req.body;
+    const user = await userStore.getOne(email);
+
+    if (passwordValidate(user, newPw))
+      res.json({ message: "no puedes colocar la contraseña anterior" });
+
+    await userService.updatePw(email, newPw);
+
+    res.json({ msj: "success change pw" });
+  } catch (error) {
+    console.log(error);
   }
 });
 

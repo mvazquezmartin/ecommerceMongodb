@@ -24,7 +24,7 @@ router.get(
 
       await ticketService.create(ticket);
 
-      res.status(200).json(ticket);
+      res.status(200).json({ status: "success", purchase: ticket });
     } catch (error) {
       res.status(400).json(error);
     }

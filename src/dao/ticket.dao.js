@@ -8,6 +8,7 @@ class TicketsDao {
         purchase_datetime: ticket.date,
         amount: ticket.amount,
         purchaser: ticket.purchaser,
+        detailedItems: ticket.detailedItems
       };
       return await Tickets.create(newTicket);
     } catch (error) {

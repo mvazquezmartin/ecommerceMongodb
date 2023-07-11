@@ -3,9 +3,12 @@ const { generateToken } = require("../utils/jwt.util");
 const usersStore = require("../store/user.store");
 const MailAdapter = require("../adapters/mail.adapter");
 const UsersDao = require("../dao/users.dao");
+const UserDTO = require("../dtos/user.dto");
+const CartService = require("./cart.service");
 
 const msg = new MailAdapter();
 const userDao = new UsersDao();
+const cartService = new CartService();
 
 const create = async (userInfo) => {
   try {
@@ -14,21 +17,18 @@ const create = async (userInfo) => {
 
     const pwHashed = createHash(userInfo.password);
 
-    const newUserInfo = {
-      first_name: userInfo.first_name,
-      last_name: userInfo.last_name,
-      email: userInfo.email,
-      age: userInfo.age,
-      phone: userInfo.phone,
-      password: pwHashed,
-    };
+    const newUserInfo = new UserDTO(userInfo);
+    newUserInfo.password = pwHashed;
 
-    const newUser = await usersStore.create(newUserInfo);
+    const cart = await cartService.create();
+    newUserInfo.id_cart = cart._id;
+
+    await usersStore.create(newUserInfo);
     const access_token = generateToken({ email: newUserInfo.email });
 
     await msg.send(newUserInfo);
 
-    return { user: newUser, access_token };
+    return { access_token };
   } catch (error) {
     throw error;
   }

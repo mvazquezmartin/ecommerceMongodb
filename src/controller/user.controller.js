@@ -27,13 +27,12 @@ router.post("/", async (req, res) => {
       });
     }
 
-    const { user, access_token, error } = await userService.create(newUserInfo);
+    const { access_token, error } = await userService.create(newUserInfo);
 
     if (error) return res.status(400).json({ error });
 
     res.status(201).json({
       status: "success",
-      message: user,
       token: access_token,
     });
   } catch (error) {
@@ -42,12 +41,13 @@ router.post("/", async (req, res) => {
   }
 });
 
+//CHANGE PASSWORD
 router.post("/resetpassword", async (req, res) => {
   try {
     const { newPw, email } = req.body;
     const user = await userStore.getOne(email);
 
-    if (passwordValidate(user, newPw))
+    if (passwordValidate(newPw, user))
       res.json({ message: "no puedes colocar la contraseña anterior" });
 
     await userService.updatePw(email, newPw);

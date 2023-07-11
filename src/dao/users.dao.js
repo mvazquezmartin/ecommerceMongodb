@@ -1,4 +1,3 @@
-const { createHash } = require("../utils/cryptPassword.util");
 const Users = require("./models/user.model");
 
 class UsersDao {
@@ -14,10 +13,9 @@ class UsersDao {
     return await Users.findById(id);
   }
 
-  async updatePw(email, pw){    
-    return await Users.updateOne({email},{password: pw} )
-    }
-  
+  async updatePw(email, pw) {
+    return await Users.updateOne({ email }, { password: pw });
+  }
 }
 
 module.exports = UsersDao;

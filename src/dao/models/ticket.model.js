@@ -21,6 +21,16 @@ const ticketSchema = {
     type: String,
     required: true,
   },
+  detailedItems: {
+    type: [
+      {
+        product: String,
+        quantity: Number,
+        unitPrice: Number,
+        totalPrice: Number,
+      },
+    ],
+  },
 };
 
 const Tickets = mongoose.model(ticketCollection, ticketSchema);

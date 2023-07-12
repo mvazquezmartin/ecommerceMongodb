@@ -3,17 +3,14 @@ const passport = require("passport");
 const { generateToken } = require("../utils/jwt.util");
 const authorization = require("../middlewares/authorization.middleware");
 const userService = require("../service/users.service");
+const UserDTO = require("../dtos/user.dto");
 
 const router = Router();
 
+//LOGIN
 router.post("/", async (req, res) => {
   try {
-    const { email, password } = req.body;
-
-    const userInfo = {
-      email,
-      password,
-    };
+    const userInfo = new UserDTO(req.body);
 
     const { access_token, error } = await userService.authenticate(userInfo);
 

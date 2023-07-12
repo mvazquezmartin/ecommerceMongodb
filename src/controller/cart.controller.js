@@ -86,6 +86,13 @@ router.post(
   }
 );
 
+// DELETE ALL CARTS
+router.delete("/", async (req, res) => {
+  await cartService.delete();
+  res.json({ message: "Carritos ELIMINADOS!" });
+});
+module.exports = router;
+
 // //PURCHASE
 // router.get(
 //   "/:cid/purchase",
@@ -134,10 +141,3 @@ router.post(
 //     }
 //   }
 // );
-
-// DELETE ALL CARTS
-router.delete("/", async (req, res) => {
-  await cartService.delete();
-  res.json({ message: "Carritos ELIMINADOS!" });
-});
-module.exports = router;

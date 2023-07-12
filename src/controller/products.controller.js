@@ -42,8 +42,7 @@ router.get("/", async (req, res) => {
 // PRODUCT BY ID
 router.get("/:pid", async (req, res) => {
   try {
-    const id = req.params.pid;
-    //const product = await productManager.getProductById(id);
+    const id = req.params.pid;    
     if (!isValidObjectId(id)) throw new Error("ID invalido");
     const product = await productService.getOneById(id);
     res.json(product);

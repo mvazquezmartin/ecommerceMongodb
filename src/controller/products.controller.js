@@ -42,7 +42,7 @@ router.get("/", async (req, res) => {
 // PRODUCT BY ID
 router.get("/:pid", async (req, res) => {
   try {
-    const id = req.params.pid;    
+    const id = req.params.pid;
     if (!isValidObjectId(id)) throw new Error("ID invalido");
     const product = await productService.getOneById(id);
     res.json(product);
@@ -75,7 +75,7 @@ router.put(
   authorization("admin"),
   async (req, res) => {
     const id = req.params.pid;
-    const update = req.body;
+    const update = new ProductDto(req.body);
     try {
       await productService.update(id, update);
       res.status(201).send("Producto modificado exitosamente");

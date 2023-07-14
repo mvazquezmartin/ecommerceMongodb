@@ -11,27 +11,23 @@ const userDao = new UsersDao();
 const cartService = new CartService();
 
 const create = async (userInfo) => {
-  try {
-    const user = await usersStore.getOne(userInfo.email);
-    if (user) return { error: "That email is already registered" };
+  const user = await usersStore.getOne(userInfo.email);
+  if (user) throw new Error("That email is already registered");
 
-    const pwHashed = createHash(userInfo.password);
+  const pwHashed = createHash(userInfo.password);
 
-    const newUserInfo = new UserDTO(userInfo);
-    newUserInfo.password = pwHashed;
+  const newUserInfo = new UserDTO(userInfo);
+  newUserInfo.password = pwHashed;
 
-    const cart = await cartService.create();
-    newUserInfo.id_cart = cart._id;
+  const cart = await cartService.create();
+  newUserInfo.id_cart = cart._id;
 
-    await usersStore.create(newUserInfo);
-    const access_token = generateToken({ email: newUserInfo.email });
+  await usersStore.create(newUserInfo);
+  const access_token = generateToken({ email: newUserInfo.email });
 
-    await msg.send(newUserInfo);
+  await msg.send(newUserInfo);
 
-    return { access_token };
-  } catch (error) {
-    throw error;
-  }
+  return access_token;
 };
 
 const authenticate = async (userInfo) => {

@@ -5,6 +5,7 @@ const { isValidObjectId } = require("mongoose");
 const authorization = require("../middlewares/authorization.middleware");
 const ProductService = require("../service/product.service");
 const ProductDto = require("../dtos/products.dto");
+const productError = require("../errorHandlers/product/prod.error");
 
 const router = Router();
 const productManager = new ProductManager();
@@ -57,13 +58,14 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   authorization("admin"),
-  async (req, res) => {
-    const item = new ProductDto(req.body);
+  async (req, res, next) => {
     try {
+      const item = new ProductDto(req.body);
+      productError(item);
       await productService.create(item);
       res.status(201).send("Producto agregado");
     } catch (error) {
-      res.status(500).send(error);
+      next(error);
     }
   }
 );
@@ -73,14 +75,15 @@ router.put(
   "/:pid",
   passport.authenticate("jwt", { session: false }),
   authorization("admin"),
-  async (req, res) => {
-    const id = req.params.pid;
-    const update = new ProductDto(req.body);
+  async (req, res, next) => {
     try {
+      const id = req.params.pid;
+      const update = new ProductDto(req.body);      
+      productError(update);
       await productService.update(id, update);
       res.status(201).send("Producto modificado exitosamente");
     } catch (error) {
-      res.status(500).send(error);
+      next(error);
     }
   }
 );

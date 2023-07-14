@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:local":"NODE_ENV=local nodemon src/"
+    "start:local": "NODE_ENV=local nodemon src/"
   },
   "keywords": [],
   "author": "",
@@ -25,7 +25,6 @@
     "mongoose": "^7.0.3",
     "mongoose-paginate-v2": "^1.7.1",
     "nodemailer": "^6.9.3",
-    "nodemon": "^2.0.22",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",

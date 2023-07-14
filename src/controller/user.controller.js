@@ -1,43 +1,27 @@
 const { Router } = require("express");
 const userService = require("../service/users.service");
 const UserDTO = require("../dtos/user.dto");
-const CustomError = require("../errorHandlers/customError");
-const generateUserErrorInfo = require("../errorHandlers/infoError");
 const userStore = require("../store/user.store");
-const EnumErrors = require("../errorHandlers/errorNum");
 const { passwordValidate } = require("../utils/cryptPassword.util");
+const userError = require("../errorHandlers/user/user.error");
 
 const router = Router();
 
 //REGISTER USER
-router.post("/", async (req, res) => {
-  try {
+router.post("/", async (req, res, next) => {
+  try {    
     const newUserInfo = new UserDTO(req.body);
 
-    if (
-      !newUserInfo.first_name ||
-      !newUserInfo.last_name ||
-      !newUserInfo.email
-    ) {
-      CustomError.createError({
-        name: "User creation error",
-        cause: generateUserErrorInfo(newUserInfo),
-        message: "Error trying to create user",
-        code: EnumErrors.INVALID_TYPES_ERROR,
-      });
-    }
+    userError(newUserInfo);
 
-    const { access_token, error } = await userService.create(newUserInfo);
-
-    if (error) return res.status(400).json({ error });
+    const access_token = await userService.create(newUserInfo);
 
     res.status(201).json({
       status: "success",
       token: access_token,
     });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: error.message });
+  } catch (error) {    
+    next(error)
   }
 });
 

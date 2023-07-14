@@ -1,8 +1,8 @@
-require("colors");
-const CustomError = require("../customError");
-const enumErrors = require("../errorNum");
+const CustomError = require("../CustomError");
+const EnumErrors = require("../enumError");
+const generateErrorInfo = require("../infoError");
 
-const productError = (pid, obj) => {
+const productError = (obj) => {
   if (
     !obj.title ||
     !obj.description ||
@@ -12,18 +12,11 @@ const productError = (pid, obj) => {
     !obj.stock ||
     !obj.category
   ) {
-    CustomError.createError({
+    CustomError.create({
       name: "Error al agregar el producto",
-      cause: `Alguno de los datos son inválidos:
-          *Título: Se esperaba un string, se recibió: ${obj.title}
-          *Description: Se esperaba un string, se recibió: ${obj.description}
-          *Price: Se esperaba un number, se recibió: ${obj.price}
-          *Thumbail: Se esperaba un string, se recibió: ${obj.thumbail}
-          *Code: Se esperaba un string, se recibió: ${obj.code}
-          *Stock: Se esperaba un number, se recibió: ${obj.stock}
-          *Category: Se esperaba un string, se recibió: ${obj.category}`.red,
+      cause: generateErrorInfo(EnumErrors.INVALID_TYPES_ERROR, obj),
       message: "Error por datos inválidos",
-      code: enumErrors.INVALID_TYPES_ERROR,
+      code: EnumErrors.INVALID_TYPES_ERROR,
     });
   }
 };

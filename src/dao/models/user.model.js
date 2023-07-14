@@ -37,10 +37,20 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "carts",
   },
+  own_prod: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "productos",
+    },
+  ],
 });
 
 userSchema.pre("find", function () {
   this.populate("carts");
+});
+
+userSchema.pre("find", function () {
+  this.populate("own_prod");
 });
 
 const Users = mongoose.model(userCollection, userSchema);

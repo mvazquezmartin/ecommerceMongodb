@@ -57,7 +57,7 @@ router.get("/:pid", async (req, res) => {
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
-  authorization("admin"),
+  authorization(["admin", "premium"]),
   async (req, res, next) => {
     try {
       const item = new ProductDto(req.body);
@@ -74,7 +74,7 @@ router.post(
 router.put(
   "/:pid",
   passport.authenticate("jwt", { session: false }),
-  authorization("admin"),
+  authorization(["admin", "premium"]),
   async (req, res, next) => {
     try {
       const id = req.params.pid;
@@ -92,7 +92,7 @@ router.put(
 router.delete(
   "/:pid",
   passport.authenticate("jwt", { session: false }),
-  authorization("admin"),
+  authorization(["admin","premium"]),
   async (req, res) => {
     const id = req.params.pid;
     try {

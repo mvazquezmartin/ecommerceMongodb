@@ -53,7 +53,7 @@ router.get(
 router.get(
   "/logout",
   passport.authenticate("jwt", { session: false }),
-  authorization(["user", "admin"]),
+  authorization(["user", "admin", "premium"]),
   (req, res) => {
     res.clearCookie("authToken");
     res.status(200).json({ message: "Logged out successfully" });

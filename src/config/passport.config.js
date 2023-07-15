@@ -45,8 +45,7 @@ const initializePassport = () => {
         callbackURL: CALLBACK_URL,
       },
       async (accessToken, refreshToken, profile, done) => {
-        try {
-          //console.log(profile);
+        try {          
           const user = await usersStore.getOne(profile._json.email);
 
           if (!user) {

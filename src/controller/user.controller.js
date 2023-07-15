@@ -9,7 +9,7 @@ const router = Router();
 
 //REGISTER USER
 router.post("/", async (req, res, next) => {
-  try {    
+  try {
     const newUserInfo = new UserDTO(req.body);
 
     userError(newUserInfo);
@@ -20,8 +20,8 @@ router.post("/", async (req, res, next) => {
       status: "success",
       token: access_token,
     });
-  } catch (error) {    
-    next(error)
+  } catch (error) {
+    next(error);
   }
 });
 

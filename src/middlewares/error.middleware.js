@@ -1,7 +1,8 @@
+const colors = require("colors")
 const EnumErrors = require("../errorHandlers/enumError");
 
 const errorMiddleware = (error, req, res, next) => {
-  console.log(error.cause);
+  console.log(colors.yellow(error.cause));
 
   switch (error.code) {
     case EnumErrors.INVALID_TYPES_ERROR:
@@ -17,7 +18,11 @@ const errorMiddleware = (error, req, res, next) => {
       break;
 
     default:
-      res.json({ status: "Error", error: "Unhandled error" });
+      if (!error.message) {
+        res.json({ status: "Error", error: "Unhandled error" });
+      }
+      console.log(colors.yellow(error.message))
+      res.json({ status: "Error", error: error.message });
       break;
   }
   next();

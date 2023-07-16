@@ -78,7 +78,7 @@ router.put(
   async (req, res, next) => {
     try {
       const id = req.params.pid;
-      const update = new ProductDto(req.body);      
+      const update = new ProductDto(req.body);
       productError(update);
       await productService.update(id, update);
       res.status(201).send("Producto modificado exitosamente");
@@ -92,7 +92,7 @@ router.put(
 router.delete(
   "/:pid",
   passport.authenticate("jwt", { session: false }),
-  authorization(["admin","premium"]),
+  authorization(["admin", "premium"]),
   async (req, res) => {
     const id = req.params.pid;
     try {

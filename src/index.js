@@ -8,6 +8,7 @@ const { PORT } = require("./config/app.config");
 const initializePassport = require("./config/passport.config");
 const setUpSocket = require("./config/socketio.config");
 const errorMiddleware = require("./middlewares/error.middleware");
+const swaggerRoute = require("./controller/swagger.controller");
 //const loggerMiddleware = require("./middlewares/logger.middleware");
 
 const app = express();

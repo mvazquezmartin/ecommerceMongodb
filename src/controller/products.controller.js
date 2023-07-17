@@ -54,7 +54,7 @@ router.get("/:pid", async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(404).send({ message: "ID INVALIDO" });
+    res.status(404).send({ message: "Something went wrong" });
   }
 });
 
@@ -72,7 +72,7 @@ router.post(
       if (user.role == "premium") {
         await userService.createOwn(user.email, product._id);
       }
-      res.status(201).send("Producto agregado");
+      res.status(201).json({ succes: "Producto agregado" });
     } catch (error) {
       next(error);
     }
@@ -88,10 +88,17 @@ router.put(
     try {
       const id = req.params.pid;
       const user = req.user;
-      if (user.role == "premium") await userService.checkOwn(user.email, id);
+
+      if (user.role == "premium") {
+        const isOwn = await userService.checkOwn(user.email, id);
+        if (!isOwn) throw new Error("Unauthorized");
+      }
+
       const update = new ProductDto(req.body);
       productError(update);
+     
       await productService.update(id, update);
+     
       res.status(201).json({ success: "Producto modificado exitosamente" });
     } catch (error) {
       next(error);
@@ -108,8 +115,14 @@ router.delete(
     try {
       const id = req.params.pid;
       const user = req.user;
-      if (user.role == "premium") await userService.checkOwn(user.email, id);
+
+      if (user.role == "premium"){
+        const isOwn = await userService.checkOwn(user.email, id)
+        if (!isOwn) throw new Error("Unauthorized");
+      } 
+
       await productService.delete(id);
+      
       res.json({ message: "Producto eliminado" });
     } catch (error) {
       console.error(error.message);

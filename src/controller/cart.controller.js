@@ -3,6 +3,7 @@ const passport = require("passport");
 const authorization = require("../middlewares/authorization.middleware");
 const CartService = require("../service/cart.service");
 const ProductService = require("../service/product.service");
+const userService = require("../service/users.service");
 
 const router = Router();
 const cartService = new CartService();
@@ -31,7 +32,7 @@ router.post(
   async (req, res) => {
     try {
       const newCart = await cartService.create();
-      console.log(newCart);
+
       res.status(201).json(newCart);
     } catch (error) {
       res.status(500).send(error);
@@ -47,7 +48,9 @@ router.get(
   async (req, res) => {
     try {
       const { cid } = req.params;
+
       const cart = await cartService.getOne(cid);
+
       res.json(cart);
     } catch (error) {
       res.status(404).json({ error: "El carrito no tiene productos" });
@@ -59,11 +62,19 @@ router.get(
 router.post(
   "/:cid/product/:pid",
   passport.authenticate("jwt", { session: false }),
-  authorization("user"),
+  authorization(["user", "premium"]),
   async (req, res) => {
-    const { cid, pid } = req.params;
-    const { quantity } = req.body;
     try {
+      const { cid, pid } = req.params;
+      const { quantity } = req.body;
+
+      const user = req.user;
+
+      if (user.role == "premium") {
+        const isOwn = await userService.checkOwn(user.email, pid);
+        if (isOwn) throw new Error("Unauthorized");
+      }
+
       const product = await productService.getOneById(pid);
 
       if (!product) {
@@ -96,7 +107,9 @@ router.delete(
   async (req, res) => {
     try {
       const { cid, pid } = req.params;
+
       await cartService.deleteProduct(cid, pid);
+
       res.status(200).json({ message: "Producto elimiando del carrito" });
     } catch {
       console.log(error);

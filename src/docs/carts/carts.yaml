@@ -57,7 +57,7 @@ paths:
             aplication/json:
               schema:
                 example:
-                  succes: "Producto agregado al carrito"                
+                  succes: "Producto agregado al carrito"
         "500":
           description: No se pudo agregar el producto al carrito
           content:
@@ -65,7 +65,38 @@ paths:
               schema:
                 example:
                   error: "No se pudo agregar el producto"
-
+    delete:
+      summary: Elimina un producto del carrito seleccionado
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito a borrar el producto
+          schema:
+            $type: string
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto a eliminar del carrito
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: El producto se elemino correctamente
+          content:
+            aplication/json:
+              schema:
+                example:
+                  success: "Producto eliminado del carrito"
+        "500":
+          description: No se pudo eliminar el producto al carrito
+          content:
+            aplication/json:
+              schema:
+                example:
+                  error: "No se pudo eliminar el producto"
 
 components:
   schemas:

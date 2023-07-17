@@ -43,7 +43,6 @@ const userSchema = new mongoose.Schema({
       ref: "productos",
     },
   ],
-  default: [],
 });
 
 userSchema.pre("find", function () {

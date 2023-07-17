@@ -42,6 +42,10 @@ router.post("/resetpassword", async (req, res) => {
   }
 });
 
+router.get("/changepw", (req, res)=>{
+  res.render("changepw.handlebars")
+})
+
 module.exports = router;
 
 //------------------------ DEPRECADO POR JWT ------------------------------------

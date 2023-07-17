@@ -27,7 +27,7 @@ class UsersDao {
 
   async checkOwnProd(email, pid) {
     const user = await Users.findOne({ email: email });
-    if (!user.own_prod.includes(pid)) throw new Error("Unauthorized");
+    return user.own_prod.includes(pid);
   }
 }
 

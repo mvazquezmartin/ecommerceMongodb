@@ -103,7 +103,7 @@ router.post(
 router.delete(
   "/:cid/product/:pid",
   passport.authenticate("jwt", { session: false }),
-  authorization("user"),
+  authorization(["user", "premium"]),
   async (req, res) => {
     try {
       const { cid, pid } = req.params;

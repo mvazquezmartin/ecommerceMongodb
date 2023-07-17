@@ -23,8 +23,8 @@ class CartService {
     return await cartDao.getProduct(cid, limit, page);
   }
 
-  async deleteProduct(cid, limit, page) {
-    return await cartDao.deleteProduct(cid, limit, page);
+  async deleteProduct(cid, pid) {
+    return await cartDao.deleteProduct(cid, pid);
   }
 
   async checkStock(pid, quantity) {

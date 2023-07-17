@@ -16,6 +16,19 @@ class UsersDao {
   async updatePw(email, pw) {
     return await Users.updateOne({ email }, { password: pw });
   }
+
+  async createOwnProd(email, pid) {
+    return await Users.findOneAndUpdate(
+      { email: email },
+      { $push: { own_prod: pid } },
+      { new: true }
+    );
+  }
+
+  async checkOwnProd(email, pid) {
+    const user = await Users.findOne({ email: email });
+    if (!user.own_prod.includes(pid)) throw new Error("Unauthorized");
+  }
 }
 
 module.exports = UsersDao;

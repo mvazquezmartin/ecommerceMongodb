@@ -9,14 +9,19 @@ const cartService = new CartService();
 const productService = new ProductService();
 
 // GET ALL CARTS
-router.get("/", async (req, res) => {
-  const carts = await cartService.get();
-  if (carts.length === 0) {
-    res.json({ message: "No hay carritos" });
-  } else {
-    res.json(carts);
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  authorization("admin"),
+  async (req, res) => {
+    const carts = await cartService.get();
+    if (carts.length === 0) {
+      res.json({ message: "No hay carritos" });
+    } else {
+      res.json(carts);
+    }
   }
-});
+);
 
 // NEW CART
 router.post(
@@ -40,14 +45,11 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   authorization("user"),
   async (req, res) => {
-    const id = parseInt(req.params.cid);
-    const cartFind = await cartService.getOne(id);
-
-    if (!cartFind) res.status(404).json({ error: "Carrito no encontrado" });
-
-    if (cartFind.products.length !== 0) {
-      res.json(cartFind.products);
-    } else {
+    try {
+      const { cid } = req.params;
+      const cart = await cartService.getOne(cid);
+      res.json(cart);
+    } catch (error) {
       res.status(404).json({ error: "El carrito no tiene productos" });
     }
   }
@@ -82,6 +84,23 @@ router.post(
       }
     } catch (error) {
       res.status(400).json(error.message);
+    }
+  }
+);
+
+//DELETE ITEM CART
+router.delete(
+  "/:cid/product/:pid",
+  passport.authenticate("jwt", { session: false }),
+  authorization("user"),
+  async (req, res) => {
+    try {
+      const { cid, pid } = req.params;
+      await cartService.deleteProduct(cid, pid);
+      res.status(200).json({ message: "Producto elimiando del carrito" });
+    } catch {
+      console.log(error);
+      res.json({ error: "algo salio mal" });
     }
   }
 );

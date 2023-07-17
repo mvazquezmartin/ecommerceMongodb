@@ -7,7 +7,7 @@ const productError = (obj) => {
     !obj.title ||
     !obj.description ||
     !obj.price ||
-    !obj.thumbail ||
+    !obj.thumbnail ||
     !obj.code ||
     !obj.stock ||
     !obj.category

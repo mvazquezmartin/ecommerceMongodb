@@ -6,6 +6,7 @@ class ProductDto {
     this.category = item.category;
     this.code = item.code;
     this.stock = item.stock;
+    this.thumbnail = item.thumbnail;
   }
 }
 

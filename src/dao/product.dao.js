@@ -14,7 +14,7 @@ class ProductDao {
   }
 
   async getOneById(id) {
-    return await Products.findOne({ _id: id });
+    return await Products.findOne({ _id: id, status: true });
   }
 
   async update(id, update) {

@@ -26,10 +26,15 @@ paths:
                   $ref: "#/components/schemas/Cart"
         "500":
           description: No se pudo obtener el carrito
+          content:
+            aplication/json:
+              schema:
+                example:
+                  error: "No se puedo obtener el carrito"
 
   /api/cart/{cid}/product/{pid}:
     post:
-      summary: Agrega un producto al carrito seleccionado
+      summary: Agrega un producto y cantidad al carrito seleccionado
       tags:
         - Carts
       parameters:
@@ -45,11 +50,21 @@ paths:
           description: ID del producto a agregar al carrito
           schema:
             $type: string
-    responses:
-      "200":
-        description: El producto se agrego correctamente
-      "500":
-        description: No se pudo agregar el producto al carrito
+      responses:
+        "200":
+          description: El producto se agrego correctamente
+          content:
+            aplication/json:
+              schema:
+                example:
+                  succes: "Producto agregado al carrito"                
+        "500":
+          description: No se pudo agregar el producto al carrito
+          content:
+            aplication/json:
+              schema:
+                example:
+                  error: "No se pudo agregar el producto"
 
 
 components:

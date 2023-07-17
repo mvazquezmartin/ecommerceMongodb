@@ -6,6 +6,7 @@ const authorization = require("../middlewares/authorization.middleware");
 const ProductService = require("../service/product.service");
 const ProductDto = require("../dtos/products.dto");
 const productError = require("../errorHandlers/product/prod.error");
+const userService = require("../service/users.service");
 
 const router = Router();
 const productManager = new ProductManager();
@@ -36,7 +37,7 @@ router.get("/", async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(500).send({ message: "internal error server" });
+    res.status(500).json({ message: "internal error server" });
   }
 });
 
@@ -46,7 +47,11 @@ router.get("/:pid", async (req, res) => {
     const id = req.params.pid;
     if (!isValidObjectId(id)) throw new Error("ID invalido");
     const product = await productService.getOneById(id);
-    res.json(product);
+    if (!product) {
+      res.json({ message: "No se encuentra el producto" });
+    } else {
+      res.json(product);
+    }
   } catch (error) {
     console.log(error);
     res.status(404).send({ message: "ID INVALIDO" });
@@ -62,7 +67,11 @@ router.post(
     try {
       const item = new ProductDto(req.body);
       productError(item);
-      await productService.create(item);
+      const user = req.user;
+      const product = await productService.create(item);
+      if (user.role == "premium") {
+        await userService.createOwn(user.email, product._id);
+      }
       res.status(201).send("Producto agregado");
     } catch (error) {
       next(error);
@@ -78,10 +87,12 @@ router.put(
   async (req, res, next) => {
     try {
       const id = req.params.pid;
+      const user = req.user;
+      if (user.role == "premium") await userService.checkOwn(user.email, id);
       const update = new ProductDto(req.body);
       productError(update);
       await productService.update(id, update);
-      res.status(201).send("Producto modificado exitosamente");
+      res.status(201).json({ success: "Producto modificado exitosamente" });
     } catch (error) {
       next(error);
     }
@@ -94,14 +105,15 @@ router.delete(
   passport.authenticate("jwt", { session: false }),
   authorization(["admin", "premium"]),
   async (req, res) => {
-    const id = req.params.pid;
     try {
+      const id = req.params.pid;
+      const user = req.user;
+      if (user.role == "premium") await userService.checkOwn(user.email, id);
       await productService.delete(id);
       res.json({ message: "Producto eliminado" });
     } catch (error) {
-      console.error(error);
-      res.status(500);
-      res.send('<img src="https://http.cat/500">');
+      console.error(error.message);
+      res.status(500).json({ error: "Unauthorized" });
     }
   }
 );

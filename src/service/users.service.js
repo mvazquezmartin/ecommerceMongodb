@@ -30,6 +30,14 @@ const create = async (userInfo) => {
   return access_token;
 };
 
+const createOwn = async (email, pid) => {
+  return await userDao.createOwnProd(email, pid);
+};
+
+const checkOwn = async (email, pid) =>{
+  return await userDao.checkOwnProd(email, pid)
+}
+
 const authenticate = async (userInfo) => {
   try {
     const user = await usersStore.getOne(userInfo.email);
@@ -57,6 +65,8 @@ const updatePw = async (email, pw) => {
 
 module.exports = {
   create,
+  createOwn,
+  checkOwn,
   authenticate,
   updatePw,
 };

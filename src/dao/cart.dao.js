@@ -27,7 +27,7 @@ class CartDao {
 
   async addProduct(cid, pid, quantity) {
     try {
-      const cart = await Carts.findById(cid)      
+      const cart = await Carts.findById(cid);
       if (!cart) throw new Error("Cart not found");
       const prod = cart.products.find((p) => p.product.toString() === pid);
 
@@ -57,26 +57,17 @@ class CartDao {
   }
 
   async deleteProduct(cid, pid) {
-    try {
+    try {      
       const cart = await Carts.findById(cid);
-      const prod = await cart.products.filter((prod) => prod.pid == pid);
-      await Carts.updateOne(
-        {
-          cid: cid,
-        },
-        {
-          $set: {
-            products: prod,
-          },
-        }
-      );
+      cart.products = cart.products.filter((prod)=> prod.product != pid)
+      await cart.save()
     } catch (error) {
       throw error.message;
     }
   }
 
   async delete() {
-    await Carts.deleteMany()    
+    await Carts.deleteMany();
   }
 }
 

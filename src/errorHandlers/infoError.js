@@ -16,7 +16,7 @@ const generateErrorInfo = (code, obj) => {
           *Título: Se esperaba un string, se recibió: ${colors.magenta(obj.title)}
           *Description: Se esperaba un string, se recibió: ${colors.magenta(obj.description)}
           *Price: Se esperaba un number, se recibió: ${colors.magenta(obj.price)}
-          *Thumbail: Se esperaba un string, se recibió: ${colors.magenta(obj.thumbail)}
+          *Thumbnail: Se esperaba un string, se recibió: ${colors.magenta(obj.thumbnail)}
           *Code: Se esperaba un string, se recibió: ${colors.magenta(obj.code)}
           *Stock: Se esperaba un number, se recibió: ${colors.magenta(obj.stock)}
           *Category: Se esperaba un string, se recibió: ${colors.magenta(obj.category)}`;

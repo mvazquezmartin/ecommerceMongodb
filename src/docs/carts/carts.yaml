@@ -3,3 +3,79 @@ info:
   title: API Products
   version: "1.0"
 paths:
+  /api/cart/{cid}:
+    get:
+      summary: Optiene un carrito por su ID con sus productos
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito a buscar
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: El carrito se obtuvo correctamente
+          content:
+            aplication/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cart"
+        "500":
+          description: No se pudo obtener el carrito
+
+  /api/cart/{cid}/product/{pid}:
+    post:
+      summary: Agrega un producto al carrito seleccionado
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito a agregar producto
+          schema:
+            $type: string
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto a agregar al carrito
+          schema:
+            $type: string
+    responses:
+      "200":
+        description: El producto se agrego correctamente
+      "500":
+        description: No se pudo agregar el producto al carrito
+
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID autogenerado por Mongodb
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              pid:
+                type: string
+                description: ID del producto
+              quantity:
+                type: number
+                description: Cantidad del producto en el carrito
+          description: Lista de ID y cantidad
+      example:
+        _id: ObjectId("649defaed6abfa653547eb55")
+        products:
+          - pid: 643ef56bb0d990bb924063d4
+            quantity: 3
+          - pid: 643ef56bb0d990bb924063d5
+            quantity: 10

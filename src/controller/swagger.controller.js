@@ -3,11 +3,11 @@ const path = require("path");
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUiExpess = require("swagger-ui-express");
 
-const route = Router();
+const router = Router();
 
 const swaggerOptions = {
   definition: {
-    openapi: "3.0.1",
+    openapi: "3.1.0",
     info: {
       title: "Documentacion API CRUD Ecommerce",
       description: "by M.VazquezMartin",
@@ -18,6 +18,6 @@ const swaggerOptions = {
 
 const specs = swaggerJSDoc(swaggerOptions);
 
-route.use("/", swaggerUiExpess.serve, swaggerUiExpess.setup(specs));
+router.use("/", swaggerUiExpess.serve, swaggerUiExpess.setup(specs));
 
-module.exports = route;
+module.exports = router;

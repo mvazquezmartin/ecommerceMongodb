@@ -50,6 +50,12 @@ paths:
           description: ID del producto a agregar al carrito
           schema:
             $type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductAddition"
       responses:
         "200":
           description: El producto se agrego correctamente
@@ -81,7 +87,7 @@ paths:
           required: true
           description: ID del producto a eliminar del carrito
           schema:
-            $type: string
+            $type: string      
       responses:
         "200":
           description: El producto se elemino correctamente
@@ -125,3 +131,17 @@ components:
             quantity: 3
           - pid: 643ef56bb0d990bb924063d5
             quantity: 10
+            
+    ProductAddition:
+      type: object
+      properties:
+        pid:
+          type: string
+          description: ID del producto
+        quantity:
+          type: number
+          description: Cantidad del producto a agregar
+      required:
+        - quantity
+      example:        
+        quantity: 3  

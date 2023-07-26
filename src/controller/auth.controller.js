@@ -4,20 +4,18 @@ const { generateToken } = require("../utils/jwt.util");
 const authorization = require("../middlewares/authorization.middleware");
 const userService = require("../service/users.service");
 const UserDTO = require("../dtos/user.dto");
+const { userAuthenticateError } = require("../errorHandlers/user/user.error");
 
 const router = Router();
 
 //LOGIN
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   try {
     const userInfo = new UserDTO(req.body);
 
     const response = await userService.authenticate(userInfo);
 
-    if (response.status === "Error")
-      return res
-        .status(400)
-        .json({ status: response.status, message: response.message, data: {} });
+    userAuthenticateError(response);
 
     res.cookie("authToken", response.data, { httpOnly: true }).json({
       success: response.status,
@@ -26,7 +24,7 @@ router.post("/", async (req, res) => {
       redirectUrl: "/home",
     });
   } catch (error) {
-    res.status(500).json({ status: "Error", error: "Internal Server Error" });
+    next(error);
   }
 });
 
@@ -46,18 +44,18 @@ router.get(
     try {
       const user = req.user;
 
-      const access_token = generateToken({
+      const response = generateToken({
         email: user.email,
         role: user.role,
       });
 
       res
-        .cookie("authToken", access_token)
-        .redirect("http://localhost:8080/home");
+        .cookie("authToken", response, { httpOnly: true })
+        .json({ status: "success", message: "Authenticated with Google" });
     } catch (error) {
       res
         .status(500)
-        .json({ status: "Error", message: "Internal Server Error" });
+        .json({ status: "error", message: "Internal Server error" });
     }
   }
 );

@@ -12,7 +12,9 @@ const cartService = new CartService();
 
 const create = async (userInfo) => {
   const user = await usersStore.getOne(userInfo.email);
-  if (user) throw new Error("That email is already registered");
+
+  if (user)
+    return { status: "error", message: "That email is already registered" };
 
   const pwHashed = createHash(userInfo.password);
 
@@ -27,7 +29,11 @@ const create = async (userInfo) => {
 
   await msg.send(newUserInfo);
 
-  return access_token;
+  return {
+    status: "success",
+    message: "Successfully registered user",
+    data: access_token,
+  };
 };
 
 const createOwn = async (email, pid) => {
@@ -43,10 +49,10 @@ const authenticate = async (userInfo) => {
     const user = await usersStore.getOne(userInfo.email);
 
     if (!user)
-      return { status: "Error", message: "Username and Password don't match" };
+      return { status: "error", message: "Username and Password don't match" };
 
     if (!passwordValidate(userInfo.password, user))
-      return { status: "Error", message: "Username and Password don't match" };
+      return { status: "error", message: "Username and Password don't match" };
 
     const access_token = generateToken({ email: user.email, role: user.role });
 

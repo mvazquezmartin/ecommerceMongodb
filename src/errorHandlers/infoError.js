@@ -8,18 +8,32 @@ const generateErrorInfo = (code, obj) => {
       if ("first_name" in obj) {
         response = `One or more properties were incomplete or not valid. 
           List of required properties:
-          *first_name: needs to be a string, received: ${colors.magenta(obj.first_name)}.
-          *last_name: needs to be a string, received: ${colors.magenta(obj.last_name)}.
-          *email: needs to be a string, received: ${colors.magenta(obj.email)}.`;
+          *first_name: needs to be a string, received: ${colors.magenta(
+            obj.first_name
+          )}.
+          *last_name: needs to be a string, received: ${colors.magenta(
+            obj.last_name
+          )}.
+          *email: needs to be a string, received: ${colors.magenta(obj.email)}.
+          *password: need to be a string, received: ${colors.magenta(
+            obj.password
+          )}`;
       } else if ("stock" in obj) {
-        response = `Alguno de los datos son inválidos:
-          *Título: Se esperaba un string, se recibió: ${colors.magenta(obj.title)}
-          *Description: Se esperaba un string, se recibió: ${colors.magenta(obj.description)}
-          *Price: Se esperaba un number, se recibió: ${colors.magenta(obj.price)}
-          *Thumbnail: Se esperaba un string, se recibió: ${colors.magenta(obj.thumbnail)}
-          *Code: Se esperaba un string, se recibió: ${colors.magenta(obj.code)}
-          *Stock: Se esperaba un number, se recibió: ${colors.magenta(obj.stock)}
-          *Category: Se esperaba un string, se recibió: ${colors.magenta(obj.category)}`;
+        response = `One or more properties were incomplete or not valid. 
+        List of required properties:
+          *title: needs to be a string, received: ${colors.magenta(obj.title)}
+          *description: needs to be a string, received: ${colors.magenta(
+            obj.description
+          )}
+          *price: needs to be a number, received: ${colors.magenta(obj.price)}
+          *thumbnail: needs to be a string, received: ${colors.magenta(
+            obj.thumbnail
+          )}
+          *code: needs to be a string, received: ${colors.magenta(obj.code)}
+          *stock: needs to be a number, received: ${colors.magenta(obj.stock)}
+          *category: needs to be a string, received: ${colors.magenta(
+            obj.category
+          )}`;
       }
       break;
 

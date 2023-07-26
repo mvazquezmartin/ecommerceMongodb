@@ -3,7 +3,10 @@ const userService = require("../service/users.service");
 const UserDTO = require("../dtos/user.dto");
 const userStore = require("../store/user.store");
 const { passwordValidate } = require("../utils/cryptPassword.util");
-const userError = require("../errorHandlers/user/user.error");
+const {
+  userInfoError,
+  userUniqueError,
+} = require("../errorHandlers/user/user.error");
 
 const router = Router();
 
@@ -12,13 +15,15 @@ router.post("/", async (req, res, next) => {
   try {
     const newUserInfo = new UserDTO(req.body);
 
-    userError(newUserInfo);
+    userInfoError(newUserInfo);
 
-    const access_token = await userService.create(newUserInfo);
+    const response = await userService.create(newUserInfo);
+
+    userUniqueError(response);
 
     res.status(201).json({
-      status: "success",
-      token: access_token,
+      status: response.status,
+      token: response.data,
     });
   } catch (error) {
     next(error);
@@ -42,9 +47,9 @@ router.post("/resetpassword", async (req, res) => {
   }
 });
 
-router.get("/changepw", (req, res)=>{
-  res.render("changepw.handlebars")
-})
+router.get("/changepw", (req, res) => {
+  res.render("changepw.handlebars");
+});
 
 module.exports = router;
 

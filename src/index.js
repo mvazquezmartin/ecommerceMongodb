@@ -7,28 +7,28 @@ const router = require("./routes");
 const { PORT } = require("./config/app.config");
 const initializePassport = require("./config/passport.config");
 const setUpSocket = require("./config/socketio.config");
-const errorMiddleware = require("./middlewares/error.middleware");
-//const loggerMiddleware = require("./middlewares/logger.middleware");
+const appError = require("./middlewares/error.middleware");
+//const appLogger = require("./middlewares/logger.middleware");
 
 const app = express();
+
+app.engine("handlebars", handlebars.engine());
+app.set("views", __dirname + "/views");
+app.set("view engine", "handlebars");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 app.use(cookieParser());
 
-router(app);
-mongoConnect();
-
 initializePassport();
 app.use(passport.initialize());
 
-app.use(errorMiddleware);
-//app.use(loggerMiddleware);
+router(app);
+mongoConnect();
 
-app.engine("handlebars", handlebars.engine());
-app.set("views", __dirname + "/views");
-app.set("view engine", "handlebars");
+app.use(appError);
+//app.use(appLogger);
 
 const httpServer = app.listen(PORT, () => {
   console.log(`Servidor iniciado en el puerto ${PORT}`);

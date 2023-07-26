@@ -12,14 +12,18 @@ router.post("/", async (req, res) => {
   try {
     const userInfo = new UserDTO(req.body);
 
-    const { access_token, error } = await userService.authenticate(userInfo);
+    const response = await userService.authenticate(userInfo);
 
-    if (error) return res.status(400).json({ error });
+    if (response.status === "Error")
+      return res
+        .status(400)
+        .json({ status: response.status, message: response.message, data: {} });
 
-    res.cookie("authToken", access_token, { httpOnly: true }).json({
-      success: true,
+    res.cookie("authToken", response.data, { httpOnly: true }).json({
+      success: response.status,
+      message: response.message,
+      access_token: response.data,
       redirectUrl: "/home",
-      access_token: access_token,
     });
   } catch (error) {
     res.status(500).json({ status: "Error", error: "Internal Server Error" });
@@ -39,13 +43,22 @@ router.get(
     session: false,
   }),
   (req, res) => {
-    const access_token = generateToken({
-      email: req.user.email,
-      role: req.user.role,
-    });
-    res
-      .cookie("authToken", access_token)
-      .redirect("http://localhost:8080/home");
+    try {
+      const user = req.user;
+
+      const access_token = generateToken({
+        email: user.email,
+        role: user.role,
+      });
+
+      res
+        .cookie("authToken", access_token)
+        .redirect("http://localhost:8080/home");
+    } catch (error) {
+      res
+        .status(500)
+        .json({ status: "Error", message: "Internal Server Error" });
+    }
   }
 );
 

@@ -34,21 +34,27 @@ const createOwn = async (email, pid) => {
   return await userDao.createOwnProd(email, pid);
 };
 
-const checkOwn = async (email, pid) =>{
-  return await userDao.checkOwnProd(email, pid)
-}
+const checkOwn = async (email, pid) => {
+  return await userDao.checkOwnProd(email, pid);
+};
 
 const authenticate = async (userInfo) => {
   try {
     const user = await usersStore.getOne(userInfo.email);
 
-    if (!user) return { error: "Username and Password don't match" };
+    if (!user)
+      return { status: "Error", message: "Username and Password don't match" };
+
     if (!passwordValidate(userInfo.password, user))
-      return { error: "Username and Password don't match" };
+      return { status: "Error", message: "Username and Password don't match" };
 
     const access_token = generateToken({ email: user.email, role: user.role });
 
-    return { access_token };
+    return {
+      status: "success",
+      message: "authenticated user",
+      data: access_token,
+    };
   } catch (error) {
     throw error;
   }

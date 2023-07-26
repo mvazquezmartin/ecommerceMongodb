@@ -67,7 +67,7 @@ router.post(
     try {
       const item = new ProductDto(req.body);
       productError(item);
-      const user = req.user;
+      const user = req.user;      
       const product = await productService.create(item);
       if (user.role == "premium") {
         await userService.createOwn(user.email, product._id);

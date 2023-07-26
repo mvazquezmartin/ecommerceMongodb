@@ -1,6 +1,6 @@
 const logger = require("../logger/factory");
 
-const loggerMiddleware = (req, res, next) => {
+const appLogger = (req, res, next) => {
   req.logger = logger;  
   req.logger.http(
     `${req.method} en ${req.url} - ${new Date().toLocaleString()}`
@@ -8,4 +8,4 @@ const loggerMiddleware = (req, res, next) => {
   next();
 };
 
-module.exports = loggerMiddleware;
+module.exports = appLogger;

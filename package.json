@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha test/supertest.test.js",
-    "start:local": "NODE_ENV=local nodemon src/"
+    "start:local": "set NODE_ENV=local && nodemon src/",
+    "start:dev":"set NODE_ENV=development && nodemon src/"
   },
   "keywords": [],
-  "author": "",
+  "author": "@mvazquezmartin",
   "license": "ISC",
   "dependencies": {
     "@faker-js/faker": "^8.0.2",

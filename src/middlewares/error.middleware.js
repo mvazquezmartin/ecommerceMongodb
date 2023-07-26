@@ -1,7 +1,7 @@
 const colors = require("colors")
 const EnumErrors = require("../errorHandlers/enumError");
 
-const errorMiddleware = (error, req, res, next) => {
+const appError = (error, req, res, next) => {
   console.log(colors.yellow(error.cause));
 
   switch (error.code) {
@@ -28,4 +28,4 @@ const errorMiddleware = (error, req, res, next) => {
   next();
 };
 
-module.exports = errorMiddleware;
+module.exports = appError;

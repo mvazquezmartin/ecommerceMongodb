@@ -23,7 +23,7 @@ describe("Testing de app ecommerce", () => {
       expect(response.status).to.eql(200);
       expect(response.body).to.be.an("object");
     });
-    
+
     it("Pruebo el endopint /api/products para agregar un producto", async () => {
       const newProduct = {
         title: "Producto de prueba",
@@ -89,7 +89,7 @@ describe("Testing de app ecommerce", () => {
       const newUser = {
         first_name: "NombrePrueba",
         last_name: "ApellidoPrueba",
-        email: "emailmocha@deprueba.com",
+        email: "emailmock@deprueba.com",
         age: 20,
         phone: 1233456768,
         password: "passwordDePrueba",
@@ -103,7 +103,7 @@ describe("Testing de app ecommerce", () => {
 
     it("Pruebo el endpoint /user/resetpassword para restablecer la contraseña de un usuario", async () => {
       const resetData = {
-        email: "emailmocha@deprueba.com",
+        email: "emailmock@deprueba.com",
         newPassword: "passwordReset",
       };
       const response = await requester

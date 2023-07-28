@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const passport = require("passport");
-const ProductManager = require("../dao/productManager");
+const ProductManager = require("../dao/fileSystem/manager/product.manager.fs");
 const { isValidObjectId } = require("mongoose");
 const authorization = require("../middlewares/authorization.middleware");
 const ProductService = require("../service/product.service");
@@ -15,13 +15,29 @@ const productService = new ProductService();
 //PRODUCTS BY PARAMS
 router.get("/params", async (req, res) => {
   try {
-    const params = req.body;
-    const products = await productService.filter(params);
-    if (products.length === 0)
-      return res.json({ message: "No se encontro producto" });
-    res.json(products);
+    const params = {
+      category: req.query.category,
+      priceMin: parseInt(req.query.priceMin),
+      priceMax: parseInt(req.query.priceMax),
+      sort: req.query.sort,
+      page: parseInt(req.query.page),
+      limit: parseInt(req.query.limit),
+    };
+
+    const result = await productService.filter(params);
+
+    if (result.totalDocs === 0)
+      return res.json({
+        status: "Not found",
+        message: "No product found",
+      });
+
+    const mapDto = result.docs.map(doc => new ProductDto(doc))
+    result.docs = mapDto
+
+    res.json({ status: "success", data: result });
   } catch (error) {
-    res.json({ message: error });
+    res.json({ status: "error", message: error.message });
   }
 });
 
@@ -44,17 +60,20 @@ router.get("/", async (req, res) => {
 // PRODUCT BY ID
 router.get("/:pid", async (req, res) => {
   try {
-    const id = req.params.pid;
+    const { id } = req.params.pid;
+
     if (!isValidObjectId(id)) throw new Error("ID invalido");
+
     const product = await productService.getOneById(id);
+
     if (!product) {
-      res.json({ message: "No se encuentra el producto" });
+      res.json({ status: "Not found", message: "No se encuentra el producto" });
     } else {
       res.json(product);
     }
   } catch (error) {
     console.log(error);
-    res.status(404).send({ message: "Something went wrong" });
+    res.status(404).send({ status: "error", message: "Something went wrong" });
   }
 });
 
@@ -66,13 +85,19 @@ router.post(
   async (req, res, next) => {
     try {
       const item = new ProductDto(req.body);
+
       productError(item);
-      const user = req.user;      
+
+      const user = req.user;
+
       const product = await productService.create(item);
+
       if (user.role == "premium") {
         await userService.createOwn(user.email, product._id);
       }
-      res.status(201).json({ succes: "Producto agregado" });
+      res
+        .status(201)
+        .json({ status: "succes", message: "Product added successfully" });
     } catch (error) {
       next(error);
     }
@@ -96,9 +121,9 @@ router.put(
 
       const update = new ProductDto(req.body);
       productError(update);
-     
+
       await productService.update(id, update);
-     
+
       res.status(201).json({ success: "Producto modificado exitosamente" });
     } catch (error) {
       next(error);
@@ -116,13 +141,13 @@ router.delete(
       const id = req.params.pid;
       const user = req.user;
 
-      if (user.role == "premium"){
-        const isOwn = await userService.checkOwn(user.email, id)
+      if (user.role == "premium") {
+        const isOwn = await userService.checkOwn(user.email, id);
         if (!isOwn) throw new Error("Unauthorized");
-      } 
+      }
 
       await productService.delete(id);
-      
+
       res.json({ message: "Producto eliminado" });
     } catch (error) {
       console.error(error.message);

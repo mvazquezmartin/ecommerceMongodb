@@ -1,4 +1,4 @@
-const Messages = require("./models/chat.model");
+const Messages = require("../models/chat.model");
 
 class MessagesDao {
   constructor() {}

@@ -1,4 +1,4 @@
-const ProductDao = require("../dao/product.dao");
+const ProductDao = require("../dao/mongoDb/manager/product.manager.mongo");
 
 const productDao = new ProductDao();
 
@@ -11,7 +11,7 @@ class ProductService {
     return await productDao.filter(params);
   }
 
-  async create(item) {    
+  async create(item) {
     return await productDao.create(item);
   }
 

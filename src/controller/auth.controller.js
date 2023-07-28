@@ -67,7 +67,9 @@ router.get(
   authorization(["user", "admin", "premium"]),
   (req, res) => {
     res.clearCookie("authToken");
-    res.status(200).json({ message: "Logged out successfully" });
+    res
+      .status(200)
+      .json({ status: "success", message: "Logged out successfully" });
   }
 );
 

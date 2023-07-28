@@ -1,4 +1,4 @@
-const UsersDao = require("../dao/users.dao");
+const UsersDao = require("../dao/mongoDb/manager/users.manager.mongo");
 
 const Users = new UsersDao();
 

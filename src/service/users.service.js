@@ -2,7 +2,7 @@ const { createHash, passwordValidate } = require("../utils/cryptPassword.util");
 const { generateToken } = require("../utils/jwt.util");
 const usersStore = require("../store/user.store");
 const MailAdapter = require("../adapters/mail.adapter");
-const UsersDao = require("../dao/users.dao");
+const UsersDao = require("../dao/mongoDb/manager/users.manager.mongo");
 const UserDTO = require("../dtos/user.dto");
 const CartService = require("./cart.service");
 

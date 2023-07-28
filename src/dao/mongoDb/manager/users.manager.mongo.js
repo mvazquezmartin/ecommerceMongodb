@@ -1,4 +1,4 @@
-const Users = require("./models/user.model");
+const Users = require("../models/user.model");
 
 class UsersDao {
   async getOne(email) {

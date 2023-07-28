@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const MessagesDao = require("../dao/chat.dao");
+const MessagesDao = require("../dao/mongoDb/manager/chat.manager.mongo");
 
 const router = Router();
 const message = new MessagesDao();

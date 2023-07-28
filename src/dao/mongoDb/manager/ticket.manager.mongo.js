@@ -1,4 +1,4 @@
-const Tickets = require("./models/ticket.model");
+const Tickets = require("../models/ticket.model");
 
 class TicketsDao {
   async create(ticket) {

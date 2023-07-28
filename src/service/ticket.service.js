@@ -1,5 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
-const TicketsDao = require("../dao/ticket.dao");
+const TicketsDao = require("../dao/mongoDb/manager/ticket.manager.mongo");
 const TicketDto = require("../dtos/tickets.dto");
 const amountAndDetails = require("../utils/ticketAmountDetails");
 

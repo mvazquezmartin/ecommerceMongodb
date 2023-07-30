@@ -1,10 +1,10 @@
+require("colors");
 const express = require("express");
 const handlebars = require("express-handlebars");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
-const mongoConnect = require("../db");
 const router = require("./routes");
-const { PORT, environment } = require("./config/app.config");
+const { PORT } = require("./config/app.config");
 const initializePassport = require("./config/passport.config");
 const setUpSocket = require("./config/socketio.config");
 const appError = require("./middlewares/error.middleware");
@@ -30,7 +30,7 @@ app.use(appError);
 //app.use(appLogger);
 
 const httpServer = app.listen(PORT, () => {
-  console.log(`Server started on port: ${PORT}`);
+  console.log(`Server started on port: ${PORT}`.green);
 });
 
 setUpSocket(httpServer);

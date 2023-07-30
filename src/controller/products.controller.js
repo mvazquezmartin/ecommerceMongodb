@@ -3,9 +3,9 @@ const passport = require("passport");
 const ProductManager = require("../dao/fileSystem/manager/product.manager.fs");
 const { isValidObjectId } = require("mongoose");
 const authorization = require("../middlewares/authorization.middleware");
-const productService = require("../service/product.service");
 const ProductDto = require("../dtos/products.dto");
 const productError = require("../errorHandlers/product/prod.error");
+const productService = require("../service/product.service");
 const userService = require("../service/users.service");
 
 const router = Router();
@@ -15,13 +15,14 @@ const productManager = new ProductManager();
 router.get("/params", async (req, res) => {
   try {
     const params = {
-      category: req.query.category,
+      category: req.query.category || null,
       priceMin: parseInt(req.query.priceMin),
       priceMax: parseInt(req.query.priceMax),
-      sort: req.query.sort,
+      sort: req.query.sort || null,
       page: parseInt(req.query.page),
       limit: parseInt(req.query.limit),
     };
+    console.log(params);
 
     const result = await productService.filter(params);
 
@@ -60,7 +61,7 @@ router.get("/", async (req, res) => {
 router.get("/:pid", async (req, res) => {
   try {
     const { pid } = req.params;
-    
+
     //if (!isValidObjectId(id)) throw new Error("ID invalido");
 
     const product = await productService.getOneById(pid);

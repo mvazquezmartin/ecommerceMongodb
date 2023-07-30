@@ -21,13 +21,6 @@ const productsSchema = new mongoose.Schema({
 //AGGREGATION PIPELINE CATEGORY, PRICEMIN, PRICEMAX, SORT
 productsSchema.statics.filterProducts = async function (params) {
   const pipeline = [];
-  if (
-    typeof params !== "object" ||
-    isNaN(params.priceMin) ||
-    isNaN(params.priceMax)
-  ) {
-    throw new Error("Parámetros inválidos");
-  }
 
   if (params.category) pipeline.push({ $match: { category: params.category } });
 
@@ -43,7 +36,10 @@ productsSchema.statics.filterProducts = async function (params) {
     pipeline.push({ $sort: { [sortField]: sortOrder } });
   }
 
-  const aggregation = await this.aggregate(pipeline);
+  const aggregation =
+    pipeline.length === 0
+      ? await this.find({ status: true })
+      : await this.aggregate(pipeline);
   const filterQuery = {
     _id: { $in: aggregation.map((item) => item._id) },
   };
@@ -54,16 +50,17 @@ productsSchema.statics.filterProducts = async function (params) {
   };
 
   const result = await this.paginate(filterQuery, options);
-  
-  const baseUrl = `?category=${params.category}&priceMin=${params.priceMin}&priceMax=${params.priceMax}&sort=${params.sort}`
+
+  const baseUrl = `?category=${params.category}&priceMin=${params.priceMin}&priceMax=${params.priceMax}&sort=${params.sort}`;
   const currentPage = result.page;
   const totalPages = result.totalPages;
-  const prevPageLink = currentPage > 1 ? `${baseUrl}&page=${currentPage - 1}` : null;
-  const nextPageLink = currentPage < totalPages ? `${baseUrl}&page=${currentPage + 1}` : null;
+  const prevPageLink =
+    currentPage > 1 ? `${baseUrl}&page=${currentPage - 1}` : null;
+  const nextPageLink =
+    currentPage < totalPages ? `${baseUrl}&page=${currentPage + 1}` : null;
 
-  result.prevPageLink = prevPageLink
-  result.nextPageLink = nextPageLink
-
+  result.prevPageLink = prevPageLink;
+  result.nextPageLink = nextPageLink;
 
   return result;
 };

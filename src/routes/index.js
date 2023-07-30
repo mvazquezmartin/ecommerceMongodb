@@ -1,6 +1,6 @@
 const realtimeproductsController = require("../controller/realtimeproducts.controller");
-const cartController = require("../controller/cart.controller");
-const productController = require("../controller/products.controller");
+const cartsController = require("../controller/cart.controller");
+const producstController = require("../controller/products.controller");
 const homeController = require("../controller/home.controller");
 const chatController = require("../controller/chat.controller");
 const userController = require("../controller/user.controller");
@@ -12,8 +12,8 @@ const mockController = require("../controller/mock.controller");
 const swaggerController = require("../controller/swagger.controller");
 
 const router = (app) => {
-  app.use("/api/products", productController);
-  app.use("/api/cart", cartController);
+  app.use("/api/products", producstController);
+  app.use("/api/cart", cartsController);
   app.use("/cart", ticketController);
   app.use("/realtimeproducts", realtimeproductsController);
   app.use("/home", homeController);

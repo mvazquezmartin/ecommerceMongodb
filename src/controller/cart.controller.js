@@ -2,12 +2,11 @@ const { Router } = require("express");
 const passport = require("passport");
 const authorization = require("../middlewares/authorization.middleware");
 const CartService = require("../service/cart.service");
-const ProductService = require("../service/product.service");
+const productService = require("../service/product.service");
 const userService = require("../service/users.service");
 
 const router = Router();
 const cartService = new CartService();
-const productService = new ProductService();
 
 // GET ALL CARTS
 router.get(

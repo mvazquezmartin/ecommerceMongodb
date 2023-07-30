@@ -3,14 +3,13 @@ const passport = require("passport");
 const ProductManager = require("../dao/fileSystem/manager/product.manager.fs");
 const { isValidObjectId } = require("mongoose");
 const authorization = require("../middlewares/authorization.middleware");
-const ProductService = require("../service/product.service");
+const productService = require("../service/product.service");
 const ProductDto = require("../dtos/products.dto");
 const productError = require("../errorHandlers/product/prod.error");
 const userService = require("../service/users.service");
 
 const router = Router();
 const productManager = new ProductManager();
-const productService = new ProductService();
 
 //PRODUCTS BY PARAMS
 router.get("/params", async (req, res) => {
@@ -32,8 +31,8 @@ router.get("/params", async (req, res) => {
         message: "No product found",
       });
 
-    const mapDto = result.docs.map(doc => new ProductDto(doc))
-    result.docs = mapDto
+    const mapDto = result.docs.map((doc) => new ProductDto(doc));
+    result.docs = mapDto;
 
     res.json({ status: "success", data: result });
   } catch (error) {
@@ -60,11 +59,11 @@ router.get("/", async (req, res) => {
 // PRODUCT BY ID
 router.get("/:pid", async (req, res) => {
   try {
-    const { id } = req.params.pid;
+    const { pid } = req.params;
+    
+    //if (!isValidObjectId(id)) throw new Error("ID invalido");
 
-    if (!isValidObjectId(id)) throw new Error("ID invalido");
-
-    const product = await productService.getOneById(id);
+    const product = await productService.getOneById(pid);
 
     if (!product) {
       res.json({ status: "Not found", message: "No se encuentra el producto" });
@@ -73,7 +72,7 @@ router.get("/:pid", async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(404).send({ status: "error", message: "Something went wrong" });
+    res.status(500).send({ status: "error", message: "Something went wrong" });
   }
 });
 

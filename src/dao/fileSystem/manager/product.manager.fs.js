@@ -1,13 +1,26 @@
 const fs = require("fs");
-const file = "./file/productos2.json";
 
 class ProductManager {
-  constructor() {
+  constructor(path) {
     this.products = [];
-    this.idCounter = 1;
+    this.path = path;
   }
 
-  async addProduct(item) {
+  async getAll() {
+    try {
+      await this.readFile();
+      const productStatusTrue = this.products.filter(
+        (prod) => prod.status === true
+      );
+      this.products = productStatusTrue;
+      return this.products;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+//filter
+
+  async create(item) {
     try {
       if (!item) {
         console.log("El objeto enviado es undefined.");
@@ -23,7 +36,7 @@ class ProductManager {
         status = true,
       } = item;
       if (!title || !description || !price || !thumbnail || !code || !stock) {
-        throw new Error("Todos los campos son necesarios.");        
+        throw new Error("Todos los campos son necesarios.");
       }
       if (this.uniqueCode(code)) return;
       const lastProduct = await this.getLastProduct();
@@ -48,23 +61,11 @@ class ProductManager {
     }
   }
 
-  async getProducts() {
+  async getOneById(id) {
     try {
       await this.readFile();
-      const productStatusTrue = this.products.filter(
-        (prod) => prod.status === true
-      );
-      this.products = productStatusTrue;
-      return this.products;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async getProductById(id) {
-    try {
-      await this.getProducts();
-      const product = this.products.find((product) => product.id === id);
+      const pid = parseInt(id)            
+      const product = this.products.find((product) => product.id === pid);      
       if (product) {
         return product;
       } else {
@@ -76,7 +77,7 @@ class ProductManager {
     }
   }
 
-  async updateProduct(id, updated) {
+  async update(id, updated) {
     try {
       await this.readFile();
       const index = this.products.findIndex((prod) => prod.id === id);
@@ -87,14 +88,14 @@ class ProductManager {
         await this.saveFile();
         return this.products[index];
       } else {
-        throw new Error("Not found.");        
+        throw new Error("Not found.");
       }
     } catch (error) {
-      throw new Error(error)
+      throw new Error(error);
     }
   }
 
-  async deleteProduct(id) {
+  async delete(id) {
     try {
       await this.readFile();
       const index = this.products.findIndex((prod) => prod.id === id);
@@ -106,7 +107,7 @@ class ProductManager {
         throw new Error("No se encontro el producto");
       }
     } catch (error) {
-      throw new Error(error)
+      throw new Error(error);
     }
   }
 
@@ -126,7 +127,7 @@ class ProductManager {
 
   async saveFile() {
     try {
-      await fs.promises.writeFile(file, JSON.stringify(this.products));
+      await fs.promises.writeFile(this.path, JSON.stringify(this.products));
     } catch (error) {
       console.log(error);
     }
@@ -134,7 +135,7 @@ class ProductManager {
 
   async readFile() {
     try {
-      const data = await fs.promises.readFile(file, "utf-8");
+      const data = await fs.promises.readFile(this.path, "utf-8");
       if (data) this.products = JSON.parse(data);
     } catch (error) {
       console.log(error);
@@ -162,7 +163,7 @@ class ProductManager {
 
   async deleteAll() {
     try {
-      await fs.promises.writeFile(file, "");
+      await fs.promises.writeFile(this.path, "");
       this.products = [];
     } catch (error) {
       console.log(error);

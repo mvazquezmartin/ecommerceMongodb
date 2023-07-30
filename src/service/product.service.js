@@ -1,35 +1,41 @@
-const ProductDao = require("../dao/mongoDb/manager/product.manager.mongo");
+const { productDAO } = require("../dao/factory.dao");
 
-const productDao = new ProductDao();
+const products = productDAO;
 
-class ProductService {
-  async getAll() {
-    return await productDao.getAll();
-  }
+const getAll = async () => {
+  return await products.getAll();
+};
 
-  async filter(params) {
-    return await productDao.filter(params);
-  }
+const filter = async (params) => {
+  return await products.filter(params);
+};
 
-  async create(item) {
-    return await productDao.create(item);
-  }
+const create = async (item) => {
+  return await products.create(item);
+};
 
-  async getOneById(id) {
-    return await productDao.getOneById(id);
-  }
+const getOneById = async (id) => {
+  return await products.getOneById(id);
+};
 
-  async update(id, update) {
-    return await productDao.update(id, update);
-  }
+const update = async (id, update) => {
+  return await products.update(id, update);
+};
 
-  async checkStock(id, quantity) {
-    return await productDao.checkStock(id, quantity);
-  }
+const checkStock = async (id, quantity) => {
+  return await products.checkStock(id, quantity);
+};
 
-  async delete(id) {
-    return await productDao.delete(id);
-  }
-}
+const deleteOne = async (id) => {
+  return await products.delete(id);
+};
 
-module.exports = ProductService;
+module.exports = {
+  getAll,
+  filter,
+  create,
+  getOneById,
+  update,
+  checkStock,
+  deleteOne,
+};

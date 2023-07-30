@@ -1,6 +1,4 @@
-const ProductService = require("../service/product.service");
-
-const productService = new ProductService();
+const productService = require("../service/product.service");
 
 const amountAndDetails = async (cart) => {
   let amount = 0;

@@ -25,13 +25,12 @@ initializePassport();
 app.use(passport.initialize());
 
 router(app);
-mongoConnect();
 
 app.use(appError);
 //app.use(appLogger);
 
 const httpServer = app.listen(PORT, () => {
-  console.log(`Servidor iniciado en el puerto ${PORT}`);
+  console.log(`Server started on port: ${PORT}`);
 });
 
 setUpSocket(httpServer);

@@ -1,8 +1,15 @@
 const { Router } = require("express");
-const userService = require("../service/users.service");
+const multer = require("multer");
 const UserDTO = require("../dtos/user.dto");
-const userStore = require("../store/user.store");
-const { passwordValidate } = require("../utils/cryptPassword.util");
+const userService = require("../service/users.service");
+const passport = require("passport");
+const authorization = require("../middlewares/authorization.middleware");
+const {
+  profileStorage,
+  imgFileFilter,
+  docStorage,
+  docFileFilter,
+} = require("../utils/multer.utils");
 const {
   userInfoError,
   userUniqueError,
@@ -10,12 +17,31 @@ const {
 
 const router = Router();
 
+const imgUploader = multer({
+  storage: profileStorage,
+  fileFilter: imgFileFilter,
+});
+
+const docUploader = multer({
+  storage: docStorage,
+  filter: docFileFilter,
+}).fields([
+  { name: "Identity", maxCount: 1 },
+  { name: "address", maxCount: 1 },
+  { name: "account", maxCount: 1 },
+]);
+
 //REGISTER USER
-router.post("/", async (req, res, next) => {
+router.post("/", imgUploader.single("image"), async (req, res, next) => {
   try {
     const newUserInfo = new UserDTO(req.body);
 
     userInfoError(newUserInfo);
+
+    if (req.file) {
+      const file = req.file;
+      newUserInfo.profile_img = file.filename;
+    }
 
     const response = await userService.create(newUserInfo);
 
@@ -30,18 +56,82 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+//SWITCH USER OR PREMIUM
+router.get(
+  "/premium/:uid",
+  passport.authenticate("jwt", { session: false }),
+  authorization(["user", "premium"]),
+  async (req, res) => {
+    try {
+      const { uid } = req.params;
+      const response = await userService.changeRole(uid);
+
+      res.json({
+        status: response.status,
+        message: response.message,
+        data: response.data,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+//LOAD DOCUMENTATION
+router.post(
+  "/:uid/documents",
+  passport.authenticate("jwt", { session: false }),
+  authorization("user"),
+  docUploader,
+  async (req, res) => {
+    try {
+      const { uid } = req.params;
+
+      const idFile = req.files["identity"];
+      const addressFile = req.files["address"];
+      const accountFile = req.files["account"];
+
+      const file = {
+        idFile,
+        addressFile,
+        accountFile,
+      };
+
+      const response = await userService.uploadDoc(uid, file);
+      res.json({
+        status: response.status,
+        message: response.message,
+        data: response.data,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 //CHANGE PASSWORD
-router.post("/resetpassword", async (req, res) => {
+router.post("/forgotpassword", async (req, res) => {
   try {
-    const { newPw, email } = req.body;
-    const user = await userStore.getOne(email);
+    const { email } = req.body;
 
-    if (passwordValidate(newPw, user))
-      res.json({ message: "no puedes colocar la contraseña anterior" });
+    const response = await userService.forgotPw(email);
 
-    await userService.updatePw(email, newPw);
+    res.json({
+      status: response.status,
+      message: response.message,
+      data: response.data,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
 
-    res.json({ msj: "success change pw" });
+router.post("/resetpw", async (req, res) => {
+  try {
+    const { password, token } = req.body;
+    //comprovaciones de password y token
+    // const response = await resetPw(token, password)
+    //res.json({status:response.status, message: response.message, data: response.data})
   } catch (error) {
     console.log(error);
   }

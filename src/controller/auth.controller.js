@@ -65,7 +65,9 @@ router.get(
   "/logout",
   passport.authenticate("jwt", { session: false }),
   authorization(["user", "admin", "premium"]),
-  (req, res) => {
+  async (req, res) => {
+    const user = req.user;
+    await userService.logout(user.email);
     res.clearCookie("authToken");
     res
       .status(200)

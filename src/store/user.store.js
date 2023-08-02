@@ -10,7 +10,7 @@ const getOne = async (item) => {
   const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(item);
 
   if (isEmail) {
-    return await Users.getOne(item);
+    return await Users.getOne({ email: item });
   } else {
     return await Users.getOneById(item);
   }

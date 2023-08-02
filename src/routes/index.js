@@ -26,4 +26,11 @@ const router = (app) => {
   app.use("/apidocs", swaggerController);
 };
 
+// AGREGAR VIEWCONTROLLER
+// /cart/:cid/purchase mover a cartsController
+// crear view para changePw y funcion changepw
+// implementar logger con customErrors
+// factory local, para que funcione con fileSystem cart,user,ticket
+// revisar chat con authorization
+// hacer el front
 module.exports = router;

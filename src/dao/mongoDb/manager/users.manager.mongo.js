@@ -9,9 +9,9 @@ class UsersManager {
       throw error;
     }
   }
-  async getOne(email) {
+  async getOne(user) {
     try {
-      const data = await Users.findOne({ email: email });
+      const data = await Users.findOne(user);
       return data;
     } catch (error) {
       throw error;
@@ -61,19 +61,6 @@ class UsersManager {
       throw error;
     }
   }
-
-  // async createOwnProd(email, pid) {
-  //   return await Users.findOneAndUpdate(
-  //     { email: email },
-  //     { $push: { own_prod: pid } },
-  //     { new: true }
-  //   );
-  // }
-
-  // async checkOwnProd(email, pid) {
-  //   const user = await Users.findOne({ email: email });
-  //   return user.own_prod.includes(pid);
-  // }
 }
 
 module.exports = UsersManager;

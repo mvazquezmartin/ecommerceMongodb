@@ -3,22 +3,12 @@ const productService = require("../service/product.service");
 
 const cart = new CartDao();
 
-const create = async () => {
-  try {
-    const data = await cart.create();
-    return {
-      status: "success",
-      message: "Cart created successfully",
-      data: data,
-    };
-  } catch (error) {
-    throw error;
-  }
-};
-
 const getAll = async () => {
   try {
     const data = await cart.getAll();
+    if (data.length === 0) {
+      return { status: "error", message: "No hay carritos", data: {} };
+    }
     return { status: "success", message: "Carts found", data: data };
   } catch (error) {
     throw error;
@@ -56,24 +46,33 @@ const getOneById = async (id) => {
   }
 };
 
+const create = async () => {
+  try {
+    const data = await cart.create();
+    return {
+      status: "success",
+      message: "Cart created successfully",
+      data: data,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
 const addProduct = async (cid, pid, quantity) => {
   try {
-    const cartData = await cart.getOne(cid);
-    
-    const prod = cartData.products.find(
-      (prod) => prod.product.toString() === pid
-    );
+    const data = await cart.getOne(cid);
+
+    const prod = data.products.find((prod) => prod.product.toString() === pid);
 
     if (prod) {
       prod.quantity += quantity;
     } else {
       const newProd = { product: pid, quantity: quantity };
-      cartData.products.push(newProd);
+      data.products.push(newProd);
     }
 
-    await cart.update(cid, cartData);
-    
-    const data = await cart.getOne(cid);
+    await cart.update(cid, data);
 
     return {
       status: "success",
@@ -85,23 +84,21 @@ const addProduct = async (cid, pid, quantity) => {
   }
 };
 
-const getProduct = async (cid, limit, page) => {
-  try {
-    return await cart.getProduct(cid, limit, page);
-  } catch (error) {
-    throw error;
-  }
-};
+// const getProduct = async (cid, limit, page) => {
+//   try {
+//     return await cart.getProduct(cid, limit, page);
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
 const deleteProduct = async (cid, pid) => {
   try {
-    const cartData = await cart.getOne(cid);
-    cartData.products = cartData.products.filter((prod) => prod.product != pid);
-    
-    await cart.update(cid, cartData);
-    
-    const data = await cart.getOne(cid);    
-    
+    const data = await cart.getOne(cid);
+    data.products = data.products.filter((prod) => prod.product != pid);
+
+    await cart.update(cid, data);
+
     return {
       status: "success",
       message: "Product removed from cart",
@@ -110,10 +107,6 @@ const deleteProduct = async (cid, pid) => {
   } catch (error) {
     throw error;
   }
-};
-
-const checkStock = async (pid, quantity) => {
-  return await cart.checkStock(pid, quantity);
 };
 
 const deleteOne = async () => {
@@ -125,8 +118,6 @@ module.exports = {
   getAll,
   getOneById,
   addProduct,
-  getProduct,
   deleteProduct,
-  checkStock,
   deleteOne,
 };

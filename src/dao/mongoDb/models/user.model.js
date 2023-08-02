@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
   },
   last_name: {
     type: String,
-    //require: true
+    require: true,
   },
   email: {
     type: String,
@@ -28,6 +28,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     //require:true,
   },
+  profile_img: String,
   role: {
     type: String,
     default: "user",
@@ -35,15 +36,18 @@ const userSchema = new mongoose.Schema({
   id_cart: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "carts",
-  },  
+  },
+  documents: [
+    {
+      name: String,
+      reference: String,
+    },
+  ],
+  last_connection: Date,
 });
 
 userSchema.pre("find", function () {
   this.populate("carts");
-});
-
-userSchema.pre("find", function () {
-  this.populate("own_prod");
 });
 
 const Users = mongoose.model(userCollection, userSchema);

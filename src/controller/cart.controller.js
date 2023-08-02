@@ -24,11 +24,15 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   authorization("admin"),
   async (req, res) => {
-    const carts = await cartService.getAll();
-    if (carts.length === 0) {
-      res.json({ message: "No hay carritos" });
-    } else {
-      res.json(carts);
+    try {
+      const response = await cartService.getAll();
+      res.json({
+        status: response.status,
+        message: response.message,
+        data: response.data,
+      });
+    } catch (error) {
+      console.log(error);
     }
   }
 );
@@ -40,9 +44,12 @@ router.post(
   authorization("user"),
   async (req, res) => {
     try {
-      const newCart = await cartService.create();
-
-      res.status(201).json(newCart);
+      const response = await cartService.create();
+      res.status(201).json({
+        status: response.status,
+        message: response.message,
+        data: response.data,
+      });
     } catch (error) {
       res.status(500).send(error);
     }
@@ -104,7 +111,7 @@ router.post(
       cartQuantityError(quantity);
       await productCheckStockError(pid, quantity);
 
-      const response = await cartService.addProduct(cid, pid, quantity);      
+      const response = await cartService.addProduct(cid, pid, quantity);
 
       res.json({
         status: response.status,

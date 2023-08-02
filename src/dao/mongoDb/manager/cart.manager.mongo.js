@@ -37,16 +37,16 @@ class CartManager {
     }
   }
 
-  async getProduct(cid, limit, page) {
-    try {
-      return await Carts.paginate(
-        { _id: cid },
-        { limit: limit, page: page, lean: true }
-      );
-    } catch (error) {
-      throw error;
-    }
-  }
+  // async getProduct(cid, limit, page) {
+  //   try {
+  //     return await Carts.paginate(
+  //       { _id: cid },
+  //       { limit: limit, page: page, lean: true }
+  //     );
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 
   async delete() {
     await Carts.deleteMany();

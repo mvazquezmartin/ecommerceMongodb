@@ -1,12 +1,13 @@
 {
-  "name": "productmanager",
+  "name": "ecommerce-manager",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "mocha test/supertest.test.js",
+    "start": "NODE_ENV=development node src/index.js ",
     "start:local": "set NODE_ENV=local&& nodemon src/index.js",
-    "start:dev":"set NODE_ENV=development&& nodemon src/index.js"
+    "start:dev": "set NODE_ENV=development&& nodemon src/index.js"
   },
   "keywords": [],
   "author": "@mvazquezmartin",

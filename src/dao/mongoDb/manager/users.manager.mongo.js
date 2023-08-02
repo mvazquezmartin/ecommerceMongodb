@@ -1,34 +1,79 @@
 const Users = require("../models/user.model");
 
-class UsersDao {
-  async getOne(email) {
-    return await Users.findOne({ email: email });
+class UsersManager {
+  async getAll() {
+    try {
+      const data = await Users.find();
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
-
-  async create(newUser) {
-    return await Users.create(newUser);
+  async getOne(email) {
+    try {
+      const data = await Users.findOne({ email: email });
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async getOneById(id) {
-    return await Users.findById(id);
+    try {
+      const data = await Users.findById(id);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async create(userInfo) {
+    try {
+      const data = await Users.create(userInfo);
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  async updatePw(email, pw) {
-    return await Users.updateOne({ email }, { password: pw });
+  async update(id, update) {
+    try {
+      const data = await Users.findByIdAndUpdate(id, update);
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  async createOwnProd(email, pid) {
-    return await Users.findOneAndUpdate(
-      { email: email },
-      { $push: { own_prod: pid } },
-      { new: true }
-    );
+  async delete(id) {
+    try {
+      const data = await Users.findByIdAndDelete(id);
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  async checkOwnProd(email, pid) {
-    const user = await Users.findOne({ email: email });
-    return user.own_prod.includes(pid);
+  async deleteAll() {
+    try {
+      await Users.deleteMany();
+      return "Todo fue eliminado o_o";
+    } catch (error) {
+      throw error;
+    }
   }
+
+  // async createOwnProd(email, pid) {
+  //   return await Users.findOneAndUpdate(
+  //     { email: email },
+  //     { $push: { own_prod: pid } },
+  //     { new: true }
+  //   );
+  // }
+
+  // async checkOwnProd(email, pid) {
+  //   const user = await Users.findOne({ email: email });
+  //   return user.own_prod.includes(pid);
+  // }
 }
 
-module.exports = UsersDao;
+module.exports = UsersManager;

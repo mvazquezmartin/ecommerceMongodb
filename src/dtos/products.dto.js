@@ -1,14 +1,25 @@
 class ProductDto {
   constructor(item) {
-    this._id = item._id;
     this.title = item.title;
     this.description = item.description;
-    this.price = item.price;
     this.category = item.category;
     this.code = item.code;
     this.stock = item.stock;
+    this.price = item.price;
     this.thumbnail = item.thumbnail;
     this.owner = item.owner;
+  }
+
+  static create(item, owner) {
+    const dto = new ProductDto(item);
+    dto.owner = owner;
+    return dto;
+  }
+
+  static update(item) {
+    const dto = new ProductDto(item);
+    delete dto.owner;
+    return dto;
   }
 }
 

@@ -18,7 +18,7 @@ const generateErrorInfo = (code, obj) => {
           *password: need to be a string, received: ${colors.magenta(
             obj.password
           )}`;
-      } else if ("stock" in obj) {
+      } else if (obj.errorType === "productInfoError") {
         response = `One or more properties were incomplete or not valid. 
         List of required properties:
           *title: needs to be a string, received: ${colors.magenta(obj.title)}
@@ -34,6 +34,14 @@ const generateErrorInfo = (code, obj) => {
           *category: needs to be a string, received: ${colors.magenta(
             obj.category
           )}`;
+      } else if (obj.errorType === "producValidIdError") {
+        response = `The product ID entered was expected to be a MongoDb ObjectId and was received: ${colors.magenta(
+          obj._id
+        )}`;
+      } else if(obj.errorType === "cartValidIdError"){
+        response = `The cart ID entered was expected to be a MongoDb ObjectId and was received: ${colors.magenta(
+          obj._id
+        )}`;
       }
       break;
 

@@ -1,12 +1,22 @@
 const { Router } = require("express");
 const passport = require("passport");
 const authorization = require("../middlewares/authorization.middleware");
-const CartService = require("../service/cart.service");
+const cartService = require("../service/cart.service");
 const productService = require("../service/product.service");
-const userService = require("../service/users.service");
+const {
+  productOwnerError,
+  productValidIdError,
+  productCheckStockError,
+  productStatusError,
+} = require("../errorHandlers/product/prod.error");
+const {
+  cartValidIdError,
+  cartStatusError,
+  cartQuantityError,
+  cartOwnerError,
+} = require("../errorHandlers/cart/cart.error");
 
 const router = Router();
-const cartService = new CartService();
 
 // GET ALL CARTS
 router.get(
@@ -14,7 +24,7 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   authorization("admin"),
   async (req, res) => {
-    const carts = await cartService.get();
+    const carts = await cartService.getAll();
     if (carts.length === 0) {
       res.json({ message: "No hay carritos" });
     } else {
@@ -43,16 +53,24 @@ router.post(
 router.get(
   "/:cid",
   passport.authenticate("jwt", { session: false }),
-  authorization("user"),
-  async (req, res) => {
+  authorization(["user", "premium", "admin"]),
+  async (req, res, next) => {
     try {
       const { cid } = req.params;
 
-      const cart = await cartService.getOne(cid);
+      cartValidIdError(cid);
 
-      res.json(cart);
+      const response = await cartService.getOneById(cid);
+
+      cartStatusError(response);
+
+      res.json({
+        status: response.status,
+        message: response.message,
+        data: response.data,
+      });
     } catch (error) {
-      res.status(404).json({ error: "El carrito no tiene productos" });
+      next(error);
     }
   }
 );
@@ -62,38 +80,39 @@ router.post(
   "/:cid/product/:pid",
   passport.authenticate("jwt", { session: false }),
   authorization(["user", "premium"]),
-  async (req, res) => {
+  async (req, res, next) => {
     try {
       const { cid, pid } = req.params;
       const { quantity } = req.body;
-
       const user = req.user;
 
+      productValidIdError(pid);
+      cartValidIdError(cid);
+
+      const cartData = await cartService.getOneById(cid);
+      cartStatusError(cartData);
+
+      await cartOwnerError(cid, user);
+
       if (user.role == "premium") {
-        const isOwn = await userService.checkOwn(user.email, pid);
-        if (isOwn) throw new Error("Unauthorized");
+        await productOwnerError(pid, user);
       }
 
       const product = await productService.getOneById(pid);
 
-      if (!product) {
-        return res.status(400).json({ error: "No se encuentra el producto" });
-      }
-      if (!quantity) {
-        return res.status(400).json({ error: "Falta especificar la cantidad" });
-      }
+      productStatusError(product);
+      cartQuantityError(quantity);
+      await productCheckStockError(pid, quantity);
 
-      await productService.checkStock(pid, quantity);
+      const response = await cartService.addProduct(cid, pid, quantity);      
 
-      const cartAdd = await cartService.addProduct(cid, pid, quantity);
-
-      if (cartAdd) {
-        res.json(cartAdd);
-      } else {
-        res.status(404).json({ error: "Carrito o producto no encontrado" });
-      }
+      res.json({
+        status: response.status,
+        message: response.message,
+        data: response.data,
+      });
     } catch (error) {
-      res.status(400).json(error.message);
+      next(error);
     }
   }
 );
@@ -103,16 +122,28 @@ router.delete(
   "/:cid/product/:pid",
   passport.authenticate("jwt", { session: false }),
   authorization(["user", "premium"]),
-  async (req, res) => {
+  async (req, res, next) => {
     try {
       const { cid, pid } = req.params;
 
-      await cartService.deleteProduct(cid, pid);
+      cartValidIdError(cid);
+      productValidIdError(pid);
 
-      res.status(200).json({ message: "Producto elimiando del carrito" });
-    } catch {
-      console.log(error);
-      res.json({ error: "algo salio mal" });
+      const cartData = await cartService.getOneById(cid);
+      cartStatusError(cartData);
+
+      const user = req.user;
+      await cartOwnerError(cid, user);
+
+      const response = await cartService.deleteProduct(cid, pid);
+
+      res.status(200).json({
+        status: response.status,
+        message: response.message,
+        data: response.data,
+      });
+    } catch (error) {
+      next(error);
     }
   }
 );

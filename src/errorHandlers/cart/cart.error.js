@@ -1,0 +1,65 @@
+const { isValidObjectId } = require("mongoose");
+const CustomError = require("../CustomError");
+const EnumErrors = require("../enumError");
+const generateErrorInfo = require("../infoError");
+const userStore = require("../../store/user.store");
+const cartService = require("../../service/cart.service");
+
+const cartValidIdError = (cid) => {
+  if (!isValidObjectId(cid)) {
+    const cidObj = { _id: cid, errorType: "cartValidIdError" };
+    CustomError.create({
+      name: "Invalid ID",
+      cause: generateErrorInfo(EnumErrors.INVALID_TYPES_ERROR, cidObj),
+      message: "Cart ID is invalid",
+      code: EnumErrors.INVALID_TYPES_ERROR,
+    });
+  }
+};
+
+const cartStatusError = (data) => {
+  if (data.status === "error") {
+    CustomError.create({
+      name: "Cart not found",
+      cause: `No cart found with the Id: ${data._id}`,
+      message: data.message,
+      code: EnumErrors.DATABASE_ERROR,
+    });
+  }
+};
+
+const cartQuantityError = (quantity) => {
+  if (isNaN(quantity)) {
+    CustomError.create({
+      name: "Not quantity",
+      cause: "The user did not specify the quantity of the product",
+      message: "Need to specify quantity",
+      code: EnumErrors.INVALID_TYPES_ERROR,
+    });
+  }
+};
+
+const cartOwnerError = async (cid, user) => {
+  const userData = await userStore.getOne(user.email);
+  const cartData = await cartService.getOneById(cid);
+
+  const userIdString = userData.id_cart.toString();
+  const cartIdString = cartData.data._id.toString();
+
+  if (userIdString !== cartIdString) {
+    CustomError.create({
+      name: "Unauthorized",
+      cause:
+        "The user tried to modify or delete a product from a cart that does not belong to him",
+      message: "You do not have permissions to do this action",
+      code: EnumErrors.UNAUTHORIZHED_ERROR,
+    });
+  }
+};
+
+module.exports = {
+  cartValidIdError,
+  cartStatusError,
+  cartQuantityError,
+  cartOwnerError,
+};

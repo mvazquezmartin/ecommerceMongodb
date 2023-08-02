@@ -1,15 +1,16 @@
 const { Router } = require("express");
 const passport = require("passport");
-const ProductManager = require("../dao/fileSystem/manager/product.manager.fs");
-const { isValidObjectId } = require("mongoose");
 const authorization = require("../middlewares/authorization.middleware");
 const ProductDto = require("../dtos/products.dto");
-const productError = require("../errorHandlers/product/prod.error");
 const productService = require("../service/product.service");
-const userService = require("../service/users.service");
+const {
+  productInfoError,
+  productValidIdError,
+  productStatusError,
+  productOwnerError,
+} = require("../errorHandlers/product/prod.error");
 
 const router = Router();
-const productManager = new ProductManager();
 
 //PRODUCTS BY PARAMS
 router.get("/params", async (req, res) => {
@@ -22,7 +23,6 @@ router.get("/params", async (req, res) => {
       page: parseInt(req.query.page),
       limit: parseInt(req.query.limit),
     };
-    console.log(params);
 
     const result = await productService.filter(params);
 
@@ -58,22 +58,23 @@ router.get("/", async (req, res) => {
 });
 
 // PRODUCT BY ID
-router.get("/:pid", async (req, res) => {
+router.get("/:pid", async (req, res, next) => {
   try {
     const { pid } = req.params;
 
-    //if (!isValidObjectId(id)) throw new Error("ID invalido");
+    productValidIdError(pid);
 
-    const product = await productService.getOneById(pid);
+    const response = await productService.getOneById(pid);
 
-    if (!product) {
-      res.json({ status: "Not found", message: "No se encuentra el producto" });
-    } else {
-      res.json(product);
-    }
+    productStatusError(response);
+
+    res.status(200).json({
+      status: response.status,
+      message: response.message,
+      data: response.data,
+    });
   } catch (error) {
-    console.log(error);
-    res.status(500).send({ status: "error", message: "Something went wrong" });
+    next(error);
   }
 });
 
@@ -84,20 +85,20 @@ router.post(
   authorization(["admin", "premium"]),
   async (req, res, next) => {
     try {
-      const item = new ProductDto(req.body);
-
-      productError(item);
-
       const user = req.user;
+      const owner = user.role === "premium" ? user.email : "admin";
 
-      const product = await productService.create(item);
+      const item = ProductDto.create(req.body, owner);
 
-      if (user.role == "premium") {
-        await userService.createOwn(user.email, product._id);
-      }
-      res
-        .status(201)
-        .json({ status: "succes", message: "Product added successfully" });
+      productInfoError(item);
+
+      const response = await productService.create(item);
+
+      res.status(201).json({
+        status: response.status,
+        message: response.message,
+        data: response.data,
+      });
     } catch (error) {
       next(error);
     }
@@ -105,26 +106,31 @@ router.post(
 );
 
 // UPDATE PRODUCT
-router.put(
+router.patch(
   "/:pid",
   passport.authenticate("jwt", { session: false }),
   authorization(["admin", "premium"]),
   async (req, res, next) => {
     try {
-      const id = req.params.pid;
+      const { pid } = req.params;
       const user = req.user;
 
-      if (user.role == "premium") {
-        const isOwn = await userService.checkOwn(user.email, id);
-        if (!isOwn) throw new Error("Unauthorized");
+      productValidIdError(pid);
+
+      if (user.role === "premium") {
+        await productOwnerError(pid, user);
       }
 
-      const update = new ProductDto(req.body);
-      productError(update);
+      const update = ProductDto.update(req.body);
+      productInfoError(update);
 
-      await productService.update(id, update);
+      const response = await productService.update(pid, update);
 
-      res.status(201).json({ success: "Producto modificado exitosamente" });
+      res.status(201).json({
+        status: response.status,
+        message: response.messages,
+        data: response.data,
+      });
     } catch (error) {
       next(error);
     }
@@ -136,35 +142,41 @@ router.delete(
   "/:pid",
   passport.authenticate("jwt", { session: false }),
   authorization(["admin", "premium"]),
-  async (req, res) => {
+  async (req, res, next) => {
     try {
-      const id = req.params.pid;
+      const { pid } = req.params;
       const user = req.user;
 
-      if (user.role == "premium") {
-        const isOwn = await userService.checkOwn(user.email, id);
-        if (!isOwn) throw new Error("Unauthorized");
+      productValidIdError(pid);
+
+      if (user.role === "premium") {
+        const product = await productService.getOneById(pid);
+        productStatusError(product);
+        await productOwnerError(pid, user);
       }
 
-      await productService.delete(id);
+      const response = await productService.deleteOne(pid);
 
-      res.json({ message: "Producto eliminado" });
+      res.json({
+        status: response.status,
+        message: response.message,
+        data: response.data,
+      });
     } catch (error) {
-      console.error(error.message);
-      res.status(500).json({ error: "Unauthorized" });
+      next(error);
     }
   }
 );
 
 // STATUS TRUE
-router.put(
-  "/status",
-  passport.authenticate("jwt", { session: false }),
-  authorization("admin"),
-  async (req, res) => {
-    await productManager.status();
-    res.json({ message: "status true" });
-  }
-);
+// router.put(
+//   "/status",
+//   passport.authenticate("jwt", { session: false }),
+//   authorization("admin"),
+//   async (req, res) => {
+//     await productManager.status();
+//     res.json({ message: "status true" });
+//   }
+// );
 
 module.exports = router;

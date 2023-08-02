@@ -1,47 +1,39 @@
 const Carts = require("../models/cart.model");
 
-class CartDao {
-  async get() {
+class CartManager {
+  async getAll() {
     try {
-      return await Carts.find();
+      const data = await Carts.find();
+      return data;
     } catch (error) {
-      throw error.message;
+      throw error;
     }
   }
 
   async getOne(id) {
     try {
-      return await Carts.findById(id);
+      const data = await Carts.findById(id);
+      return data;
     } catch (error) {
-      throw error.message;
+      throw error;
     }
   }
 
   async create() {
     try {
-      return await Carts.create({ products: [] });
+      const data = await Carts.create({ products: [] });
+      return data;
     } catch (error) {
-      throw error.message;
+      throw error;
     }
   }
 
-  async addProduct(cid, pid, quantity) {
+  async update(id, update) {
     try {
-      const cart = await Carts.findById(cid);
-      if (!cart) throw new Error("Cart not found");
-      const prod = cart.products.find((p) => p.product.toString() === pid);
-
-      if (prod) {
-        prod.quantity += quantity;
-      } else {
-        const newProd = { product: pid, quantity: quantity };
-        cart.products.push(newProd);
-      }
-
-      await cart.save();
-      return cart;
+      const data = await Carts.findByIdAndUpdate(id, update);
+      return data;
     } catch (error) {
-      throw error.message;
+      throw error;
     }
   }
 
@@ -52,17 +44,7 @@ class CartDao {
         { limit: limit, page: page, lean: true }
       );
     } catch (error) {
-      throw error.message;
-    }
-  }
-
-  async deleteProduct(cid, pid) {
-    try {      
-      const cart = await Carts.findById(cid);
-      cart.products = cart.products.filter((prod)=> prod.product != pid)
-      await cart.save()
-    } catch (error) {
-      throw error.message;
+      throw error;
     }
   }
 
@@ -71,4 +53,4 @@ class CartDao {
   }
 }
 
-module.exports = CartDao;
+module.exports = CartManager;

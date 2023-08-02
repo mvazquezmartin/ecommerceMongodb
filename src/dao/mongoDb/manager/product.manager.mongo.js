@@ -2,39 +2,69 @@ const Products = require("../models/products.model");
 
 class ProductManager {
   async getAll() {
-    return await Products.find({ status: true });
-  }
-
-  async filter(params) {
-    return await Products.filterProducts(params);
-  }
-
-  async create(item) {
-    return await Products.create(item);
+    try {
+      const data = await Products.find({ status: true });
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async getOneById(id) {
-    return await Products.findOne({ _id: id, status: true });
+    try {
+      const data = await Products.findOne({ _id: id, status: true });
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async filter(params) {
+    try {
+      const data = await Products.filterProducts(params);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async create(item) {
+    try {
+      const data = await Products.create(item);
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async update(id, update) {
-    return await Products.updateOne({ _id: id }, update);
-  }
-
-  async checkStock(id, quantity) {
-    const prod = await Products.findById(id);
-    if (prod.stock < quantity)
-      throw new Error(
-        `No hay stock suficiente de ${prod.title}. Total Stock ${prod.stock}`
-      );
+    try {
+      const data = await Products.findByIdAndUpdate(id, update);
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async delete(id) {
-    return await Products.updateOne({ _id: id }, { status: false });
+    try {
+      const data = await Products.findByIdAndUpdate(
+        { _id: id },
+        { status: false }
+      );
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  async createMany(data) {
-    return await Products.insertMany(data);
+  async createMany(doc) {
+    try {
+      const data = await Products.insertMany(doc);
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
 }
 

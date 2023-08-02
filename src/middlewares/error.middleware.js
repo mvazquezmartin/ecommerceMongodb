@@ -21,6 +21,10 @@ const appError = (error, req, res, next) => {
       res.json({ status: "error", error: error.name, message: error.message });
       break;
 
+    case EnumErrors.UNAUTHORIZHED_ERROR:
+      res.json({ status: "error", error: error.name, message: error.message });
+      break;
+
     default:
       if (!error.message) {
         res.json({ status: "error", error: "Unhandled error" });

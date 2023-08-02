@@ -22,13 +22,16 @@ const productsSchema = new mongoose.Schema({
 productsSchema.statics.filterProducts = async function (params) {
   const pipeline = [];
 
-  if (params.category) pipeline.push({ $match: { category: params.category } });
+  if (params.category !== null)
+    pipeline.push({ $match: { category: params.category } });
 
-  const priceFilter = {};
-  if (params.priceMin) priceFilter.$gte = params.priceMin;
-  if (params.priceMax) priceFilter.$lte = params.priceMax;
-  if (Object.keys(priceFilter).length > 0)
+  if (!isNaN(params.priceMin) && !isNaN(params.priceMax)) {
+    const priceFilter = {
+      $gte: params.priceMin,
+      $lte: params.priceMax,
+    };
     pipeline.push({ $match: { price: priceFilter } });
+  }
 
   if (params.sort) {
     const sortField = "price";
@@ -36,17 +39,14 @@ productsSchema.statics.filterProducts = async function (params) {
     pipeline.push({ $sort: { [sortField]: sortOrder } });
   }
 
-  const aggregation =
-    pipeline.length === 0
-      ? await this.find({ status: true })
-      : await this.aggregate(pipeline);
-  const filterQuery = {
-    _id: { $in: aggregation.map((item) => item._id) },
-  };
-
   const options = {
     page: params.page || 1,
     limit: params.limit || 10,
+  };
+
+  const aggregation = await this.aggregate(pipeline);
+  const filterQuery = {
+    _id: { $in: aggregation.map((item) => item._id) },
   };
 
   const result = await this.paginate(filterQuery, options);

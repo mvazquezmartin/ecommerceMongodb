@@ -4,11 +4,10 @@ const usersStore = require("../store/user.store");
 const MailAdapter = require("../adapters/mail.adapter");
 const UsersDao = require("../dao/mongoDb/manager/users.manager.mongo");
 const UserDTO = require("../dtos/user.dto");
-const CartService = require("./cart.service");
+const cartService = require("./cart.service");
 
 const msg = new MailAdapter();
 const userDao = new UsersDao();
-const cartService = new CartService();
 
 const create = async (userInfo) => {
   const user = await usersStore.getOne(userInfo.email);
@@ -36,13 +35,13 @@ const create = async (userInfo) => {
   };
 };
 
-const createOwn = async (email, pid) => {
-  return await userDao.createOwnProd(email, pid);
-};
+// const createOwn = async (email, pid) => {
+//   return await userDao.createOwnProd(email, pid);
+// };
 
-const checkOwn = async (email, pid) => {
-  return await userDao.checkOwnProd(email, pid);
-};
+// const checkOwn = async (email, pid) => {
+//   return await userDao.checkOwnProd(email, pid);
+// };
 
 const authenticate = async (userInfo) => {
   try {
@@ -77,8 +76,6 @@ const updatePw = async (email, pw) => {
 
 module.exports = {
   create,
-  createOwn,
-  checkOwn,
   authenticate,
   updatePw,
 };

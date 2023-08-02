@@ -1,11 +1,10 @@
 const { Router } = require("express");
 const passport = require("passport");
 const authorization = require("../middlewares/authorization.middleware");
-const CartService = require("../service/cart.service");
+const cartService = require("../service/cart.service");
 const TicketService = require("../service/ticket.service");
 
 const router = Router();
-const cartService = new CartService();
 const ticketService = new TicketService();
 
 router.get(

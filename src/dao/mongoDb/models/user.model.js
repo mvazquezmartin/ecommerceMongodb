@@ -30,19 +30,12 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["admin", "user", "premium"],
     default: "user",
   },
   id_cart: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "carts",
-  },
-  own_prod: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "productos",
-    },
-  ],
+  },  
 });
 
 userSchema.pre("find", function () {

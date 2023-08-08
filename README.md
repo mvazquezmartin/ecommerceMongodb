@@ -2,6 +2,8 @@
 # 🏪 E-commerce backend proyect 🛍
 
 ¡Bienvenido al repositorio del proyecto E-commerce backend! Este proyecto tiene como objetivo crear una aplicación utilizando MongoDB como base de datos. Proporciona una estructura para la gestión de productos, clientes y pedidos.
+<br/>
+<br/>
 
 ## 📚 Tech Stack 🧾
 
@@ -10,7 +12,8 @@
 **Server:** ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
 
 **Dependencias:** ![NPM](https://img.shields.io/badge/NPM-%23000000.svg?style=for-the-badge&logo=npm&logoColor=white)
-
+<br/>
+<br/>
 
 ## 💡 Features & API Reference 📑
 *A continuación estan las principales funcionalidades de la api, para mas detalle /apidocs*
@@ -111,6 +114,8 @@
   "success": "Product removed"
 }
 ```
+<br/>
+
 
 ### 🛒 **Carrito**
 - **Obtener carritos**
@@ -189,12 +194,19 @@
 }
 ```
 - Finalizar compra
+<br/>
+
+
 ### 👥 User 
 - Crear usuario
 - Actualizar documentacion
 - Cambiar roles
 - Eliminar usuario  
+
 *```Para mas detalle de la documentacion /apidocs```*
+
+<br/>
+<br/>
 
 ## ▶ Installation 📦
 
@@ -206,6 +218,8 @@ Instalar dependecias:
 ```bash
   npm install
 ```
+<br/>
+<br/>
 
 ## ⚙ Deploy 🖥
 Ejecucion en modo local y persistencias de los datos con fileSystem:

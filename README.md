@@ -44,7 +44,7 @@
   "success": "The product was added successfully"
 }
 ```
----
+___
 <br/>
 
 ### **Actualizar productos:**
@@ -74,7 +74,7 @@
   "success": "Product successfully modified"
 }
 ```
----
+___
 <br/>
 
 ### **Obener productos:**
@@ -105,7 +105,7 @@
   }
 ]
 ```
----
+___
 <br/>
 
 ### **Eliminar productos**
@@ -123,7 +123,7 @@
   "success": "Product removed"
 }
 ```
----
+___
 <br/>
 
 ## 🛒 **Carrito**
@@ -158,7 +158,7 @@
   "success": "Cart loaded with products"
 }
 ```
----
+___
 <br/>
 
 ### **Agregar productos**
@@ -183,7 +183,7 @@
   "success": "Product added to cart"
 }
 ```
----
+___
 <br/>
 
 ### **Eliminar Productos**
@@ -208,7 +208,7 @@
   "success": "Product removed from cart"
 }
 ```
----
+___
 <br/>
 
 ### **Finalizar compra**

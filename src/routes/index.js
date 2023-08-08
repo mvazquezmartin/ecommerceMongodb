@@ -35,4 +35,5 @@ const router = (app) => {
 // factory local, para que funcione con fileSystem cart,user,ticket
 // revisar chat con authorization
 // hacer el front
+// crear README
 module.exports = router;

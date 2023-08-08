@@ -18,7 +18,7 @@
 ## 💡 Features & API Reference 📑
 *A continuación estan las principales funcionalidades de la api, para mas detalle /apidocs*
 ### 🛍 **Productos**
-- **Agregar productos:**
+### **Agregar productos:**
 ```http
   POST /api/products
 ```
@@ -71,7 +71,9 @@
   "success": "Product successfully modified"
 }
 ```
-- **Obener productos:**
+<br/>
+
+### **Obener productos:**
 ```http
   GET /api/products
 ```
@@ -99,7 +101,9 @@
   }
 ]
 ```
-- **Eliminar productos**
+<br/>
+
+### **Eliminar productos**
 ```http
   DELETE /api/product/{pid}
 ```
@@ -116,9 +120,8 @@
 ```
 <br/>
 
-
 ### 🛒 **Carrito**
-- **Obtener carritos**
+### **Obtener carritos**
 ```http
   GET /api/cart/{cid}
 ```
@@ -149,7 +152,9 @@
   "success": "Cart loaded with products"
 }
 ```
-- **Agregar productos**
+<br/>
+
+### **Agregar productos**
 ```http
   POST /api/cart/{cid}/product/{pid}
 ```
@@ -171,7 +176,9 @@
   "success": "Product added to cart"
 }
 ```
-- **Eliminar Productos**
+<br/>
+
+### **Eliminar Productos**
 ```http
   DELETE /api/cart/{cid}/product/{pid}
 ```
@@ -193,9 +200,8 @@
   "success": "Product removed from cart"
 }
 ```
-- Finalizar compra
+### **Finalizar compra**
 <br/>
-
 
 ### 👥 User 
 - Crear usuario
@@ -204,7 +210,6 @@
 - Eliminar usuario  
 
 *```Para mas detalle de la documentacion /apidocs```*
-
 <br/>
 <br/>
 
@@ -230,6 +235,9 @@ Para ejecutar en modo developer con persistencias en MongoDB:
 ````
 npm run start:dev
 ````
+<br/>
+<br/>
+
     
 ## 🔧 Running Tests 🔨
 
@@ -238,4 +246,11 @@ Para realizar un test completo de la API (*mocha, chai y supertest*) ejecute el 
 ```bash
   npm run test
 ```
+<br/>
+<br/>
+
+## 🧾 Authors ✍
+Desarrolado por: Matias Vazquez Martin
+
+[@mvazquezmartin](https://www.github.com/mvazquezmartin)
 

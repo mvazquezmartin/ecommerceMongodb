@@ -98,10 +98,11 @@ ___
     "status": true,
     "stock": 300,
     "category": "CATEGORIA_DEL_PRODUCTO",
-    "thumbnail": "http://dummyimage.com/x.png/5fa2dd/ffffff"
-  }
+    "thumbnail": "http://dummyimage.com/x.png/5fa2dd/ffffff",
+    "owner": "userPremium@email.com"
+  },
   {
-      ...
+      "moreProducts": "..."
   }
 ]
 ```

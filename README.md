@@ -17,7 +17,7 @@
 
 ## 💡 Features & API Reference 📑
 *A continuación estan las principales funcionalidades de la api, para mas detalle /apidocs*
-### 🛍 **Productos**
+## 🛍 **Productos**
 ### **Agregar productos:**
 ```http
   POST /api/products
@@ -120,7 +120,7 @@
 ```
 <br/>
 
-### 🛒 **Carrito**
+## 🛒 **Carrito**
 ### **Obtener carritos**
 ```http
   GET /api/cart/{cid}
@@ -203,7 +203,7 @@
 ### **Finalizar compra**
 <br/>
 
-### 👥 User 
+## 👥 User 
 - Crear usuario
 - Actualizar documentacion
 - Cambiar roles

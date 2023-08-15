@@ -4,35 +4,30 @@ const EnumErrors = require("../errorHandlers/enumError");
 const appError = (error, req, res, next) => {
   console.log(colors.red(error.cause));
 
+  const responseBody = {
+    status: "error",
+    error: error.name,
+    message: error.message,
+  };
+
   switch (error.code) {
     case EnumErrors.INVALID_TYPES_ERROR:
-      res.json({ status: "error", error: error.name, message: error.message });
-      break;
-
     case EnumErrors.DATABASE_ERROR:
-      res.json({ status: "error", error: error.name, message: error.message });
-      break;
-
     case EnumErrors.ROUTING_ERROR:
-      res.json({ status: "error", error: error.name, message: error.message });
-      break;
-
     case EnumErrors.AUTHENTICATE_ERROR:
-      res.json({ status: "error", error: error.name, message: error.message });
-      break;
-
-    case EnumErrors.UNAUTHORIZHED_ERROR:
-      res.json({ status: "error", error: error.name, message: error.message });
+    case EnumErrors.UNAUTHORIZED_ERROR:
+      res.status(error.status).json(responseBody);
       break;
 
     default:
       if (!error.message) {
-        res.json({ status: "error", error: "Unhandled error" });
+        responseBody.message = "Unhandled error";
       }
       console.log(colors.yellow(error.message));
-      res.json({ status: "error", error: error.message });
+      res.json(responseBody);
       break;
   }
+
   next();
 };
 

@@ -1,15 +1,13 @@
-const {enviroment}= require("../config/logger.config")
+const { enviroment } = require("../config/logger.config");
 
-switch (enviroment){
+switch (enviroment) {
   case "development":
-    console.log("devlog")
-    module.exports = require("./dev.logger")
-    break
-  case "production":
-    console.log("prodLog")
-    module.exports = require("./prod.logger")
-    break
-  default:
-    break
-}
+    console.log("Development log");
+    module.exports = require("./dev.logger");
+    break;
 
+  case "local":
+    console.log("Local log");
+    module.exports = require("./local.logger");
+    break;
+}

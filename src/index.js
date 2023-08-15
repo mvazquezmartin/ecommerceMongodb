@@ -8,7 +8,7 @@ const { PORT } = require("./config/app.config");
 const initializePassport = require("./config/passport.config");
 const setUpSocket = require("./config/socketio.config");
 const appError = require("./middlewares/error.middleware");
-//const appLogger = require("./middlewares/logger.middleware");
+const appLogger = require("./middlewares/logger.middleware");
 
 const app = express();
 
@@ -27,7 +27,7 @@ app.use(passport.initialize());
 router(app);
 
 app.use(appError);
-//app.use(appLogger);
+app.use(appLogger);
 
 const httpServer = app.listen(PORT, () => {
   console.log(`Server started on port: ${PORT}`.green);

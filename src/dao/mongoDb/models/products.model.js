@@ -36,7 +36,7 @@ productsSchema.statics.filterProducts = async function (params) {
   const sortOrder = params.sort === "asc" ? 1 : -1;
   pipeline.push({ $sort: { price: sortOrder } });
 
-  console.log("pipeline:", ...pipeline);
+  //console.log("pipeline:", ...pipeline);
   const aggregation = await this.aggregate(pipeline);
 
   const filterQuery = {

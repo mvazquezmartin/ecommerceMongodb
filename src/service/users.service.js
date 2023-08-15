@@ -67,7 +67,7 @@ const changeRole = async (userInfo) => {
     return {
       status: "success",
       message: `Successful role change to ${userData.role}`,
-      data: data.role,
+      data: userData.role,
     };
   } catch (error) {
     throw error;

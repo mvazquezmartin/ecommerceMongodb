@@ -4,12 +4,7 @@ const authorization = require("../middlewares/authorization.middleware");
 const cartService = require("../service/cart.service");
 const productService = require("../service/product.service");
 const productError = require("../errorHandlers/product/prod.error");
-const {
-  cartValidIdError,
-  cartStatusError,
-  cartQuantityError,
-  cartOwnerError,
-} = require("../errorHandlers/cart/cart.error");
+const cartError = require("../errorHandlers/cart/cart.error");
 
 const router = Router();
 
@@ -60,11 +55,11 @@ router.get(
     try {
       const { cid } = req.params;
 
-      cartValidIdError(cid);
+      cartError.validId(cid);
 
       const response = await cartService.getOneById(cid);
 
-      cartStatusError(response);
+      cartError.status(response);
 
       res.json({
         status: response.status,
@@ -89,12 +84,12 @@ router.post(
       const user = req.user;
 
       productError.validId(pid);
-      cartValidIdError(cid);
+      cartError.validId(cid);
 
       const cartData = await cartService.getOneById(cid);
-      cartStatusError(cartData);
+      cartError.status(cartData);
 
-      await cartOwnerError(cid, user);
+      await cartError.owner(cid, user);
 
       if (user.role == "premium") {
         await productError.owner(pid, user);
@@ -103,7 +98,7 @@ router.post(
       const product = await productService.getOneById(pid);
 
       productError.status(product);
-      cartQuantityError(quantity);
+      cartError.quantity(quantity);
       await productError.checkStock(pid, quantity);
 
       const response = await cartService.addProduct(cid, pid, quantity);
@@ -128,14 +123,14 @@ router.delete(
     try {
       const { cid, pid } = req.params;
 
-      cartValidIdError(cid);
+      cartError.validId(cid);
       productError.validId(pid);
 
       const cartData = await cartService.getOneById(cid);
-      cartStatusError(cartData);
+      cartError.status(cartData);
 
       const user = req.user;
-      await cartOwnerError(cid, user);
+      await cartError.owner(cid, user);
 
       const response = await cartService.deleteProduct(cid, pid);
 

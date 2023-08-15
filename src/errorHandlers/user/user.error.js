@@ -10,6 +10,7 @@ const userInfoError = (userInfo) => {
     !userInfo.password
   ) {
     CustomError.create({
+      status: 400,
       name: "User creation error",
       cause: generateErrorInfo(enumErrors.INVALID_TYPES_ERROR, userInfo),
       message: "Error trying to create user",
@@ -19,6 +20,7 @@ const userInfoError = (userInfo) => {
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userInfo.email)) {
     CustomError.create({
+      status: 400,
       name: "User creation error",
       cause: "The email entered does not have the basic email format",
       message: "Invalid email format",
@@ -30,6 +32,7 @@ const userInfoError = (userInfo) => {
 const userUniqueError = (data) => {
   if (data.status === "error") {
     CustomError.create({
+      status: 409,
       name: "User creation error",
       cause: "The email used by the new user already exists",
       message: data.message,
@@ -41,6 +44,7 @@ const userUniqueError = (data) => {
 const userAuthenticateError = (data) => {
   if (data.status === "error") {
     CustomError.create({
+      status: 406,
       name: "User authetication error",
       cause: data.message,
       message: data.message,

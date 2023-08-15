@@ -5,10 +5,11 @@ const generateErrorInfo = require("../infoError");
 const userStore = require("../../store/user.store");
 const cartService = require("../../service/cart.service");
 
-const cartValidIdError = (cid) => {
+const validId = (cid) => {
   if (!isValidObjectId(cid)) {
     const cidObj = { _id: cid, errorType: "cartValidIdError" };
     CustomError.create({
+      status: 400,
       name: "Invalid ID",
       cause: generateErrorInfo(EnumErrors.INVALID_TYPES_ERROR, cidObj),
       message: "Cart ID is invalid",
@@ -17,9 +18,10 @@ const cartValidIdError = (cid) => {
   }
 };
 
-const cartStatusError = (data) => {
+const status = (data) => {
   if (data.status === "error") {
     CustomError.create({
+      status: 404,
       name: "Cart not found",
       cause: `No cart found with the Id: ${data._id}`,
       message: data.message,
@@ -28,9 +30,10 @@ const cartStatusError = (data) => {
   }
 };
 
-const cartQuantityError = (quantity) => {
+const quantity = (quantity) => {
   if (isNaN(quantity)) {
     CustomError.create({
+      status: 400,
       name: "Not quantity",
       cause: "The user did not specify the quantity of the product",
       message: "Need to specify quantity",
@@ -39,7 +42,7 @@ const cartQuantityError = (quantity) => {
   }
 };
 
-const cartOwnerError = async (cid, user) => {
+const owner = async (cid, user) => {
   const userData = await userStore.getOne(user.email);
   const cartData = await cartService.getOneById(cid);
 
@@ -48,6 +51,7 @@ const cartOwnerError = async (cid, user) => {
 
   if (userIdString !== cartIdString) {
     CustomError.create({
+      status: 401,
       name: "Unauthorized",
       cause:
         "The user tried to modify or delete a product from a cart that does not belong to him",
@@ -58,8 +62,8 @@ const cartOwnerError = async (cid, user) => {
 };
 
 module.exports = {
-  cartValidIdError,
-  cartStatusError,
-  cartQuantityError,
-  cartOwnerError,
+  validId,
+  status,
+  quantity,
+  owner,
 };

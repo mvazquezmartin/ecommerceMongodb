@@ -16,7 +16,8 @@ const info = (obj) => {
   ) {
     obj.errorType = "productInfoError";
     CustomError.create({
-      name: "Error adding product",
+      status: 400,
+      name: "Error adding or update product",
       cause: generateErrorInfo(EnumErrors.INVALID_TYPES_ERROR, obj),
       message: "Invalid data error",
       code: EnumErrors.INVALID_TYPES_ERROR,
@@ -28,6 +29,7 @@ const validId = (pid) => {
   if (!isValidObjectId(pid)) {
     const pidObj = { _id: pid, errorType: "producValidIdError" };
     CustomError.create({
+      status: 400,
       name: "Invalid ID",
       cause: generateErrorInfo(EnumErrors.INVALID_TYPES_ERROR, pidObj),
       message: "The product ID is invalid",
@@ -39,6 +41,7 @@ const validId = (pid) => {
 const status = (data) => {
   if (data.status === "error") {
     CustomError.create({
+      status: 404,
       name: "Product not found",
       cause: `No product found with the Id: ${data._id}`,
       message: data.message,
@@ -51,6 +54,7 @@ const owner = async (pid, user) => {
   const response = await productService.getOneById(pid);
   if (response.data.owner === user.email) {
     CustomError.create({
+      status: 401,
       name: "Unauthorized",
       cause:
         "The user tried to modify or delete a product that does not belong to him",
@@ -64,6 +68,7 @@ const checkStock = async (pid, quantity) => {
   const prod = await productService.getOneById(pid);
   if (prod.data.stock < quantity) {
     CustomError.create({
+      status:409,
       name: "Not stock enough",
       cause: "The user tried to add a product that there is not enough stock",
       message: `Not enough stock of ${prod.data.title}. Total Stock ${prod.data.stock}`,

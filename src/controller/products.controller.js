@@ -8,7 +8,7 @@ const productError = require("../errorHandlers/product/prod.error");
 const router = Router();
 
 //PRODUCTS BY PARAMS
-router.get("/params", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const params = {
       category: req.query.category || null,
@@ -27,25 +27,26 @@ router.get("/params", async (req, res) => {
       data: response.data,
     });
   } catch (error) {
-    res.json({ status: "error", message: error.message });
+    req.logger.error(error);
+    res.json({ status: "error", message: "internal server error" });
   }
 });
 
 // ALL PRODUCTS
-router.get("/", async (req, res) => {
-  try {
-    const limit = parseInt(req.query.limit);
-    const products = await productService.getAll();
-    if (!limit || isNaN(limit)) {
-      res.json(products);
-    } else {
-      res.json(products.slice(0, limit));
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "internal error server" });
-  }
-});
+// router.get("/", async (req, res) => {
+//   try {
+//     const limit = parseInt(req.query.limit);
+//     const products = await productService.getAll();
+//     if (!limit || isNaN(limit)) {
+//       res.json(products);
+//     } else {
+//       res.json(products.slice(0, limit));
+//     }
+//   } catch (error) {
+//     req.logger.error(error);
+//     res.status(500).json({ message: "internal error server" });
+//   }
+// });
 
 // PRODUCT BY ID
 router.get("/:pid", async (req, res, next) => {
@@ -65,6 +66,7 @@ router.get("/:pid", async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+    req.logger.error(error);
   }
 });
 
@@ -82,7 +84,7 @@ router.post(
 
       productError.info(item);
 
-      const response = await productService.create(item);
+      const response = await productService.create(item, user);
 
       res.status(201).json({
         status: response.status,
@@ -91,6 +93,7 @@ router.post(
       });
     } catch (error) {
       next(error);
+      req.logger.error(error);
     }
   }
 );
@@ -108,7 +111,7 @@ router.patch(
       productError.validId(pid);
 
       if (user.role === "premium") {
-        await productOwnerError(pid, user);
+        await productError.owner(pid, user);
       }
 
       const update = ProductDto.update(req.body);
@@ -123,6 +126,7 @@ router.patch(
       });
     } catch (error) {
       next(error);
+      req.logger.error(error);
     }
   }
 );
@@ -153,6 +157,7 @@ router.delete(
         data: response.data,
       });
     } catch (error) {
+      req.logger.error(error);
       next(error);
     }
   }

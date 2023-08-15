@@ -4,7 +4,7 @@ const EnumErrors = require("../enumError");
 const generateErrorInfo = require("../infoError");
 const productService = require("../../service/product.service");
 
-const productInfoError = (obj) => {
+const info = (obj) => {
   if (
     !obj.title ||
     !obj.description ||
@@ -16,27 +16,27 @@ const productInfoError = (obj) => {
   ) {
     obj.errorType = "productInfoError";
     CustomError.create({
-      name: "Error al agregar el producto",
+      name: "Error adding product",
       cause: generateErrorInfo(EnumErrors.INVALID_TYPES_ERROR, obj),
-      message: "Error por datos inválidos",
+      message: "Invalid data error",
       code: EnumErrors.INVALID_TYPES_ERROR,
     });
   }
 };
 
-const productValidIdError = (pid) => {
+const validId = (pid) => {
   if (!isValidObjectId(pid)) {
     const pidObj = { _id: pid, errorType: "producValidIdError" };
     CustomError.create({
       name: "Invalid ID",
       cause: generateErrorInfo(EnumErrors.INVALID_TYPES_ERROR, pidObj),
-      message: "El ID del producto es invalido",
+      message: "The product ID is invalid",
       code: EnumErrors.INVALID_TYPES_ERROR,
     });
   }
 };
 
-const productStatusError = (data) => {
+const status = (data) => {
   if (data.status === "error") {
     CustomError.create({
       name: "Product not found",
@@ -47,7 +47,7 @@ const productStatusError = (data) => {
   }
 };
 
-const productOwnerError = async (pid, user) => {
+const owner = async (pid, user) => {
   const response = await productService.getOneById(pid);
   if (response.data.owner === user.email) {
     CustomError.create({
@@ -60,7 +60,7 @@ const productOwnerError = async (pid, user) => {
   }
 };
 
-const productCheckStockError = async (pid, quantity) => {
+const checkStock = async (pid, quantity) => {
   const prod = await productService.getOneById(pid);
   if (prod.data.stock < quantity) {
     CustomError.create({
@@ -72,9 +72,9 @@ const productCheckStockError = async (pid, quantity) => {
   }
 };
 module.exports = {
-  productInfoError,
-  productValidIdError,
-  productStatusError,
-  productOwnerError,
-  productCheckStockError,
+  info,
+  validId,
+  status,
+  owner,
+  checkStock,
 };

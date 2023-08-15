@@ -3,12 +3,7 @@ const passport = require("passport");
 const authorization = require("../middlewares/authorization.middleware");
 const cartService = require("../service/cart.service");
 const productService = require("../service/product.service");
-const {
-  productOwnerError,
-  productValidIdError,
-  productCheckStockError,
-  productStatusError,
-} = require("../errorHandlers/product/prod.error");
+const productError = require("../errorHandlers/product/prod.error");
 const {
   cartValidIdError,
   cartStatusError,
@@ -93,7 +88,7 @@ router.post(
       const { quantity } = req.body;
       const user = req.user;
 
-      productValidIdError(pid);
+      productError.validId(pid);
       cartValidIdError(cid);
 
       const cartData = await cartService.getOneById(cid);
@@ -102,14 +97,14 @@ router.post(
       await cartOwnerError(cid, user);
 
       if (user.role == "premium") {
-        await productOwnerError(pid, user);
+        await productError.owner(pid, user);
       }
 
       const product = await productService.getOneById(pid);
 
-      productStatusError(product);
+      productError.status(product);
       cartQuantityError(quantity);
-      await productCheckStockError(pid, quantity);
+      await productError.checkStock(pid, quantity);
 
       const response = await cartService.addProduct(cid, pid, quantity);
 
@@ -134,7 +129,7 @@ router.delete(
       const { cid, pid } = req.params;
 
       cartValidIdError(cid);
-      productValidIdError(pid);
+      productError.validId(pid);
 
       const cartData = await cartService.getOneById(cid);
       cartStatusError(cartData);

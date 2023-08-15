@@ -20,7 +20,7 @@ class ProductManager {
   }
 
   async filter(params) {
-    try {
+    try {      
       const data = await Products.filterProducts(params);
       return data;
     } catch (error) {

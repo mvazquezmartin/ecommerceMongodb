@@ -3,12 +3,7 @@ const passport = require("passport");
 const authorization = require("../middlewares/authorization.middleware");
 const ProductDto = require("../dtos/products.dto");
 const productService = require("../service/product.service");
-const {
-  productInfoError,
-  productValidIdError,
-  productStatusError,
-  productOwnerError,
-} = require("../errorHandlers/product/prod.error");
+const productError = require("../errorHandlers/product/prod.error");
 
 const router = Router();
 
@@ -17,25 +12,20 @@ router.get("/params", async (req, res) => {
   try {
     const params = {
       category: req.query.category || null,
-      priceMin: parseInt(req.query.priceMin),
-      priceMax: parseInt(req.query.priceMax),
-      sort: req.query.sort || null,
-      page: parseInt(req.query.page),
-      limit: parseInt(req.query.limit),
+      priceMin: req.query.priceMin || null,
+      priceMax: req.query.priceMax || null,
+      sort: req.query.sort,
+      page: req.query.page,
+      limit: req.query.limit,
     };
 
-    const result = await productService.filter(params);
+    const response = await productService.filter(params);
 
-    if (result.totalDocs === 0)
-      return res.json({
-        status: "Not found",
-        message: "No product found",
-      });
-
-    const mapDto = result.docs.map((doc) => new ProductDto(doc));
-    result.docs = mapDto;
-
-    res.json({ status: "success", data: result });
+    res.json({
+      status: response.status,
+      message: response.message,
+      data: response.data,
+    });
   } catch (error) {
     res.json({ status: "error", message: error.message });
   }
@@ -62,11 +52,11 @@ router.get("/:pid", async (req, res, next) => {
   try {
     const { pid } = req.params;
 
-    productValidIdError(pid);
+    productError.validId(pid);
 
     const response = await productService.getOneById(pid);
 
-    productStatusError(response);
+    productError.status(response);
 
     res.status(200).json({
       status: response.status,
@@ -90,7 +80,7 @@ router.post(
 
       const item = ProductDto.create(req.body, owner);
 
-      productInfoError(item);
+      productError.info(item);
 
       const response = await productService.create(item);
 
@@ -115,14 +105,14 @@ router.patch(
       const { pid } = req.params;
       const user = req.user;
 
-      productValidIdError(pid);
+      productError.validId(pid);
 
       if (user.role === "premium") {
         await productOwnerError(pid, user);
       }
 
       const update = ProductDto.update(req.body);
-      productInfoError(update);
+      productError.info(update);
 
       const response = await productService.update(pid, update);
 
@@ -147,12 +137,12 @@ router.delete(
       const { pid } = req.params;
       const user = req.user;
 
-      productValidIdError(pid);
+      productError.validId(pid);
 
       if (user.role === "premium") {
         const product = await productService.getOneById(pid);
-        productStatusError(product);
-        await productOwnerError(pid, user);
+        productError.status(product);
+        await productError.owner(pid, user);
       }
 
       const response = await productService.deleteOne(pid);

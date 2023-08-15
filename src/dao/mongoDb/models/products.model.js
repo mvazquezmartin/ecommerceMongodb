@@ -25,28 +25,27 @@ productsSchema.statics.filterProducts = async function (params) {
   if (params.category !== null)
     pipeline.push({ $match: { category: params.category } });
 
-  if (!isNaN(params.priceMin) && !isNaN(params.priceMax)) {
+  if (params.priceMin !== null && params.priceMax !== null) {
     const priceFilter = {
-      $gte: params.priceMin,
-      $lte: params.priceMax,
+      $gte: parseInt(params.priceMin),
+      $lte: parseInt(params.priceMax),
     };
     pipeline.push({ $match: { price: priceFilter } });
   }
 
-  if (params.sort) {
-    const sortField = "price";
-    const sortOrder = params.sort === "asc" ? 1 : -1;
-    pipeline.push({ $sort: { [sortField]: sortOrder } });
-  }
+  const sortOrder = params.sort === "asc" ? 1 : -1;
+  pipeline.push({ $sort: { price: sortOrder } });
 
-  const options = {
-    page: params.page || 1,
-    limit: params.limit || 10,
-  };
-
+  console.log("pipeline:", ...pipeline);
   const aggregation = await this.aggregate(pipeline);
+
   const filterQuery = {
     _id: { $in: aggregation.map((item) => item._id) },
+  };
+
+  const options = {
+    page: parseInt(params.page) || 1,
+    limit: parseInt(params.limit) || 10,
   };
 
   const result = await this.paginate(filterQuery, options);

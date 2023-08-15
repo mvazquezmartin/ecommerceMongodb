@@ -1,4 +1,5 @@
 const { productDAO } = require("../dao/factory.dao");
+const ProductDto = require("../dtos/products.dto");
 
 const products = productDAO;
 
@@ -8,7 +9,19 @@ const getAll = async () => {
 
 const filter = async (params) => {
   try {
-    return await products.filter(params);
+    const data = await products.filter(params);
+
+    if (data.totalDocs === 0)
+      return {
+        status: "error",
+        message: "No products found",
+        data: {},
+      };
+
+    const mapDto = data.docs.map((doc) => new ProductDto(doc));
+    data.docs = mapDto;
+
+    return { status: "success", message: "Products found", data: data };
   } catch (error) {
     throw error;
   }

@@ -5,22 +5,20 @@ const amountAndDetails = require("../utils/ticketAmountDetails");
 
 const ticketDao = new TicketsDao();
 
-class TicketService {
-  async generate(cart, req) {
-    const { amount, detailedItems } = await amountAndDetails(cart);
+const generate = async (cart, user) => {
+  const { amount, detailedItems } = await amountAndDetails(cart);
 
-    const code = uuidv4();
-    const date = new Date();
-    const purchaser = req.user.email;
+  const code = uuidv4();
+  const date = new Date();
+  const purchaser = user.email;
 
-    const ticket = new TicketDto(code, date, detailedItems, amount, purchaser);
+  const data = new TicketDto(code, date, detailedItems, amount, purchaser);
 
-    return ticket;
-  }
+  return {status: "success", message:"Ticket generated successfully", data: data};
+};
 
-  async create(ticket) {
-    return await ticketDao.create(ticket);
-  }
-}
+const create = async (ticket) => {
+  return await ticketDao.create(ticket);
+};
 
-module.exports = TicketService;
+module.exports = { generate, create };

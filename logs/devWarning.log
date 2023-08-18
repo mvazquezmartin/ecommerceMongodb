@@ -1,2 +1,5 @@
 http: GET en /api/products/643ef56bb0d990bb924063e - 15/8/2023, 20:23:28
 error: undefined {"cause":"The product ID entered was expected to be a MongoDb ObjectId and was received: \u001b[35m643ef56bb0d990bb924063e\u001b[39m","code":2,"name":"Invalid ID","status":400}
+http: POST en /api/cart/64b4af0eb0b590bb118aaffe/product/643ef56bb0d990bb924063f0 - 15/8/2023, 22:02:45
+http: POST en /api/cart/64b4af0eb0b590bb118aaffe/product/643ef56bb0d990bb924063f0 - 15/8/2023, 22:03:19
+error: undefined {"cause":"No product found with the Id: 643ef56bb0d990bb924063f0","code":3,"name":"Product not found","status":404}

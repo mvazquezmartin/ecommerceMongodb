@@ -7,14 +7,12 @@ const userController = require("../controller/user.controller");
 const signUpController = require("../controller/signup.controller");
 const authController = require("../controller/auth.controller");
 const loginController = require("../controller/login.controller");
-const ticketController = require("../controller/ticket.controller");
 const mockController = require("../controller/mock.controller");
 const swaggerController = require("../controller/swagger.controller");
 
 const router = (app) => {
   app.use("/api/products", producstController);
   app.use("/api/cart", cartsController);
-  app.use("/cart", ticketController);
   app.use("/realtimeproducts", realtimeproductsController);
   app.use("/home", homeController);
   app.use("/chat", chatController);
@@ -27,7 +25,7 @@ const router = (app) => {
 };
 
 // AGREGAR VIEWCONTROLLER
-// /cart/:cid/purchase mover a cartsController
+
 // product.controller byParams y getAll en un solo endpoints
 // revisar y crear DTO
 // crear view para changePw y funcion changepw

@@ -1,5 +1,5 @@
 
-# 🏪 E-commerce backend proyect 🛍
+# <center> 🏪 E-commerce backend proyect 🛍 </center>
 
 ¡Bienvenido al repositorio del proyecto E-commerce backend! Este proyecto tiene como objetivo crear una aplicación utilizando MongoDB como base de datos. Proporciona una estructura para la gestión de productos, clientes y pedidos.
 <br/>

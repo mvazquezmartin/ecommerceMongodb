@@ -24,7 +24,7 @@ const getOneById = async (id) => {
         status: "error",
         _id: id,
         message: "The cart does not exist",
-        data: {},
+        data: [],
       };
     }
 
@@ -32,7 +32,7 @@ const getOneById = async (id) => {
       return {
         status: "success",
         message: "There are no products in the cart",
-        data: data,
+        data: [],
       };
     }
 

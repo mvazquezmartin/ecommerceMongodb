@@ -3,6 +3,7 @@ const passport = require("passport");
 const authorization = require("../middlewares/authorization.middleware");
 const cartService = require("../service/cart.service");
 const productService = require("../service/product.service");
+const ticketService = require("../service/ticket.service");
 const productError = require("../errorHandlers/product/prod.error");
 const cartError = require("../errorHandlers/cart/cart.error");
 
@@ -110,6 +111,7 @@ router.post(
       });
     } catch (error) {
       next(error);
+      req.logger.error(error);
     }
   }
 );
@@ -141,6 +143,35 @@ router.delete(
       });
     } catch (error) {
       next(error);
+    }
+  }
+);
+//GENERATE AND CREATE TICKET
+router.get(
+  "/:cid/purchase",
+  passport.authenticate("jwt", { session: false }),
+  authorization("user"),
+  async (req, res) => {
+    try {
+      const { cid } = req.params;
+      const user = req.user;
+
+      const cart = await cartService.getOneById(cid);
+      console.log(cart);
+      if (cart.data.length === 0)
+        return res
+          .status(401)
+          .send({ status: cart.status, message: cart.message, data: {} });
+
+      const ticket = await ticketService.generate(cart.data, user);
+
+      await ticketService.create(ticket);
+
+      res.status(200).json({ status: "success", purchase: ticket });
+    } catch (error) {
+      console.log(error);
+      res.status(400).json("algo salio mal");
+      req.logger.error(error);
     }
   }
 );

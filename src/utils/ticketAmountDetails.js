@@ -1,34 +1,38 @@
 const productService = require("../service/product.service");
 
 const amountAndDetails = async (cart) => {
-  let amount = 0;
+  try {
+    let amount = 0;
 
-  await cart.populate("products.product");
+    await cart.populate("products.product");
 
-  const detailedItems = [];
+    const detailedItems = [];
 
-  for (const item of cart.products) {
-    const prod = item.product;
-    const price = prod.price;
-    const quantity = item.quantity;
+    for (const item of cart.products) {
+      const prod = item.product;
+      const price = prod.price;
+      const quantity = item.quantity;
 
-    amount += price * quantity;
+      amount += price * quantity;
 
-    await productService.checkStock(prod._id, quantity);
-    const updateStock = prod.stock - quantity;
-    await productService.update(prod._id, { stock: updateStock });
+      await productService.checkStock(prod._id, quantity);
+      const updateStock = prod.stock - quantity;
+      await productService.update(prod._id, { stock: updateStock });
 
-    const detailedItem = {
-      product: prod.title,
-      quantity: quantity,
-      unitPrice: price,
-      totalPrice: quantity * price,
-    };
+      const detailedItem = {
+        product: prod.title,
+        quantity: quantity,
+        unitPrice: price,
+        totalPrice: quantity * price,
+      };
 
-    detailedItems.push(detailedItem);
+      detailedItems.push(detailedItem);
+    }
+
+    return { amount, detailedItems };
+  } catch (error) {
+    throw error;
   }
-
-  return { amount, detailedItems };
 };
 
 module.exports = amountAndDetails;

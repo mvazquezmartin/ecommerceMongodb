@@ -3,38 +3,69 @@ const { createHash, passwordValidate } = require("../utils/cryptPassword.util");
 const { generateToken } = require("../utils/jwt.util");
 const usersStore = require("../store/user.store");
 const MailAdapter = require("../adapters/mail.adapter");
-const UsersDao = require("../dao/mongoDb/manager/users.manager.mongo");
+const { userDAO } = require("../dao/factory.dao");
 const UserDTO = require("../dtos/user.dto");
 const cartService = require("./cart.service");
 const transport = require("../utils/mail.util");
 
 const msg = new MailAdapter();
-const userDao = new UsersDao();
+const user = userDAO;
+
+const getAll = async () => {
+  try {
+    const data = await user.getAll();
+
+    if (data.length === 0)
+      return {
+        status: "error",
+        message: "There are no registered users",
+        data: [],
+      };
+
+    const dataDTO = data.map((info) => UserDTO.getData(info));
+
+    return { status: "success", message: "Users find", data: dataDTO };
+  } catch (error) {
+    throw error;
+  }
+};
 
 const create = async (userInfo) => {
-  const user = await usersStore.getOne(userInfo.email);
+  try {
+    const user = await usersStore.getOne(userInfo.email);
 
-  if (user)
-    return { status: "error", message: "That email is already registered" };
+    if (user)
+      return {
+        status: "error",
+        message: "That email is already registered",
+        data: [],
+      };
 
-  const pwHashed = createHash(userInfo.password);
+    const pwHashed = createHash(userInfo.password);
 
-  const newUserInfo = new UserDTO(userInfo);
-  newUserInfo.password = pwHashed;
+    const newUserInfo = new UserDTO(userInfo);
+    newUserInfo.password = pwHashed;
 
-  const cart = await cartService.create();
-  newUserInfo.id_cart = cart._id;
+    const cart = await cartService.create();
+    newUserInfo.id_cart = cart.data._id;
+    newUserInfo.last_connection = new Date();
 
-  await usersStore.create(newUserInfo);
-  const access_token = generateToken({ email: newUserInfo.email }, "1d");
+    const newUser = await usersStore.create(newUserInfo);
+    const access_token = generateToken({ email: newUser.email }, "1d");
 
-  await msg.send(newUserInfo);
+    const data = UserDTO.getData(newUser);
+    data.access_token = access_token;
 
-  return {
-    status: "success",
-    message: "Successfully registered user",
-    data: access_token,
-  };
+    //await msg.send(newUser);
+
+    return {
+      status: "success",
+      message: "Successfully registered user",
+      data: data,
+    };
+  } catch (error) {
+    throw error;
+  }
 };
 
 const changeRole = async (userInfo) => {
@@ -55,6 +86,7 @@ const changeRole = async (userInfo) => {
           return {
             status: "error",
             message: "You have not finished processing your documentation",
+            data: []
           };
         }
         break;
@@ -62,7 +94,7 @@ const changeRole = async (userInfo) => {
         userData.role = "user";
     }
 
-    await userDao.update(userData._id, { role: userData.role });
+    await user.update(userData._id, { role: userData.role });
 
     return {
       status: "success",
@@ -108,7 +140,7 @@ const uploadDoc = async (uid, files) => {
         docToUpload.push(document.name);
       }
     }
-    await userDao.update(uid, userData);
+    await user.update(uid, userData);
     return {
       status: "success",
       message: "Documentation uploaded successfully",
@@ -124,14 +156,22 @@ const authenticate = async (userInfo) => {
     const userData = await usersStore.getOne(userInfo.email);
 
     if (!userData)
-      return { status: "error", message: "Username and Password don't match" };
+      return {
+        status: "error",
+        message: "Username and Password don't match",
+        data: [],
+      };
 
     if (!passwordValidate(userInfo.password, userData))
-      return { status: "error", message: "Username and Password don't match" };
+      return {
+        status: "error",
+        message: "Username and Password don't match",
+        data: [],
+      };
 
     userData.last_connection = new Date();
     const userId = userData._id;
-    await userDao.update(userId, userData);
+    await user.update(userId, userData);
 
     const access_token = generateToken(
       {
@@ -194,13 +234,14 @@ const logout = async (email) => {
   try {
     const userData = await usersStore.getOne(email);
     userData.last_connection = new Date();
-    await userDao.update(userData._id, userData);
+    await user.update(userData._id, userData);
   } catch (error) {
     throw error;
   }
 };
 
 module.exports = {
+  getAll,
   create,
   changeRole,
   authenticate,

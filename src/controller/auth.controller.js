@@ -4,7 +4,7 @@ const { generateToken } = require("../utils/jwt.util");
 const authorization = require("../middlewares/authorization.middleware");
 const userService = require("../service/users.service");
 const UserDTO = require("../dtos/user.dto");
-const { userAuthenticateError } = require("../errorHandlers/user/user.error");
+const userError = require("../errorHandlers/user/user.error");
 
 const router = Router();
 
@@ -15,7 +15,7 @@ router.post("/", async (req, res, next) => {
 
     const response = await userService.authenticate(userInfo);
 
-    userAuthenticateError(response);
+    userError.authenticate(response);
 
     res.cookie("authToken", response.data, { httpOnly: true }).json({
       success: response.status,
@@ -25,6 +25,7 @@ router.post("/", async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+    req.logger.error(error);
   }
 });
 
@@ -59,6 +60,34 @@ router.get(
     }
   }
 );
+
+//CHANGE PASSWORD
+router.post("/forgotpassword", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const response = await userService.forgotPw(email);
+
+    res.json({
+      status: response.status,
+      message: response.message,
+      data: response.data,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/resetpw", async (req, res) => {
+  try {
+    const { password, token } = req.body;
+    //comprovaciones de password y token
+    // const response = await resetPw(token, password)
+    //res.json({status:response.status, message: response.message, data: response.data})
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 //LOGOUT
 router.get(

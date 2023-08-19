@@ -25,11 +25,11 @@ app.use(cookieParser());
 
 initializePassport();
 app.use(passport.initialize());
+app.use(appLogger);
 
 router(app);
 
 app.use(appError);
-app.use(appLogger);
 
 const httpServer = app.listen(PORT, () => {
   console.log(`Server started on port: ${PORT}`.green);

@@ -4,7 +4,7 @@ import { renderProductos } from "../js/render/productRender.js";
 
 const socket = io();
 
-const urlProducts = "/api/products/";
+const urlProducts = "/api/products/?category=&priceMin=&priceMax=&sort=&limit=&page=";
 
 const btnMainFind = document.getElementById("btnMainFind");
 const btnMainAdd = document.getElementById("btnMainAdd");
@@ -20,7 +20,7 @@ const renderInputFind = () => {
     console.log(id)
     fetch(`${urlProducts}${id}`)
       .then((response) => response.json())      
-      .then((data) => {
+      .then((data) => {        
         renderProductos(data);
       })
       .catch((error) => {        

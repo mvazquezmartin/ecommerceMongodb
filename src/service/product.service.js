@@ -1,10 +1,16 @@
 const { productDAO } = require("../dao/factory.dao");
 const ProductDto = require("../dtos/products.dto");
+const UserDTO = require("../dtos/user.dto");
 
 const products = productDAO;
 
 const getAll = async () => {
-  return await products.getAll();
+  try {
+    const data = await products.getAll();
+    return data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 const filter = async (params) => {

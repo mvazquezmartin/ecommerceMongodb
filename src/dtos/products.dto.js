@@ -11,8 +11,7 @@ class ProductDto {
   }
 
   static create(item, owner) {
-    const dto = new ProductDto(item);
-    dto.owner = owner;
+    const dto = new ProductDto({ ...item, owner: owner });
     return dto;
   }
 

@@ -4,24 +4,17 @@ const UserDTO = require("../dtos/user.dto");
 const userService = require("../service/users.service");
 const passport = require("passport");
 const authorization = require("../middlewares/authorization.middleware");
+const userError = require("../errorHandlers/user/user.error");
 const {
   profileStorage,
   imgFileFilter,
   docStorage,
   docFileFilter,
 } = require("../utils/multer.utils");
-const {
-  userInfoError,
-  userUniqueError,
-} = require("../errorHandlers/user/user.error");
-
-const router = Router();
-
 const imgUploader = multer({
   storage: profileStorage,
   fileFilter: imgFileFilter,
 });
-
 const docUploader = multer({
   storage: docStorage,
   filter: docFileFilter,
@@ -31,12 +24,38 @@ const docUploader = multer({
   { name: "account", maxCount: 1 },
 ]);
 
+const router = Router();
+
+//GET USERS
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  authorization("admin"),
+  async (req, res) => {
+    try {
+      const response = await userService.getAll();
+      
+      res.status(201).json({
+        status: response.status,
+        message: response.message,
+        data: response.data,
+      });
+    } catch (error) {      
+      req.logger.error(error.message);
+      res
+        .status(500)
+        .json({ status: "error", message: "Internal server error" });
+
+    }
+  }
+);
+
 //REGISTER USER
 router.post("/", imgUploader.single("image"), async (req, res, next) => {
   try {
-    const newUserInfo = new UserDTO(req.body);
+    const newUserInfo = UserDTO.create(req.body);
 
-    userInfoError(newUserInfo);
+    userError.info(newUserInfo);
 
     if (req.file) {
       const file = req.file;
@@ -45,18 +64,20 @@ router.post("/", imgUploader.single("image"), async (req, res, next) => {
 
     const response = await userService.create(newUserInfo);
 
-    userUniqueError(response);
+    userError.unique(response);
 
     res.status(201).json({
       status: response.status,
-      token: response.data,
+      message: response.message,
+      data: response.data,
     });
   } catch (error) {
+    req.logger.error(error.message);
     next(error);
   }
 });
 
-//SWITCH USER OR PREMIUM
+//SWITCH USER & PREMIUM
 router.get(
   "/premium/:uid",
   passport.authenticate("jwt", { session: false }),
@@ -108,34 +129,6 @@ router.post(
     }
   }
 );
-
-//CHANGE PASSWORD
-router.post("/forgotpassword", async (req, res) => {
-  try {
-    const { email } = req.body;
-
-    const response = await userService.forgotPw(email);
-
-    res.json({
-      status: response.status,
-      message: response.message,
-      data: response.data,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-router.post("/resetpw", async (req, res) => {
-  try {
-    const { password, token } = req.body;
-    //comprovaciones de password y token
-    // const response = await resetPw(token, password)
-    //res.json({status:response.status, message: response.message, data: response.data})
-  } catch (error) {
-    console.log(error);
-  }
-});
 
 router.get("/changepw", (req, res) => {
   res.render("changepw.handlebars");

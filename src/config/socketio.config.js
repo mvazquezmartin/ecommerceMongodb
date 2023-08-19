@@ -2,7 +2,7 @@ const axios = require("axios");
 const { Server } = require("socket.io");
 
 const messages = [];
-const urlProducts = "http://localhost:8080/api/products?limit=";
+const urlProducts = "http://localhost:8080/api/products/?category=&priceMin=&priceMax=&sort=&limit=&page=";
 
 const setUpSocket = (app) => {
   const io = new Server(app);

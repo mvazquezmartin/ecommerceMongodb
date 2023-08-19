@@ -27,26 +27,10 @@ router.get("/", async (req, res) => {
       data: response.data,
     });
   } catch (error) {
-    req.logger.error(error);
-    res.json({ status: "error", message: "internal server error" });
+    req.logger.error(error.message);
+    res.json({ status: "error", message: "Internal server error" });
   }
 });
-
-// ALL PRODUCTS
-// router.get("/", async (req, res) => {
-//   try {
-//     const limit = parseInt(req.query.limit);
-//     const products = await productService.getAll();
-//     if (!limit || isNaN(limit)) {
-//       res.json(products);
-//     } else {
-//       res.json(products.slice(0, limit));
-//     }
-//   } catch (error) {
-//     req.logger.error(error);
-//     res.status(500).json({ message: "internal error server" });
-//   }
-// });
 
 // PRODUCT BY ID
 router.get("/:pid", async (req, res, next) => {
@@ -65,8 +49,8 @@ router.get("/:pid", async (req, res, next) => {
       data: response.data,
     });
   } catch (error) {
+    req.logger.error(error.message);
     next(error);
-    req.logger.error(error);
   }
 });
 
@@ -92,8 +76,8 @@ router.post(
         data: response.data,
       });
     } catch (error) {
+      req.logger.error(error.message);
       next(error);
-      req.logger.error(error);
     }
   }
 );
@@ -125,8 +109,8 @@ router.patch(
         data: response.data,
       });
     } catch (error) {
+      req.logger.error(error.message);
       next(error);
-      req.logger.error(error);
     }
   }
 );
@@ -157,11 +141,29 @@ router.delete(
         data: response.data,
       });
     } catch (error) {
-      req.logger.error(error);
+      req.logger.error(error.message);
       next(error);
     }
   }
 );
+
+module.exports = router;
+
+// ALL PRODUCTS
+// router.get("/", async (req, res) => {
+//   try {
+//     const limit = parseInt(req.query.limit);
+//     const products = await productService.getAll();
+//     if (!limit || isNaN(limit)) {
+//       res.json(products);
+//     } else {
+//       res.json(products.slice(0, limit));
+//     }
+//   } catch (error) {
+//     req.logger.error(error);
+//     res.status(500).json({ message: "internal error server" });
+//   }
+// });
 
 // STATUS TRUE
 // router.put(
@@ -173,5 +175,3 @@ router.delete(
 //     res.json({ message: "status true" });
 //   }
 // );
-
-module.exports = router;

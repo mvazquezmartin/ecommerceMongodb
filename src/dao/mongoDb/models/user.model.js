@@ -24,19 +24,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     //require:true,
   },
-  phone: {
-    type: String,
-    //require:true,
-  },
   profile_img: String,
   role: {
     type: String,
     default: "user",
   },
-  id_cart: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "carts",
-  },
+  id_cart: String,
   documents: [
     {
       name: String,
@@ -46,9 +39,9 @@ const userSchema = new mongoose.Schema({
   last_connection: Date,
 });
 
-userSchema.pre("find", function () {
-  this.populate("carts");
-});
+// userSchema.pre("find", function () {
+//   this.populate("carts");
+// });
 
 const Users = mongoose.model(userCollection, userSchema);
 

@@ -2,7 +2,7 @@ const CustomError = require("../CustomError");
 const enumErrors = require("../enumError");
 const generateErrorInfo = require("../infoError");
 
-const userInfoError = (userInfo) => {
+const info = (userInfo) => {
   if (
     !userInfo.first_name ||
     !userInfo.last_name ||
@@ -29,7 +29,7 @@ const userInfoError = (userInfo) => {
   }
 };
 
-const userUniqueError = (data) => {
+const unique = (data) => {
   if (data.status === "error") {
     CustomError.create({
       status: 409,
@@ -41,7 +41,7 @@ const userUniqueError = (data) => {
   }
 };
 
-const userAuthenticateError = (data) => {
+const authenticate = (data) => {
   if (data.status === "error") {
     CustomError.create({
       status: 406,
@@ -53,4 +53,4 @@ const userAuthenticateError = (data) => {
   }
 };
 
-module.exports = { userInfoError, userUniqueError, userAuthenticateError };
+module.exports = { info, unique, authenticate };

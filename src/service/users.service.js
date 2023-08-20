@@ -183,7 +183,7 @@ const authenticate = async (userInfo) => {
 
     return {
       status: "success",
-      message: "authenticated user",
+      message: "Authenticated user",
       data: access_token,
     };
   } catch (error) {

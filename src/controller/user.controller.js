@@ -71,7 +71,7 @@ router.post("/", imgUploader.single("image"), async (req, res, next) => {
       message: response.message,
       data: response.data,
     });
-  } catch (error) {
+  } catch (error) {    
     req.logger.error(error.message);
     next(error);
   }

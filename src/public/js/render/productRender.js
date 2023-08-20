@@ -1,6 +1,6 @@
 export const renderProductos = (data) => {
   const cardProducto = document.getElementById("cardProductos");
-  cardProducto.innerHTML=""
+  cardProducto.innerHTML = "";
   const reqData = Array.isArray(data) ? data : [data];
   reqData.forEach((producto) => {
     //ESTRUCTURA
@@ -29,11 +29,15 @@ export const renderProductos = (data) => {
     //ID PRODUCTO
     const miNodoId = document.createElement("p");
     miNodoId.classList.add("card-text");
-    miNodoId.textContent = `PROD ID: ${producto._id}`;
+    miNodoId.textContent = `PROD ID: ${producto.id}`;
+    // CATEGORY PRODUCT
+    const miNodoCategory = document.createElement("p");
+    miNodoCategory.classList.add("cart-text");
+    miNodoCategory.textContent = `CATEGORY: ${producto.category}`;
     //DESCRIPTION
-    const miNodoDescription = document.createElement("p")
-    miNodoDescription.classList.add("card-text")
-    miNodoDescription.textContent = producto.description
+    const miNodoDescription = document.createElement("p");
+    miNodoDescription.classList.add("card-text");
+    miNodoDescription.textContent = producto.description;
     //PRECIO
     const miNodoPrecio = document.createElement("p");
     miNodoPrecio.classList.add("card-text");
@@ -42,14 +46,21 @@ export const renderProductos = (data) => {
     const miNodoUnidades = document.createElement("p");
     miNodoUnidades.classList.add("card-text");
     miNodoUnidades.textContent = `Unidades: ${producto.stock}`;
+    //BTN CART
+    const miNodoBtnCart = document.createElement("a");
+    miNodoBtnCart.classList.add("btn", "btn-primary");
+    miNodoBtnCart.setAttribute("href", "#");
+    miNodoBtnCart.textContent = "Add Cart";
     //INSERTAR MINODO
     miNodo.appendChild(miNodoImg);
     miNodo.appendChild(miNodoBodyCard);
     miNodoBodyCard.appendChild(miNodoTitle);
     miNodoBodyCard.appendChild(miNodoId);
-    miNodoBodyCard.appendChild(miNodoDescription)
+    miNodoBodyCard.appendChild(miNodoCategory);
+    miNodoBodyCard.appendChild(miNodoDescription);
     miNodoBodyCard.appendChild(miNodoUnidades);
     miNodoBodyCard.appendChild(miNodoPrecio);
+    miNodoBodyCard.appendChild(miNodoBtnCart);
     cardProducto.appendChild(miNodo);
   });
 };

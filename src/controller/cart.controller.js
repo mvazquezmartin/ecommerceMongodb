@@ -146,6 +146,7 @@ router.delete(
     }
   }
 );
+
 //GENERATE AND CREATE TICKET
 router.get(
   "/:cid/purchase",

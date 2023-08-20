@@ -24,8 +24,8 @@ router.post("/", async (req, res, next) => {
       redirectUrl: "/home",
     });
   } catch (error) {
+    req.logger.error(error.message);
     next(error);
-    req.logger.error(error);
   }
 });
 

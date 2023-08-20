@@ -21,7 +21,7 @@ const filter = async (params) => {
       return {
         status: "error",
         message: "No products found",
-        data: {},
+        data: [],
       };
 
     const mapDto = data.docs.map((doc) => new ProductDto(doc));

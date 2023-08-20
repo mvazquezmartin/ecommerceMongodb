@@ -18,7 +18,41 @@
     <h1 class="text-center">Listado de productos</h1>
   </div>
   <div class="row">
-    <div class="col-12">
+    <div class="col-2">
+      <input type="text" class="form-control" name="" id="prodId" />
+      <input
+        class="m-1 btn btn-primary"
+        type="submit"
+        value="Buscar"
+        id="btnMainFind"
+      />
+      <br />
+      <br />
+      <form action="">
+        <label for="cars">Category</label>
+        <select name="category" id="category">
+          <option value="Movies">Movies</option>
+          <option value="Baby">Baby</option>
+          <option value="Computers">Computers</option>
+          <option value="Garden">Garden</option>
+          <option value="Industrial">Industrila</option>
+          <option value="Grocery">Grocery</option>
+          <option value="Tools">Tools</option>
+          <option value="Games">Games</option>
+        </select>        
+        <label for="minPrice" class="form-label">MinPrice</label>
+        <input type="text" class="form-control" name="" id="minPrice" />
+        <label for="maxPrice" class="form-label">MaxPrice</label>
+        <input type="text" class="form-control" name="" id="maxPrice" />
+        <input
+        class="m-1 btn btn-primary"
+        type="submit"
+        value="Filter"
+        id="btnFilter"
+      />
+      </form>
+    </div>
+    <div class="col-10">
       <div
         id="cardProductos"
         class="container d-flex flex-wrap justify-content-center"
@@ -28,4 +62,5 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="module" src="../public/js/home.js"></script>

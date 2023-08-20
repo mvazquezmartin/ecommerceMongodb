@@ -22,10 +22,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 app.use(cookieParser());
+app.use(appLogger);
 
 initializePassport();
 app.use(passport.initialize());
-app.use(appLogger);
 
 router(app);
 

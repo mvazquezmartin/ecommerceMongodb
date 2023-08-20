@@ -22,6 +22,8 @@ const productsSchema = new mongoose.Schema({
 productsSchema.statics.filterProducts = async function (params) {
   const pipeline = [];
 
+  pipeline.push({ $match: { status: true } });
+
   if (params.category !== null)
     pipeline.push({ $match: { category: params.category } });
 

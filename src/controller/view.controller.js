@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 
-router.get("/home", (req, res) => {
+router.get("/", (req, res) => {
   res.render("home.handlebars");
 });
 
@@ -11,6 +11,10 @@ router.get("/login", (req, res) => {
 
 router.get("/signup", (req, res) => {
   res.render("signup.handlebars");
+});
+
+router.get("/chat", (req, res) => {
+  res.render("chat.handlebars");
 });
 
 module.exports = router;

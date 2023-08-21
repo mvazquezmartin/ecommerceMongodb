@@ -316,3 +316,144 @@ http: GET en / - 20/8/2023, 20:31:14
 http: GET en /api/products/?category=&priceMin=&priceMax=&sort=&limit=&page= - 20/8/2023, 20:31:15
 http: GET en / - 20/8/2023, 20:31:30
 http: GET en /api/products/?category=&priceMin=&priceMax=&sort=&limit=&page= - 20/8/2023, 20:31:31
+http: POST en /api/auth - 21/8/2023, 12:57:50
+http: POST en /api/products - 21/8/2023, 12:58:31
+http: GET en /api/products/64e389a797ed2daf79a48f95 - 21/8/2023, 12:58:57
+http: POST en /api/products - 21/8/2023, 13:01:42
+error: Invalid data error
+http: PATCH en /api/products/64e389a797ed2daf79a48f95 - 21/8/2023, 13:07:38
+error: You do not have permissions to do this action
+http: PATCH en /api/products/64e389a797ed2daf79a48f95 - 21/8/2023, 13:08:48
+error: Invalid data error
+http: PATCH en /api/products/64e389a797ed2daf79a48f95 - 21/8/2023, 13:09:47
+http: GET en /api/products/64e389a797ed2daf79a48f95 - 21/8/2023, 13:10:12
+http: PATCH en /api/products/64e389a797ed2daf79a48f95 - 21/8/2023, 13:12:00
+http: POST en /api/user - 21/8/2023, 13:52:31
+http: POST en /api/products - 21/8/2023, 13:53:33
+http: GET en /api/auth/logout - 21/8/2023, 13:53:48
+http: POST en /auth - 21/8/2023, 13:54:00
+http: POST en /api/auth - 21/8/2023, 13:54:11
+http: DELETE en /api/products/64e3968dbc94b9f278dc671b - 21/8/2023, 13:54:29
+error: No recipients defined
+http: GET en /api/products/64e3968dbc94b9f278dc671b - 21/8/2023, 13:54:52
+http: DELETE en /api/products/64e3968dbc94b9f278dc671b - 21/8/2023, 13:55:35
+error: No recipients defined
+http: PATCH en /api/products/64e389a797ed2daf79a48f95 - 21/8/2023, 13:57:08
+http: POST en /api/auth - 21/8/2023, 13:57:34
+http: POST en /api/products - 21/8/2023, 13:57:48
+http: GET en /api/products/64e3978ce067f192b9dc69d3 - 21/8/2023, 13:58:05
+http: PATCH en /api/products/64e389a797ed2daf79a48f95 - 21/8/2023, 13:58:14
+error: You do not have permissions to do this action
+http: GET en /api/auth/logout - 21/8/2023, 13:59:00
+http: POST en /api/auth - 21/8/2023, 13:59:09
+http: DELETE en /api/products/64e3978ce067f192b9dc69d3 - 21/8/2023, 13:59:19
+http: GET en /api/products/64e3978ce067f192b9dc69d3 - 21/8/2023, 14:16:39
+error: Product not found
+http: POST en /api/auth - 21/8/2023, 14:17:23
+http: POST en /api/products - 21/8/2023, 14:17:30
+http: GET en /api/auth/logout - 21/8/2023, 14:17:44
+http: POST en /api/auth - 21/8/2023, 14:17:49
+http: DELETE en /api/products/64e39c2a0b82935789fc832b - 21/8/2023, 14:18:00
+http: GET en /api/user - 21/8/2023, 14:23:42
+http: POST en /api/user - 21/8/2023, 14:29:57
+http: POST en /api/auth - 21/8/2023, 14:30:34
+http: GET en /api/user/premium/64e39f16161ffd1d87d25a97 - 21/8/2023, 14:31:51
+http: GET en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 14:42:05
+http: GET en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 14:45:18
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 14:47:05
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 14:47:57
+http: POST en /api/auth - 21/8/2023, 15:01:00
+http: GET en /api/user/premium/64e39f16161ffd1d87d25a97 - 21/8/2023, 15:01:14
+http: GET en /user/premium/64b4af0fb0b590bb118ab000 - 21/8/2023, 15:01:24
+http: GET en /api/products/g - 21/8/2023, 15:16:13
+error: The product ID is invalid
+http: POST en /api/auth - 21/8/2023, 15:16:19
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 15:17:00
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 15:17:51
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 15:18:27
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 15:39:48
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 15:45:00
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 15:46:11
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 15:50:02
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 15:51:01
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 15:51:06
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 15:51:28
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 15:52:12
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 15:52:22
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 15:56:40
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 16:02:21
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 16:04:26
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 16:05:13
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 16:06:54
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 16:07:13
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 16:10:35
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 16:11:01
+error: Cannot read properties of undefined (reading 'identity')
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 16:11:21
+error: Cannot read properties of undefined (reading 'identity')
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 16:11:21
+error: Cannot read properties of undefined (reading 'identity')
+http: POST en /api/user/64e39f16161ffd1d87d25a97/documents - 21/8/2023, 16:11:28
+http: DELETE en /api/user/ - 21/8/2023, 16:44:54
+http: DELETE en /api/user/ - 21/8/2023, 16:45:41
+error: Cannot access 'user' before initialization
+http: DELETE en /api/user/ - 21/8/2023, 16:46:43
+error: Cannot access 'user' before initialization
+http: DELETE en /api/user/ - 21/8/2023, 16:48:15
+http: DELETE en /api/user/64e39f16161ffd1d87d25a97 - 21/8/2023, 17:01:36
+http: POST en /api/auth - 21/8/2023, 17:01:54
+http: DELETE en /api/user/64e39f16161ffd1d87d25a97 - 21/8/2023, 17:01:59
+error: pid is not defined
+http: DELETE en /api/user/64e39f16161ffd1d87d25a9 - 21/8/2023, 17:02:34
+error: EnumErrors is not defined
+http: DELETE en /api/user/64e39f16161ffd1d87d25a9 - 21/8/2023, 17:03:27
+error: The product ID is invalid
+http: DELETE en /api/user/64e39f16161ffd1d87d25a9 - 21/8/2023, 17:04:48
+error: The user ID is invalid
+http: DELETE en /api/user/64e39f16161ffd1d87d25a97 - 21/8/2023, 17:04:56
+http: POST en /api/auth - 21/8/2023, 18:01:47
+error: Username and Password don't match
+http: POST en /api/auth - 21/8/2023, 18:02:01
+error: Username and Password don't match
+http: POST en /api/auth - 21/8/2023, 18:02:25
+http: POST en /api/cart/64e255af4c8f5cd828f13175/product/643ef56bb0d990bb924063e5 - 21/8/2023, 18:03:02
+error: undefined
+http: POST en /api/cart/64e255af4c8f5cd828f13175/product/643ef56bb0d990bb924063e5 - 21/8/2023, 18:03:52
+error: undefined
+http: POST en /api/cart/64e255af4c8f5cd828f13175/product/643ef56bb0d990bb924063e5 - 21/8/2023, 18:04:20
+error: Cannot read properties of undefined (reading 'toString')
+http: POST en /api/cart/64e255af4c8f5cd828f13175/product/643ef56bb0d990bb924063e5 - 21/8/2023, 18:06:39
+error: You do not have permissions to do this action
+http: POST en /api/cart/64e255af4c8f5cd828f13175/product/643ef56bb0d990bb924063e5 - 21/8/2023, 18:07:54
+error: You do not have permissions to do this action
+http: POST en /api/cart/64e255af4c8f5cd828f13175/product/643ef56bb0d990bb924063e5 - 21/8/2023, 18:09:33
+http: POST en /api/cart/64e255af4c8f5cd828f13175/product/643ef56bb0d990bb924063e5 - 21/8/2023, 18:09:38
+http: POST en /api/cart/64e255af4c8f5cd828f13175/product/643ef56bb0d990bb924063e5 - 21/8/2023, 18:09:45
+http: GET en /api/cart/64e255af4c8f5cd828f13175/purchase - 21/8/2023, 18:10:05
+error: undefined
+http: GET en /api/cart/64e255af4c8f5cd828f13175/purchase - 21/8/2023, 18:13:00
+error: undefined
+http: GET en /api/cart/64e255af4c8f5cd828f13175/purchase - 21/8/2023, 18:14:07
+error: undefined
+http: GET en /api/cart/64e255af4c8f5cd828f13175/purchase - 21/8/2023, 18:14:59
+error: undefined
+http: GET en /api/cart/64e255af4c8f5cd828f13175/purchase - 21/8/2023, 18:15:51
+error: undefined
+http: GET en /api/cart/64e255af4c8f5cd828f13175/purchase - 21/8/2023, 18:18:53
+error: tickets validation failed: code: Path `code` is required., purchase_datetime: Path `purchase_datetime` is required., amount: Path `amount` is required., purchaser: Path `purchaser` is required.
+http: GET en /api/cart/64e255af4c8f5cd828f13175/purchase - 21/8/2023, 18:20:54
+error: tickets validation failed: code: Path `code` is required., purchase_datetime: Path `purchase_datetime` is required., amount: Path `amount` is required., purchaser: Path `purchaser` is required.
+http: GET en /api/cart/64e255af4c8f5cd828f13175/purchase - 21/8/2023, 18:21:46
+error: tickets validation failed: code: Path `code` is required., purchase_datetime: Path `purchase_datetime` is required., amount: Path `amount` is required., purchaser: Path `purchaser` is required.
+http: GET en /api/cart/64e255af4c8f5cd828f13175/purchase - 21/8/2023, 18:23:05
+error: tickets validation failed: code: Path `code` is required., purchase_datetime: Path `purchase_datetime` is required., amount: Path `amount` is required., purchaser: Path `purchaser` is required.
+http: GET en /api/cart/64e255af4c8f5cd828f13175/purchase - 21/8/2023, 18:25:10
+error: tickets validation failed: code: Path `code` is required., purchase_datetime: Path `purchase_datetime` is required., amount: Path `amount` is required., purchaser: Path `purchaser` is required.
+http: GET en /api/cart/64e255af4c8f5cd828f13175/purchase - 21/8/2023, 18:26:48
+error: tickets validation failed: code: Path `code` is required., purchase_datetime: Path `purchase_datetime` is required., amount: Path `amount` is required., purchaser: Path `purchaser` is required.
+http: GET en /api/cart/64e255af4c8f5cd828f13175/purchase - 21/8/2023, 18:27:27
+error: tickets validation failed: code: Path `code` is required., purchase_datetime: Path `purchase_datetime` is required., amount: Path `amount` is required., purchaser: Path `purchaser` is required.
+http: GET en /api/cart/64e255af4c8f5cd828f13175/purchase - 21/8/2023, 18:29:19
+http: GET en /api/cart/64e255af4c8f5cd828f13175/purchase - 21/8/2023, 18:43:43
+http: GET en /api/cart/64e255af4c8f5cd828f13175/purchase - 21/8/2023, 18:53:27
+http: GET en /api/cart/64e255af4c8f5cd828f13175 - 21/8/2023, 18:53:40

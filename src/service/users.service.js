@@ -86,7 +86,7 @@ const changeRole = async (userInfo) => {
           return {
             status: "error",
             message: "You have not finished processing your documentation",
-            data: []
+            data: [],
           };
         }
         break;
@@ -100,6 +100,67 @@ const changeRole = async (userInfo) => {
       status: "success",
       message: `Successful role change to ${userData.role}`,
       data: userData.role,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteOne = async (id) => {
+  try {
+    const data = await user.delete(id);
+
+    return {
+      status: "success",
+      message: "user deleted successfully",
+      data: data,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteInactivity = async () => {
+  try {
+    const users = await user.getAll();
+
+    if (users.length === 0) {
+      return {
+        status: "error",
+        message: "There are no registered users",
+        data: [],
+      };
+    }
+
+    const timeFrame = 172800;
+    const currentTime = new Date();
+
+    const outdatedUsers = users.filter((user) => {
+      const userConnection = new Date(user.last_connection);
+      const timeLimit = new Date(userConnection.getTime() + timeFrame * 1000);
+      return currentTime > timeLimit;
+    });
+
+    if (outdatedUsers.length === 0) {
+      return {
+        status: "success",
+        message: "No recent offline users found",
+        data: [],
+      };
+    }
+
+    for (const user of outdatedUsers) {
+      await deleteOne(user.id);
+    }
+
+    const data = users
+      .filter((user) => outdatedUsers.includes(user))
+      .map((doc) => UserDTO.getData(doc));
+
+    return {
+      status: "success",
+      message: "Recent offline users removed",
+      data: data,
     };
   } catch (error) {
     throw error;
@@ -243,6 +304,8 @@ const logout = async (email) => {
 module.exports = {
   getAll,
   create,
+  deleteOne,
+  deleteInactivity,
   changeRole,
   authenticate,
   forgotPw,

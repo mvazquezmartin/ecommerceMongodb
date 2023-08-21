@@ -1,6 +1,5 @@
 const CartDao = require("../dao/mongoDb/manager/cart.manager.mongo");
 
-
 const cart = new CartDao();
 
 const getAll = async () => {
@@ -32,7 +31,7 @@ const getOneById = async (id) => {
       return {
         status: "success",
         message: "There are no products in the cart",
-        data: [],
+        data: data,
       };
     }
 
@@ -84,13 +83,13 @@ const addProduct = async (cid, pid, quantity) => {
   }
 };
 
-// const getProduct = async (cid, limit, page) => {
-//   try {
-//     return await cart.getProduct(cid, limit, page);
-//   } catch (error) {
-//     throw error;
-//   }
-// };
+const update = async (cid, data) => {
+  try {
+    return await cart.update(cid, data);
+  } catch (error) {
+    throw error;
+  }
+};
 
 const deleteProduct = async (cid, pid) => {
   try {
@@ -120,4 +119,5 @@ module.exports = {
   addProduct,
   deleteProduct,
   deleteOne,
+  update,
 };

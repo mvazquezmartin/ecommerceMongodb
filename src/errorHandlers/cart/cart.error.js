@@ -44,7 +44,7 @@ const quantity = (quantity) => {
 
 const owner = async (cid, user) => {
   const userData = await userStore.getOne(user.email);
-  const cartData = await cartService.getOneById(cid);
+  const cartData = await cartService.getOneById(cid);  
 
   const userIdString = userData.id_cart.toString();
   const cartIdString = cartData.data._id.toString();

@@ -7,6 +7,7 @@ const amountAndDetails = async (cart) => {
     await cart.populate("products.product");
 
     const detailedItems = [];
+    const notStock = [];
 
     for (const item of cart.products) {
       const prod = item.product;
@@ -15,21 +16,42 @@ const amountAndDetails = async (cart) => {
 
       amount += price * quantity;
 
-      await productService.checkStock(prod._id, quantity);
-      const updateStock = prod.stock - quantity;
-      await productService.update(prod._id, { stock: updateStock });
+      const isStock = await productService.checkStock(prod._id, quantity);
 
-      const detailedItem = {
-        product: prod.title,
-        quantity: quantity,
-        unitPrice: price,
-        totalPrice: quantity * price,
-      };
+      if (isStock.status === "error") {
+        notStock.push(isStock.data);
+      } else {
+        const updateStock = prod.stock - quantity;
+        await productService.update(prod._id, { stock: updateStock });
 
-      detailedItems.push(detailedItem);
+        const detailedItem = {
+          product: prod.title,
+          quantity: quantity,
+          unitPrice: price,
+          totalPrice: quantity * price,
+        };
+        detailedItems.push(detailedItem);
+      }
     }
 
-    return { amount, detailedItems };
+    if (notStock.length !== 0) {
+      return {
+        status: "error",
+        message: "The purchase could not be made. Check stock before buying.",
+        data: notStock,
+      };
+    }
+
+    const data = {
+      details: detailedItems,
+      amount,
+    };
+
+    return {
+      status: "success",
+      message: "The purchase was successful",
+      data: data,
+    };
   } catch (error) {
     throw error;
   }

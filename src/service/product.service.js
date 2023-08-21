@@ -1,6 +1,5 @@
 const { productDAO } = require("../dao/factory.dao");
 const ProductDto = require("../dtos/products.dto");
-const UserDTO = require("../dtos/user.dto");
 
 const products = productDAO;
 
@@ -88,6 +87,18 @@ const deleteOne = async (id) => {
   }
 };
 
+const checkStock = async (id, quantity) => {
+  try {
+    const prod = await products.getOneById(id);
+    if (prod.stock < quantity) {
+      return { status: "error", message: "Not enough stock", data: prod.title };
+    }
+    return { status: "success" };
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   getAll,
   filter,
@@ -95,4 +106,5 @@ module.exports = {
   getOneById,
   update,
   deleteOne,
+  checkStock,
 };

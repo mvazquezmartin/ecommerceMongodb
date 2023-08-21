@@ -1,6 +1,6 @@
 class ProductDto {
   constructor(item) {
-    this.id = item._id
+    this.id = item._id;
     this.title = item.title;
     this.description = item.description;
     this.category = item.category;
@@ -18,6 +18,7 @@ class ProductDto {
 
   static update(item) {
     const dto = new ProductDto(item);
+    delete dto.id;
     delete dto.owner;
     return dto;
   }

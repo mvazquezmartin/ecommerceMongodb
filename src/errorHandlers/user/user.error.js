@@ -1,3 +1,4 @@
+const { isValidObjectId } = require("mongoose");
 const CustomError = require("../CustomError");
 const enumErrors = require("../enumError");
 const generateErrorInfo = require("../infoError");
@@ -29,6 +30,18 @@ const info = (userInfo) => {
   }
 };
 
+const validId = (uid) => {
+  if (!isValidObjectId(uid)) {
+    CustomError.create({
+      status: 400,
+      name: "Invalid ID",
+      cause: `The user ID entered was expected to be a MongoDb ObjectId and was received: ${uid}`,
+      message: "The user ID is invalid",
+      code: enumErrors.INVALID_TYPES_ERROR,
+    });
+  }
+};
+
 const unique = (data) => {
   if (data.status === "error") {
     CustomError.create({
@@ -53,4 +66,4 @@ const authenticate = (data) => {
   }
 };
 
-module.exports = { info, unique, authenticate };
+module.exports = { info, unique, authenticate, validId };

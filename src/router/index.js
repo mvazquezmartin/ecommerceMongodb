@@ -23,10 +23,6 @@ const router = (app) => {
   app.use("/mockingproducts", mockController);
 };
 
-// AGREGAR VIEWCONTROLLER
-
-// product.controller byParams y getAll en un solo endpoints
-// revisar y crear DTO
 // crear view para changePw y funcion changepw
 // implementar logger con customErrors
 // factory local, para que funcione con fileSystem cart,user,ticket

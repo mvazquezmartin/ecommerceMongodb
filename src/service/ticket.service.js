@@ -2,23 +2,43 @@ const { v4: uuidv4 } = require("uuid");
 const TicketsDao = require("../dao/mongoDb/manager/ticket.manager.mongo");
 const TicketDto = require("../dtos/tickets.dto");
 const amountAndDetails = require("../utils/ticketAmountDetails");
+const cartService = require("../service/cart.service");
 
 const ticketDao = new TicketsDao();
 
 const generate = async (cart, user) => {
-  const { amount, detailedItems } = await amountAndDetails(cart);
+  const dataDetails = await amountAndDetails(cart);
+
+  if (dataDetails.status === "error")
+    return {
+      status: dataDetails.status,
+      message: dataDetails.message,
+      data: dataDetails.data,
+    };
 
   const code = uuidv4();
   const date = new Date();
   const purchaser = user.email;
 
-  const data = new TicketDto(code, date, detailedItems, amount, purchaser);
+  const ticketData = {
+    code,
+    date,
+    purchaser,
+    detailedItems: dataDetails.data.details,
+    amount: dataDetails.data.amount,
+  };
 
-  return {status: "success", message:"Ticket generated successfully", data: data};
+  const data = new TicketDto(ticketData);
+
+  await ticketDao.create(data);
+
+  await cartService.update(cart, { products: [] });
+
+  return {
+    status: "success",
+    message: "Ticket generated successfully",
+    data: data,
+  };
 };
 
-const create = async (ticket) => {
-  return await ticketDao.create(ticket);
-};
-
-module.exports = { generate, create };
+module.exports = { generate };

@@ -1,10 +1,10 @@
 class TicketDto {
-  constructor(code, date, detailedItems, amount, purchaser) {
-    this.code = code;
-    this.date = date;
-    this.detailedItems = detailedItems;
-    this.amount = amount;
-    this.purchaser = purchaser;
+  constructor(ticketInfo) {
+    this.code = ticketInfo.code;
+    this.date = ticketInfo.date;
+    this.detailedItems = ticketInfo.detailedItems;
+    this.amount = ticketInfo.amount;
+    this.purchaser = ticketInfo.purchaser;
   }
 }
 

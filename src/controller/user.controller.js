@@ -5,21 +5,16 @@ const userService = require("../service/users.service");
 const passport = require("passport");
 const authorization = require("../middlewares/authorization.middleware");
 const userError = require("../errorHandlers/user/user.error");
-const {
-  profileStorage,
-  imgFileFilter,
-  docStorage,
-  docFileFilter,
-} = require("../utils/multer.utils");
+const utilsMulter = require("../utils/multer.utils");
 const imgUploader = multer({
-  storage: profileStorage,
-  fileFilter: imgFileFilter,
+  storage: utilsMulter.profileStorage,
+  fileFilter: utilsMulter.imgFileFilter,
 });
 const docUploader = multer({
-  storage: docStorage,
-  filter: docFileFilter,
+  storage: utilsMulter.docStorage,
+  fileFilter: utilsMulter.docFileFilter,
 }).fields([
-  { name: "Identity", maxCount: 1 },
+  { name: "identity", maxCount: 1 },
   { name: "address", maxCount: 1 },
   { name: "account", maxCount: 1 },
 ]);
@@ -34,18 +29,17 @@ router.get(
   async (req, res) => {
     try {
       const response = await userService.getAll();
-      
+
       res.status(201).json({
         status: response.status,
         message: response.message,
         data: response.data,
       });
-    } catch (error) {      
+    } catch (error) {
       req.logger.error(error.message);
       res
         .status(500)
         .json({ status: "error", message: "Internal server error" });
-
     }
   }
 );
@@ -71,7 +65,7 @@ router.post("/", imgUploader.single("image"), async (req, res, next) => {
       message: response.message,
       data: response.data,
     });
-  } catch (error) {    
+  } catch (error) {
     req.logger.error(error.message);
     next(error);
   }
@@ -93,7 +87,8 @@ router.get(
         data: response.data,
       });
     } catch (error) {
-      throw error;
+      req.logger.error(error.message);
+      res.json({ status: "error", message: "Internal server error" });
     }
   }
 );
@@ -108,9 +103,16 @@ router.post(
     try {
       const { uid } = req.params;
 
-      const idFile = req.files["identity"];
-      const addressFile = req.files["address"];
-      const accountFile = req.files["account"];
+      const idFile = req.file["identity"];
+      const addressFile = req.file["address"];
+      const accountFile = req.file["account"];
+
+      if (!idFile && !addressFile && !accountFile)
+        return res.status(400).json({
+          status: "error",
+          message: "No documents have been selected to upload",
+          data: [],
+        });
 
       const file = {
         idFile,
@@ -125,7 +127,54 @@ router.post(
         data: response.data,
       });
     } catch (error) {
-      throw error;
+      req.logger.error(error.message);
+      res.json({ status: "error", message: "Internal server error" });
+    }
+  }
+);
+
+// DELETE USER INACTIVITY
+router.delete(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  authorization("admin"),
+  async (req, res) => {
+    try {
+      const response = await userService.deleteInactivity();
+      res.json({
+        status: response.status,
+        message: response.message,
+        data: response.data,
+      });
+    } catch (error) {
+      console.log(error);
+      req.logger.error(error.message);
+      res.json({ status: "error", message: "Internal server error" });
+    }
+  }
+);
+
+//DELETE ONE USER
+router.delete(
+  "/:uid",
+  passport.authenticate("jwt", { session: false }),
+  authorization("admin"),
+  async (req, res, next) => {
+    try {
+      const { uid } = req.params;
+
+      userError.validId(uid);
+
+      const response = await userService.deleteOne(uid);
+
+      res.json({
+        status: response.status,
+        message: response.message,
+        data: response.data,
+      });
+    } catch (error) {
+      req.logger.error(error.message);
+      next(error);
     }
   }
 );

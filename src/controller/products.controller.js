@@ -4,8 +4,10 @@ const authorization = require("../middlewares/authorization.middleware");
 const ProductDto = require("../dtos/products.dto");
 const productService = require("../service/product.service");
 const productError = require("../errorHandlers/product/prod.error");
+const MailAdapter = require("../adapters/mail.adapter");
 
 const router = Router();
+const msg = new MailAdapter();
 
 //PRODUCTS BY PARAMS
 router.get("/", async (req, res) => {
@@ -99,7 +101,6 @@ router.patch(
       }
 
       const update = ProductDto.update(req.body);
-      productError.info(update);
 
       const response = await productService.update(pid, update);
 
@@ -126,20 +127,28 @@ router.delete(
       const user = req.user;
 
       productError.validId(pid);
+      const product = await productService.getOneById(pid);
+      productError.status(product);
 
       if (user.role === "premium") {
-        const product = await productService.getOneById(pid);
-        productError.status(product);
         await productError.owner(pid, user);
+        const response = await productService.deleteOne(pid);
+        res.json({
+          status: response.status,
+          message: response.message,
+          data: response.data,
+        });
       }
 
-      const response = await productService.deleteOne(pid);
-
-      res.json({
-        status: response.status,
-        message: response.message,
-        data: response.data,
-      });
+      if (user.role === "admin") {
+        await msg.alertDelete(product.data);
+        const response = await productService.deleteOne(pid);
+        res.json({
+          status: response.status,
+          message: response.message,
+          data: response.data,
+        });
+      }
     } catch (error) {
       req.logger.error(error.message);
       next(error);

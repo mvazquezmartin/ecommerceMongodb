@@ -214,7 +214,7 @@ ___
 
 ### **Finalizar compra**
 ```http
-  DELETE /api/cart/{cid}/purchase
+  GET /api/cart/{cid}/purchase
 ```
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |

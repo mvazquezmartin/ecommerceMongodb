@@ -1,10 +1,11 @@
 const { Router } = require("express");
 const passport = require("passport");
 const authorization = require("../middlewares/authorization.middleware");
+const ProductDto = require("../dtos/products.dto");
 const { message } = require("../repositories/index");
+const { validId, validIdFs } = require("../utils/idValidation");
 const productService = require("../service/product.service");
 const productValidation = require("../utils/productValidation");
-const ProductDto = require("../dtos/products.dto");
 
 const router = Router();
 
@@ -39,7 +40,7 @@ router.get("/:pid", async (req, res) => {
   try {
     const { pid } = req.params;
 
-    if (!(productValidation.validId(pid) || productValidation.validIdFs(pid))) {
+    if (!(validId(pid) || validIdFs(pid))) {
       return res.status(400).json({
         status: "error",
         message: "The product ID is invalid",
@@ -110,7 +111,7 @@ router.patch(
       const { pid } = req.params;
       const user = req.user;
 
-      if (!(productValidation.validId(pid) || productValidation.validIdFs(pid))) {
+      if (!(validId(pid) || validIdFs(pid))) {
         return res.status(400).json({
           status: "error",
           message: "The product ID is invalid",
@@ -160,7 +161,7 @@ router.delete(
       const { pid } = req.params;
       const user = req.user;
 
-      if (!(productValidation.validId(pid) || productValidation.validIdFs(pid))) {
+      if (!(validId(pid) || validIdFs(pid))) {
         return res.status(400).json({
           status: "error",
           message: "The product ID is invalid",
@@ -209,7 +210,7 @@ router.delete(
         data: response.data,
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       req.logger.error(error);
       res
         .status(500)

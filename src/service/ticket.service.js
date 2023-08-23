@@ -1,10 +1,8 @@
 const { v4: uuidv4 } = require("uuid");
-const TicketsDao = require("../dao/mongoDb/manager/ticket.manager.mongo");
-const TicketDto = require("../dtos/tickets.dto");
+const { ticketManager } = require("../repositories/index");
 const amountAndDetails = require("../utils/ticketAmountDetails");
+const TicketDto = require("../dtos/tickets.dto");
 const cartService = require("../service/cart.service");
-
-const ticketDao = new TicketsDao();
 
 const generate = async (cart, user) => {
   const dataDetails = await amountAndDetails(cart);
@@ -29,8 +27,7 @@ const generate = async (cart, user) => {
   };
 
   const data = new TicketDto(ticketData);
-
-  await ticketDao.create(data);
+  await ticketManager.create(data);
 
   await cartService.update(cart, { products: [] });
 

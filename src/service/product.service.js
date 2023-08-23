@@ -79,7 +79,7 @@ const update = async (id, update) => {
       if (update[key] && update[key] !== product[key])
         product[key] = update[key];
     });
-    console.log(product);
+
     const data = await productManager.update(id, product);
 
     return {

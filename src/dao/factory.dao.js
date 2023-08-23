@@ -6,6 +6,7 @@ const mongoConnect = require("../../db");
 const fileProducts = path.join(__dirname, "./fileSystem/files/products.json");
 const fileCarts = path.join(__dirname, "./fileSystem/files/carts.json");
 const fileUsers = path.join(__dirname, "./fileSystem/files/users.json");
+const fileTickets = path.join(__dirname, "./fileSystem/files/tickets.json");
 
 switch (environment) {
   case "local":
@@ -14,11 +15,13 @@ switch (environment) {
     const ProductManagerFs = require("./fileSystem/manager/product.manager.fs");
     const CartsManagerFs = require("./fileSystem/manager/cart.manager.fs");
     const UserManagerFs = require("./fileSystem/manager/user.manager.fs");
+    const TicketsManagerFs = require("./fileSystem/manager/ticket.manager.fs");
 
     module.exports = {
       ProductManager: new ProductManagerFs(fileProducts),
       CartManager: new CartsManagerFs(fileCarts),
       UserManager: new UserManagerFs(fileUsers),
+      TicketManager: new TicketsManagerFs(fileTickets),
     };
 
     break;

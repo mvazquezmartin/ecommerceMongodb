@@ -1,11 +1,10 @@
 const { Router } = require("express");
 const passport = require("passport");
 const authorization = require("../middlewares/authorization.middleware");
+const { validId, validIdFs } = require("../utils/idValidation");
 const cartService = require("../service/cart.service");
 const productService = require("../service/product.service");
 const ticketService = require("../service/ticket.service");
-const cartValidation = require("../utils/cartValidation");
-const productValidation = require("../utils/productValidation");
 
 const router = Router();
 
@@ -63,7 +62,7 @@ router.get(
     try {
       const { cid } = req.params;
 
-      if (cartValidation.validId(cid)) {
+      if (!(validId(cid) || validIdFs(cid))) {
         return res.status(400).json({
           status: "error",
           message: "The cart ID is invalid",
@@ -102,7 +101,10 @@ router.post(
       const { quantity } = req.body;
       const user = req.user;
 
-      if (productValidation.validId(pid) && cartValidation.validId(cid)) {
+      if (
+        (validId(pid) && validId(cid)) ||
+        !(validIdFs(pid) && validIdFs(cid))
+      ) {
         return res.status(400).json({
           status: "error",
           message: "Some of the entered IDs are not valid",
@@ -181,7 +183,10 @@ router.delete(
       const { cid, pid } = req.params;
       const user = req.user;
 
-      if (productValidation.validId(pid) && cartValidation.validId(cid)) {
+      if (
+        (validId(pid) && validId(cid)) ||
+        !(validIdFs(pid) && validIdFs(cid))
+      ) {
         return res.status(400).json({
           status: "error",
           message: "Some of the entered IDs are not valid",
@@ -235,7 +240,7 @@ router.get(
       const { cid } = req.params;
       const user = req.user;
 
-      if (cartValidation.validId(cid)) {
+      if (!(validId(cid) || validIdFs(cid))) {
         return res.status(400).json({
           status: "error",
           message: "Some of the entered IDs are not valid",
@@ -279,10 +284,15 @@ router.get(
 );
 
 // DELETE ALL CARTS
-router.delete("/", async (req, res) => {
-  await cartService.delete();
-  res.json({ message: "Carritos ELIMINADOS!" });
-});
+router.delete(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  authorization("admin"),
+  async (req, res) => {
+    await cartService.delete();
+    res.json({ message: "Carritos ELIMINADOS!" });
+  }
+);
 module.exports = router;
 
 // //PURCHASE

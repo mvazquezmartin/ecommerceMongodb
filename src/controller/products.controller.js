@@ -1,10 +1,11 @@
 const { Router } = require("express");
 const passport = require("passport");
 const authorization = require("../middlewares/authorization.middleware");
-const ProductDto = require("../dtos/products.dto");
-const productService = require("../service/product.service");
 const { message } = require("../repositories/index");
+const productService = require("../service/product.service");
 const productValidation = require("../utils/productValidation");
+const ProductDto = require("../dtos/products.dto");
+
 const router = Router();
 
 //PRODUCTS BY PARAMS

@@ -18,7 +18,6 @@ router.post("/", async (req, res) => {
     res.cookie("authToken", response.data, { httpOnly: true }).json({
       status: response.status,
       message: response.message,
-      data: response.data,
       redirectUrl: "/home",
     });
   } catch (error) {
@@ -102,9 +101,9 @@ router.get(
   authorization(["user", "admin", "premium"]),
   async (req, res) => {
     const user = req.user;
-    
+
     await authService.logout(user.email);
-    
+
     res.clearCookie("authToken");
     res
       .status(200)

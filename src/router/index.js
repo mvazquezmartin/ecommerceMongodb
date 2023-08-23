@@ -20,9 +20,4 @@ const router = (app) => {
   app.use("/mockingproducts", mockController);
 };
 
-// crear view para changePw y funcion changepw
-// factory local, para que funcione con fileSystem cart,user,ticket
-// revisar chat con authorization
-// hacer el front
-// crear README
 module.exports = router;

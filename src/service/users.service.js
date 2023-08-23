@@ -1,10 +1,10 @@
+const { userManager } = require("../repositories/index");
+const { message } = require("../repositories/index");
 const { createHash } = require("../utils/cryptPassword.util");
 const { generateToken } = require("../utils/jwt.util");
 const usersStore = require("../store/user.store");
-const { userManager } = require("../repositories/index");
-const UserDTO = require("../dtos/user.dto");
 const cartService = require("./cart.service");
-const { message } = require("../repositories/index");
+const UserDTO = require("../dtos/user.dto");
 
 const getAll = async () => {
   try {

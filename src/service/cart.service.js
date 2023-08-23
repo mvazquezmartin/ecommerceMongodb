@@ -1,6 +1,4 @@
-const CartDao = require("../dao/mongoDb/manager/cart.manager.mongo");
 const { cartManager } = require("../repositories/index");
-const cart = new CartDao();
 
 const getAll = async () => {
   try {
@@ -31,13 +29,13 @@ const getOneById = async (id) => {
     //   return {
     //     status: "success",
     //     message: "There are no products in the cart",
-    //     data: data,
+    //     data: [],
     //   };
     // }
 
     return {
       status: "success",
-      message: "Cart loaded with products",
+      message: "Cart found",
       data: data,
     };
   } catch (error) {

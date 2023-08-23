@@ -1,3 +1,5 @@
+// ----------------- DEPRECADO ---------------------------
+
 const colors = require("colors");
 const EnumErrors = require("../errorHandlers/enumError");
 

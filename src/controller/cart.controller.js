@@ -39,6 +39,7 @@ router.post(
   async (req, res) => {
     try {
       const response = await cartService.create();
+
       res.status(201).json({
         status: response.status,
         message: response.message,
@@ -62,7 +63,7 @@ router.get(
     try {
       const { cid } = req.params;
 
-      if (cartValidation(cid)) {
+      if (cartValidation.validId(cid)) {
         return res.status(400).json({
           status: "error",
           message: "The cart ID is invalid",
@@ -81,7 +82,8 @@ router.get(
         data: response.data,
       });
     } catch (error) {
-      req.logger.error(error);
+      console.log(error);
+      req.logger.error(error.message);
       res
         .status(500)
         .json({ status: "error", message: "Internal server error" });

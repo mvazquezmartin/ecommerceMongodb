@@ -5,7 +5,7 @@ const logger = winston.createLogger({
   level: customLevelOptions.level,
   transports: [
     new winston.transports.Console({
-      level: "debug",
+      level: "info",
       format: winston.format.combine(
         winston.format.colorize({ colors: customLevelOptions.colors }),
         winston.format.simple()
@@ -13,7 +13,7 @@ const logger = winston.createLogger({
     }),
     new winston.transports.File({
       filename: "./logs/devWarning.log",
-      level: "silly",
+      level: "error",
       format: winston.format.simple(),
     }),
   ],

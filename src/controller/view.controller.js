@@ -17,4 +17,8 @@ router.get("/chat", (req, res) => {
   res.render("chat.handlebars");
 });
 
+router.get("/recoverypw", (req, res) => {
+  res.render("recoverypw.handlebars");
+});
+
 module.exports = router;

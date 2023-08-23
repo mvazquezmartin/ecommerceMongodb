@@ -179,10 +179,6 @@ router.delete(
   }
 );
 
-router.get("/changepw", (req, res) => {
-  res.render("changepw.handlebars");
-});
-
 module.exports = router;
 
 //------------------------ DEPRECADO POR JWT ------------------------------------

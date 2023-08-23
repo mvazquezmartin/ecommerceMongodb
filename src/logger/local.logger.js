@@ -1,5 +1,5 @@
 const winston = require("winston");
-const customLevelOptions = require("../utils/logger/loggerCustomLvl");
+const customLevelOptions = require("./levelOptions.logger");
 
 const logger = winston.createLogger({
   level: customLevelOptions.level,

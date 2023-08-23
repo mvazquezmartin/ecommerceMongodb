@@ -1,19 +1,14 @@
-const fs = require("fs");
-const { createHash, passwordValidate } = require("../utils/cryptPassword.util");
+const { createHash } = require("../utils/cryptPassword.util");
 const { generateToken } = require("../utils/jwt.util");
 const usersStore = require("../store/user.store");
-const MailAdapter = require("../adapters/mail.adapter");
-const { userDAO } = require("../dao/factory.dao");
+const { userManager } = require("../repositories/index");
 const UserDTO = require("../dtos/user.dto");
 const cartService = require("./cart.service");
-const transport = require("../utils/mail.util");
-
-const msg = new MailAdapter();
-const user = userDAO;
+const { message } = require("../repositories/index");
 
 const getAll = async () => {
   try {
-    const data = await user.getAll();
+    const data = await userManager.getAll();
 
     if (data.length === 0)
       return {
@@ -56,7 +51,7 @@ const create = async (userInfo) => {
     const data = UserDTO.getData(newUser);
     data.access_token = access_token;
 
-    //await msg.send(newUser);
+    await message.send(newUser);
 
     return {
       status: "success",
@@ -94,7 +89,7 @@ const changeRole = async (userInfo) => {
         userData.role = "user";
     }
 
-    await user.update(userData._id, { role: userData.role });
+    await userManager.update(userData._id, { role: userData.role });
 
     return {
       status: "success",
@@ -108,7 +103,7 @@ const changeRole = async (userInfo) => {
 
 const deleteOne = async (id) => {
   try {
-    const data = await user.delete(id);
+    const data = await userManager.delete(id);
 
     return {
       status: "success",
@@ -122,7 +117,7 @@ const deleteOne = async (id) => {
 
 const deleteInactivity = async () => {
   try {
-    const users = await user.getAll();
+    const users = await userManager.getAll();
 
     if (users.length === 0) {
       return {
@@ -150,7 +145,7 @@ const deleteInactivity = async () => {
     }
 
     for (const user of outdatedUsers) {
-      await deleteOne(user.id);
+      await userManager.delete(user.id);
     }
 
     const data = users
@@ -167,149 +162,10 @@ const deleteInactivity = async () => {
   }
 };
 
-const uploadDoc = async (uid, files) => {
-  try {
-    const userData = await usersStore.getOne(uid);
-    const { idFile, addressFile, accountFile } = files;
-    const docToUpload = [];
-
-    const fileTypes = [
-      { name: "identification", file: idFile },
-      { name: "proofAddress", file: addressFile },
-      { name: "bankStatement", file: accountFile },
-    ];
-
-    for (const fileType of fileTypes) {
-      const { name, file } = fileType;
-      if (file) {
-        const docs = userData.documents;
-        const existingDocIndex = docs.findIndex((doc) => doc.name === name);
-
-        if (existingDocIndex !== -1) {
-          const existingDoc = docs[existingDocIndex];
-          fs.unlink(__dirname + existingDoc.reference);
-          docs.splice(existingDocIndex, 1);
-        }
-
-        const path = `/documents/${file.filename}`;
-        const document = {
-          name,
-          reference: path,
-        };
-
-        userData.documents.push(document);
-        docToUpload.push(document.name);
-      }
-    }
-    await user.update(uid, userData);
-    return {
-      status: "success",
-      message: "Documentation uploaded successfully",
-      data: docToUpload,
-    };
-  } catch (error) {
-    throw error;
-  }
-};
-
-const authenticate = async (userInfo) => {
-  try {
-    const userData = await usersStore.getOne(userInfo.email);
-
-    if (!userData)
-      return {
-        status: "error",
-        message: "Username and Password don't match",
-        data: [],
-      };
-
-    if (!passwordValidate(userInfo.password, userData))
-      return {
-        status: "error",
-        message: "Username and Password don't match",
-        data: [],
-      };
-
-    userData.last_connection = new Date();
-    const userId = userData._id;
-    await user.update(userId, userData);
-
-    const access_token = generateToken(
-      {
-        email: userData.email,
-        role: userData.role,
-      },
-      "1d"
-    );
-
-    return {
-      status: "success",
-      message: "Authenticated user",
-      data: access_token,
-    };
-  } catch (error) {
-    throw error;
-  }
-};
-
-const forgotPw = async (email) => {
-  try {
-    const userData = await usersStore.getOne(email);
-    const user = userData;
-
-    const recoveyToken = generateToken(user, "1h");
-    user.recoveyToken = recoveyToken;
-    user.recoveyTokenExpires = Date.now() + 3600000;
-
-    await updateUser(user._id, user);
-
-    const recoveryUrl = `localhost:8080/viewpararecuperarlapw?token=${recoveyToken}`;
-    const mailRecovery = {
-      //crear util para enviar correo: from, to, subject, html: recoveryUrl,
-    };
-    await transport.sendMail(mailRecovery);
-    return {
-      status: "succes",
-      message: "The email to change the password was sent",
-      data: "",
-    };
-  } catch (error) {
-    throw error;
-  }
-};
-
-const resetPw = async (token, pw) => {
-  try {
-    // get user data by recoveryToken: token, recoveryTokenExpires: {$gt: Date.now()}
-    // que no pueda usar el mismo password
-    // user.password createHash(pw)
-    // eliminar recoveryToken y recoveryTokenExpiration de user
-    // update User
-    // return status, meessage, data?
-  } catch (error) {
-    throw error;
-  }
-};
-
-const logout = async (email) => {
-  try {
-    const userData = await usersStore.getOne(email);
-    userData.last_connection = new Date();
-    await user.update(userData._id, userData);
-  } catch (error) {
-    throw error;
-  }
-};
-
 module.exports = {
   getAll,
   create,
   deleteOne,
   deleteInactivity,
   changeRole,
-  authenticate,
-  forgotPw,
-  resetPw,
-  uploadDoc,
-  logout,
 };

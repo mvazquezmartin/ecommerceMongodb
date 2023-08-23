@@ -4,8 +4,8 @@ const authorization = require("../middlewares/authorization.middleware");
 const cartService = require("../service/cart.service");
 const productService = require("../service/product.service");
 const ticketService = require("../service/ticket.service");
-const productError = require("../errorHandlers/product/prod.error");
-const cartError = require("../errorHandlers/cart/cart.error");
+const cartValidation = require("../utils/cartValidation");
+const productValidation = require("../utils/productValidation");
 
 const router = Router();
 
@@ -23,7 +23,10 @@ router.get(
         data: response.data,
       });
     } catch (error) {
-      console.log(error);
+      req.logger.error(error);
+      res
+        .status(500)
+        .json({ status: "error", message: "Internal server error" });
     }
   }
 );
@@ -42,7 +45,10 @@ router.post(
         data: response.data,
       });
     } catch (error) {
-      res.status(500).send(error);
+      req.logger.error(error);
+      res
+        .status(500)
+        .json({ status: "error", message: "Internal server error" });
     }
   }
 );
@@ -52,15 +58,22 @@ router.get(
   "/:cid",
   passport.authenticate("jwt", { session: false }),
   authorization(["user", "premium", "admin"]),
-  async (req, res, next) => {
+  async (req, res) => {
     try {
       const { cid } = req.params;
 
-      cartError.validId(cid);
+      if (cartValidation(cid)) {
+        return res.status(400).json({
+          status: "error",
+          message: "The cart ID is invalid",
+          data: [],
+        });
+      }
+      //cartError.validId(cid);
 
       const response = await cartService.getOneById(cid);
 
-      cartError.status(response);
+      //cartError.status(response);
 
       res.json({
         status: response.status,
@@ -68,7 +81,10 @@ router.get(
         data: response.data,
       });
     } catch (error) {
-      next(error);
+      req.logger.error(error);
+      res
+        .status(500)
+        .json({ status: "error", message: "Internal server error" });
     }
   }
 );
@@ -78,29 +94,63 @@ router.post(
   "/:cid/product/:pid",
   passport.authenticate("jwt", { session: false }),
   authorization(["user", "premium"]),
-  async (req, res, next) => {
+  async (req, res) => {
     try {
       const { cid, pid } = req.params;
       const { quantity } = req.body;
       const user = req.user;
 
-      productError.validId(pid);
+      if (productValidation.validId(pid) && cartValidation.validId(cid)) {
+        return res.status(400).json({
+          status: "error",
+          message: "Some of the entered IDs are not valid",
+          data: [],
+        });
+      }
+      //productError.validId(pid);
       //cartError.validId(cid);
 
       const cartData = await cartService.getOneById(cid);
-      cartError.status(cartData);
-
-      await cartError.owner(cid, user);
-
-      if (user.role == "premium") {
-        await productError.owner(pid, user);
+      if (cartData.status === "error") {
+        return res.status(404).json({
+          status: "error",
+          message: "The cart does not exist",
+          data: [],
+        });
       }
+      //cartError.status(cartData);
 
+      if (user.id_cart !== cid) {
+        return res.status(401).json({
+          status: "error",
+          message: "This cart does not belong to the user",
+          data: [],
+        });
+      }
+      //await cartError.owner(cid, user);
       const product = await productService.getOneById(pid);
 
-      productError.status(product);
-      cartError.quantity(quantity);
-      await productError.checkStock(pid, quantity);
+      if (user.role !== "admin") {
+        if (user.email === product.data.owner) {
+          return res.status(401).json({
+            status: "error",
+            message: "Cannot add own product to cart",
+            data: [],
+          });
+        }
+      }
+      //await productError.owner(pid, user);
+
+      if (product.quantity < quantity) {
+        return res.status(409).json({
+          status: "error",
+          message: "Not enough stock",
+          data: [],
+        });
+      }
+      //productError.status(product);
+      //cartError.quantity(quantity);
+      //await productError.checkStock(pid, quantity);
 
       const response = await cartService.addProduct(cid, pid, quantity);
 
@@ -111,8 +161,10 @@ router.post(
       });
     } catch (error) {
       console.log(error);
-      req.logger.error(error.message);
-      next(error);
+      req.logger.error(error);
+      res
+        .status(500)
+        .json({ status: "error", message: "Internal server error" });
     }
   }
 );
@@ -122,18 +174,38 @@ router.delete(
   "/:cid/product/:pid",
   passport.authenticate("jwt", { session: false }),
   authorization(["user", "premium"]),
-  async (req, res, next) => {
+  async (req, res) => {
     try {
       const { cid, pid } = req.params;
+      const user = req.user;
 
-      cartError.validId(cid);
-      productError.validId(pid);
+      if (productValidation.validId(pid) && cartValidation.validId(cid)) {
+        return res.status(400).json({
+          status: "error",
+          message: "Some of the entered IDs are not valid",
+          data: [],
+        });
+      }
+      // cartError.validId(cid);
+      // productError.validId(pid);
 
       const cartData = await cartService.getOneById(cid);
-      cartError.status(cartData);
-
-      const user = req.user;
-      await cartError.owner(cid, user);
+      if (cartData.status === "error") {
+        return res.status(404).json({
+          status: "error",
+          message: "No cart found",
+          data: [],
+        });
+      }
+      //cartError.status(cartData);
+      if (user.id_cart !== cid) {
+        return res.status(401).json({
+          status: "error",
+          message: "This cart does not belong to the user",
+          data: [],
+        });
+      }
+      // await cartError.owner(cid, user);
 
       const response = await cartService.deleteProduct(cid, pid);
 
@@ -143,7 +215,10 @@ router.delete(
         data: response.data,
       });
     } catch (error) {
-      next(error);
+      req.logger.error(error);
+      res
+        .status(500)
+        .json({ status: "error", message: "Internal server error" });
     }
   }
 );
@@ -158,12 +233,31 @@ router.get(
       const { cid } = req.params;
       const user = req.user;
 
+      if (cartValidation.validId(cid)) {
+        return res.status(400).json({
+          status: "error",
+          message: "Some of the entered IDs are not valid",
+          data: [],
+        });
+      }
+
       const cart = await cartService.getOneById(cid);
 
-      if (cart.data.length === 0)
-        return res
-          .status(401)
-          .send({ status: cart.status, message: cart.message, data: [] });
+      if (user.id_cart !== cid) {
+        return res.status(401).json({
+          status: "error",
+          message: "This cart does not belong to the user",
+          data: [],
+        });
+      }
+
+      if (cart.data.products.length === 0) {
+        return res.status(400).json({
+          status: "error",
+          message: "There are no products in the cart",
+          data: [],
+        });
+      }
 
       const response = await ticketService.generate(cart.data, user);
 
@@ -175,7 +269,9 @@ router.get(
     } catch (error) {
       console.log(error);
       req.logger.error(error);
-      res.status(400).json("algo salio mal");
+      res
+        .status(500)
+        .json({ status: "error", message: "Internal server error" });
     }
   }
 );

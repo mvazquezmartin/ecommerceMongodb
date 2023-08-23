@@ -3,11 +3,9 @@ const passport = require("passport");
 const authorization = require("../middlewares/authorization.middleware");
 const ProductDto = require("../dtos/products.dto");
 const productService = require("../service/product.service");
-const productError = require("../errorHandlers/product/prod.error");
-const MailAdapter = require("../adapters/mail.adapter");
-
+const { message } = require("../repositories/index");
+const productValidation = require("../utils/productValidation");
 const router = Router();
-const msg = new MailAdapter();
 
 //PRODUCTS BY PARAMS
 router.get("/", async (req, res) => {
@@ -29,21 +27,28 @@ router.get("/", async (req, res) => {
       data: response.data,
     });
   } catch (error) {
-    req.logger.error(error.message);
-    res.json({ status: "error", message: "Internal server error" });
+    req.logger.error(error);
+    res.status(500).json({ status: "error", message: "Internal server error" });
   }
 });
 
 // PRODUCT BY ID
-router.get("/:pid", async (req, res, next) => {
+router.get("/:pid", async (req, res) => {
   try {
     const { pid } = req.params;
 
-    productError.validId(pid);
+    if (productValidation.validId(pid)) {
+      return res.status(400).json({
+        status: "error",
+        message: "The product ID is invalid",
+        data: [],
+      });
+    }
+    //productError.validId(pid);
 
     const response = await productService.getOneById(pid);
 
-    productError.status(response);
+    //productError.status(response);
 
     res.status(200).json({
       status: response.status,
@@ -51,8 +56,8 @@ router.get("/:pid", async (req, res, next) => {
       data: response.data,
     });
   } catch (error) {
-    req.logger.error(error.message);
-    next(error);
+    req.logger.error(error);
+    res.status(500).json({ status: "error", message: "Internal server error" });
   }
 });
 
@@ -61,14 +66,20 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   authorization(["admin", "premium"]),
-  async (req, res, next) => {
+  async (req, res) => {
     try {
       const user = req.user;
       const owner = user.role === "premium" ? user.email : "admin";
 
       const item = ProductDto.create(req.body, owner);
 
-      productError.info(item);
+      if (productValidation.info(item))
+        return res.status(400).json({
+          status: "error",
+          message: "All fields are required",
+          data: [],
+        });
+      //productError.info(item);
 
       const response = await productService.create(item, user);
 
@@ -78,8 +89,11 @@ router.post(
         data: response.data,
       });
     } catch (error) {
-      req.logger.error(error.message);
-      next(error);
+      console.log(error);
+      req.logger.error(error);
+      res
+        .status(500)
+        .json({ status: "error", message: "Internal server error" });
     }
   }
 );
@@ -89,16 +103,32 @@ router.patch(
   "/:pid",
   passport.authenticate("jwt", { session: false }),
   authorization(["admin", "premium"]),
-  async (req, res, next) => {
+  async (req, res) => {
     try {
       const { pid } = req.params;
       const user = req.user;
 
-      productError.validId(pid);
-
-      if (user.role === "premium") {
-        await productError.owner(pid, user);
+      if (productValidation.validId(pid)) {
+        return res.status(400).json({
+          status: "error",
+          message: "The product ID is invalid",
+          data: [],
+        });
       }
+      //productError.validId(pid);
+
+      if (user.role !== "admin") {
+        const product = await productService.getOneById(pid);
+        if (product.data.owner !== user.email)
+          return res.status(400).json({
+            status: "error",
+            message: "You are not authorized to modify this product",
+            data: [],
+          });
+      }
+      // if (user.role === "premium") {
+      //   await productError.owner(pid, user);
+      // }
 
       const update = ProductDto.update(req.body);
 
@@ -110,8 +140,10 @@ router.patch(
         data: response.data,
       });
     } catch (error) {
-      req.logger.error(error.message);
-      next(error);
+      req.logger.error(error);
+      res
+        .status(500)
+        .json({ status: "error", message: "Internal server error" });
     }
   }
 );
@@ -121,19 +153,42 @@ router.delete(
   "/:pid",
   passport.authenticate("jwt", { session: false }),
   authorization(["admin", "premium"]),
-  async (req, res, next) => {
+  async (req, res) => {
     try {
       const { pid } = req.params;
       const user = req.user;
 
-      productError.validId(pid);
-      const product = await productService.getOneById(pid);
-      productError.status(product);
+      if (productValidation.validId(pid)) {
+        return res.status(400).json({
+          status: "error",
+          message: "The product ID is invalid",
+          data: [],
+        });
+      }
+      //productError.validId(pid);
 
-      if (user.role === "premium") {
-        await productError.owner(pid, user);
+      const product = await productService.getOneById(pid);
+
+      if (product.status === "error") {
+        return res.status(404).json({
+          status: "error",
+          message: "No product found",
+          data: [],
+        });
+      }
+      //productError.status(product);
+
+      if (user.role !== "admin") {
+        if (product.data.owner !== user.email) {
+          return res.status(401).json({
+            status: "error",
+            message: "You are not authorized to remove this product",
+            data: [],
+          });
+        }
+        //await productError.owner(pid, user);
         const response = await productService.deleteOne(pid);
-        res.json({
+        return res.status(200).json({
           status: response.status,
           message: response.message,
           data: response.data,
@@ -141,17 +196,21 @@ router.delete(
       }
 
       if (user.role === "admin") {
-        await msg.alertDelete(product.data);
-        const response = await productService.deleteOne(pid);
-        res.json({
-          status: response.status,
-          message: response.message,
-          data: response.data,
-        });
+        await message.alertDelete(product.data);
       }
+
+      const response = await productService.deleteOne(pid);
+
+      res.status(200).json({
+        status: response.status,
+        message: response.message,
+        data: response.data,
+      });
     } catch (error) {
-      req.logger.error(error.message);
-      next(error);
+      req.logger.error(error);
+      res
+        .status(500)
+        .json({ status: "error", message: "Internal server error" });
     }
   }
 );

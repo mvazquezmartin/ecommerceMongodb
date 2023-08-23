@@ -3,7 +3,7 @@ info:
   title: API Products
   version: "1.0"
 paths:
-  /api/cart/{cid}:
+  /api/carts/{cid}:
     get:
       summary: Optiene un carrito por su ID con sus productos
       tags:
@@ -32,7 +32,7 @@ paths:
                 example:
                   error: "No se puedo obtener el carrito"
 
-  /api/cart/{cid}/product/{pid}:
+  /api/carts/{cid}/product/{pid}:
     post:
       summary: Agrega un producto y cantidad al carrito seleccionado
       tags:
@@ -87,7 +87,7 @@ paths:
           required: true
           description: ID del producto a eliminar del carrito
           schema:
-            $type: string      
+            $type: string
       responses:
         "200":
           description: El producto se elemino correctamente
@@ -103,6 +103,28 @@ paths:
               schema:
                 example:
                   error: "No se pudo eliminar el producto"
+
+  /api/carts/{cid}/purchase:
+    get:
+      summary: Obtiene un ticket detallado de un carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito a finalizar compra
+          schema:
+           $type: String
+      responses:
+        "200":
+          description: El Ticket se genero correctamente
+          content:
+            aplication/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Ticket"
 
 components:
   schemas:
@@ -131,7 +153,7 @@ components:
             quantity: 3
           - pid: 643ef56bb0d990bb924063d5
             quantity: 10
-            
+
     ProductAddition:
       type: object
       properties:
@@ -143,5 +165,52 @@ components:
           description: Cantidad del producto a agregar
       required:
         - quantity
-      example:        
-        quantity: 3  
+      example:
+        quantity: 3
+
+    Ticket:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID de Mongodb
+        code:
+          type: string
+          description: Codigo unico del ticket
+        purchase_datetime:
+          type: string
+          description: Fecha y hora del momento que se genero el ticket
+        amount:
+          type: number
+          description: Monto total de la compra
+        purchaser:
+          type: string
+          description: Email del usuario que realizo la compra
+        detailedItems:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+                description: Titulo del producto
+              quantity:
+                type: number
+                description: Cantidad del producto
+              unitPrice:
+                type: number
+                description: Precio unitario del producto
+              totalPrice:
+                type: number
+                description: Precio total de la cantidad de producto
+      example:
+        _id: ObjectId("64add4e22930950efaea6a79")
+        code: d7bc130f-3f3f-4d7f-97b3-2367717e98df
+        purchase_datetime: Tue Jul 11 2023 19:17:06
+        amount: 2724
+        purchaser: emailDelUsuario@correo.com
+        detailedItems:
+          product: Sole - Fillet Prueba Modificaion
+          quantity: 3
+          unitPrice: 908
+          totalPrice: 2724

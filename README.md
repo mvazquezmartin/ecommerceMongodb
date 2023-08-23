@@ -213,6 +213,34 @@ ___
 <br/>
 
 ### **Finalizar compra**
+```http
+  DELETE /api/cart/{cid}/purchase
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `cid`      | `Mongo ObjectId` | **Required**: Id del carrito a generer ticket|
+
+### Response example:
+```json
+{
+    "status": "success",
+    "message": "Ticket generated successfully",
+    "data": {
+        "code": "b4b0d166-399a-47c0-a422-584a5a233d07",
+        "date": "2023-08-18T23:53:09.258Z",
+        "detailedItems": [
+            {
+                "product": "Ham - Procutinni",
+                "quantity": 1,
+                "unitPrice": 675,
+                "totalPrice": 675
+            }
+        ],
+        "amount": 675,
+        "purchaser": "email@test.com"
+    }
+}
+```
 <br/>
 
 ## 👥 User 

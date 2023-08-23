@@ -2,30 +2,29 @@ const { Router } = require("express");
 const passport = require("passport");
 const { generateToken } = require("../utils/jwt.util");
 const authorization = require("../middlewares/authorization.middleware");
-const userService = require("../service/users.service");
-const UserDTO = require("../dtos/user.dto");
-const userError = require("../errorHandlers/user/user.error");
+const authService = require("../service/auth.service");
 
 const router = Router();
 
 //LOGIN
-router.post("/", async (req, res, next) => {
+router.post("/", async (req, res) => {
   try {
-    const userInfo = new UserDTO(req.body);
+    const { email, password } = req.body;
 
-    const response = await userService.authenticate(userInfo);
+    const userInfo = { email, password };
 
-    userError.authenticate(response);
+    const response = await authService.authenticate(userInfo);
 
     res.cookie("authToken", response.data, { httpOnly: true }).json({
-      success: response.status,
+      status: response.status,
       message: response.message,
-      access_token: response.data,
+      data: response.data,
       redirectUrl: "/home",
     });
   } catch (error) {
+    console.log(error);
     req.logger.error(error.message);
-    next(error);
+    res.json({ status: "error", message: "Internal server error" });
   }
 });
 
@@ -66,7 +65,7 @@ router.post("/forgotpassword", async (req, res) => {
   try {
     const { email } = req.body;
 
-    const response = await userService.forgotPw(email);
+    const response = await authService.forgotPw(email);
 
     res.json({
       status: response.status,
@@ -75,17 +74,24 @@ router.post("/forgotpassword", async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ status: "error", message: "Internal Server error" });
   }
 });
 
 router.post("/resetpw", async (req, res) => {
   try {
     const { password, token } = req.body;
-    //comprovaciones de password y token
-    // const response = await resetPw(token, password)
-    //res.json({status:response.status, message: response.message, data: response.data})
+
+    const response = await authService.resetPw(token, password);
+
+    res.json({
+      status: response.status,
+      message: response.message,
+      data: response.data,
+    });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ status: "error", message: "Internal Server error" });
   }
 });
 
@@ -96,7 +102,9 @@ router.get(
   authorization(["user", "admin", "premium"]),
   async (req, res) => {
     const user = req.user;
-    await userService.logout(user.email);
+    
+    await authService.logout(user.email);
+    
     res.clearCookie("authToken");
     res
       .status(200)

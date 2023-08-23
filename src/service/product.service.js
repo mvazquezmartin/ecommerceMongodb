@@ -1,11 +1,9 @@
-const { productDAO } = require("../dao/factory.dao");
+const { productManager } = require("../repositories/index");
 const ProductDto = require("../dtos/products.dto");
-
-const products = productDAO;
 
 const getAll = async () => {
   try {
-    const data = await products.getAll();
+    const data = await productManager.getAll();
     return data;
   } catch (error) {
     throw error;
@@ -14,7 +12,7 @@ const getAll = async () => {
 
 const filter = async (params) => {
   try {
-    const data = await products.filter(params);
+    const data = await productManager.filter(params);
 
     if (data.totalDocs === 0)
       return {
@@ -34,7 +32,7 @@ const filter = async (params) => {
 
 const create = async (item) => {
   try {
-    const data = await products.create(item);
+    const data = await productManager.create(item);
     return {
       status: "success",
       message: "The product was added successfully",
@@ -47,7 +45,7 @@ const create = async (item) => {
 
 const getOneById = async (id) => {
   try {
-    const data = await products.getOneById(id);
+    const data = await productManager.getOneById(id);
     if (!data) {
       return {
         status: "error",
@@ -67,7 +65,7 @@ const getOneById = async (id) => {
 
 const update = async (id, update) => {
   try {
-    const data = await products.update(id, update);
+    const data = await productManager.update(id, update);
     return {
       status: "success",
       messages: "Product successfully modified",
@@ -80,7 +78,7 @@ const update = async (id, update) => {
 
 const deleteOne = async (id) => {
   try {
-    const data = await products.delete(id);
+    const data = await productManager.delete(id);
     return { status: "success", message: "Product removed", data: data };
   } catch (error) {
     throw error;
@@ -89,7 +87,7 @@ const deleteOne = async (id) => {
 
 const checkStock = async (id, quantity) => {
   try {
-    const prod = await products.getOneById(id);
+    const prod = await productManager.getOneById(id);
     if (prod.stock < quantity) {
       return { status: "error", message: "Not enough stock", data: prod.title };
     }

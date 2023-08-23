@@ -37,6 +37,14 @@ const userSchema = new mongoose.Schema({
     },
   ],
   last_connection: Date,
+  recoveryToken: {
+    type: String,
+    default: "",
+  },
+  recoveryTokenExpires: {
+    type: String,
+    default: "",
+  },
 });
 
 // userSchema.pre("find", function () {

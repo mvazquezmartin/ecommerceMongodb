@@ -3,7 +3,7 @@ const Users = require("../models/user.model");
 class UsersManager {
   async getAll() {
     try {
-      const data = await Users.find();      
+      const data = await Users.find();
       return data;
     } catch (error) {
       throw error;
@@ -26,6 +26,7 @@ class UsersManager {
       throw error;
     }
   }
+
   async create(userInfo) {
     try {
       const data = await Users.create(userInfo);

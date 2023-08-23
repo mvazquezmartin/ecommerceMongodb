@@ -457,3 +457,90 @@ http: GET en /api/cart/64e255af4c8f5cd828f13175/purchase - 21/8/2023, 18:29:19
 http: GET en /api/cart/64e255af4c8f5cd828f13175/purchase - 21/8/2023, 18:43:43
 http: GET en /api/cart/64e255af4c8f5cd828f13175/purchase - 21/8/2023, 18:53:27
 http: GET en /api/cart/64e255af4c8f5cd828f13175 - 21/8/2023, 18:53:40
+http: POST en /api/auth - 21/8/2023, 19:30:37
+http: POST en /api/cart/64e255af4c8f5cd828f13175/product/643ef56bb0d990bb924063e5 - 21/8/2023, 19:30:58
+http: GET en /api/auth/logout - 21/8/2023, 19:31:11
+http: POST en /api/auth - 21/8/2023, 19:31:17
+http: POST en /api/cart/64e255af4c8f5cd828f13175/product/643ef56bb0d990bb924063e5 - 21/8/2023, 19:31:23
+http: GET en /api/auth/logout - 21/8/2023, 19:34:23
+http: POST en /api/auth - 21/8/2023, 19:34:33
+http: POST en /api/cart/64e255af4c8f5cd828f13175/product/643ef56bb0d990bb924063e5 - 21/8/2023, 19:34:38
+http: GET en /api/cart/64e255af4c8f5cd828f13175/purchase - 21/8/2023, 19:34:49
+http: GET en /api/cart/64e255af4c8f5cd828f13175 - 21/8/2023, 19:34:58
+http: POST en /api/auth - 22/8/2023, 11:21:11
+http: POST en /api/products - 22/8/2023, 11:22:07
+http: GET en /api/auth/logout - 22/8/2023, 11:22:19
+http: POST en /api/auth - 22/8/2023, 11:22:25
+http: DELETE en /api/products/64e4c48f4f59d9caa4d1da82 - 22/8/2023, 11:22:36
+http: GET en /api/products/?category=&priceMin=&priceMax=&sort=&limit=&page= - 22/8/2023, 12:36:11
+error: Cannot read properties of undefined (reading 'filter')
+http: GET en /api/products/?category=&priceMin=&priceMax=&sort=&limit=&page= - 22/8/2023, 12:37:09
+error: Cannot read properties of undefined (reading 'filter')
+http: GET en /api/products/643ef56bb0d990bb924063d6 - 22/8/2023, 12:37:46
+error: Cannot read properties of undefined (reading 'getOneById')
+http: GET en /api/products/643ef56bb0d990bb924063d6 - 22/8/2023, 12:38:16
+error: Cannot read properties of undefined (reading 'getOneById')
+http: GET en /api/products/643ef56bb0d990bb924063d6 - 22/8/2023, 12:50:32
+http: GET en /api/products/?category=&priceMin=&priceMax=&sort=&limit=&page= - 22/8/2023, 12:56:46
+http: GET en /api/auth/logout - 22/8/2023, 13:35:41
+http: GET en /api/auth/logout - 22/8/2023, 13:47:26
+http: GET en /api/auth/logout - 22/8/2023, 13:50:21
+http: GET en /api/auth/logout - 22/8/2023, 13:51:03
+http: POST en /api/auth - 22/8/2023, 13:59:18
+http: GET en /api/cart/ - 22/8/2023, 13:59:24
+http: POST en /api/auth - 22/8/2023, 13:59:29
+http: GET en /api/cart/ - 22/8/2023, 13:59:33
+http: GET en /api/auth/logout - 22/8/2023, 13:59:44
+http: GET en /api/auth/logout - 22/8/2023, 13:59:46
+http: POST en /api/auth - 22/8/2023, 13:59:50
+http: GET en /api/cart/ - 22/8/2023, 13:59:54
+http: POST en /api/auths - 22/8/2023, 14:15:53
+http: GET en /api/carts/ - 22/8/2023, 14:15:59
+http: GET en /api/auths/logout - 22/8/2023, 14:20:32
+http: GET en /api/carts/ - 22/8/2023, 14:20:42
+http: POST en /api/auths - 22/8/2023, 14:54:51
+http: POST en /api/products - 22/8/2023, 14:55:15
+http: GET en /api/auths/logout - 22/8/2023, 14:55:30
+http: POST en /api/auths - 22/8/2023, 14:55:35
+http: DELETE en /api/products/64e4f683aa345c55c29d9453 - 22/8/2023, 14:55:48
+error: msg.alertDelete is not a function
+http: DELETE en /api/products/64e4f683aa345c55c29d9453 - 22/8/2023, 15:01:12
+http: GET en /api/auths/logout - 22/8/2023, 15:08:21
+http: POST en /api/auths - 22/8/2023, 15:08:35
+http: GET en /api/users - 22/8/2023, 15:08:39
+http: DELETE en /api/users/64e39650bc94b9f278dc6719 - 22/8/2023, 15:08:53
+http: GET en /api/auths/logout - 22/8/2023, 15:09:01
+http: POST en /api/users - 22/8/2023, 15:09:30
+http: GET en / - 22/8/2023, 15:09:54
+http: GET en /api/products/?category=&priceMin=&priceMax=&sort=&limit=&page= - 22/8/2023, 15:09:55
+http: GET en /favicon.ico - 22/8/2023, 15:09:55
+error: Found non-callable @@iterator
+error: Expected "payload" to be a plain object.
+error: Expected "payload" to be a plain object.
+error: Expected "payload" to be a plain object.
+error: Expected "payload" to be a plain object.
+error: payload is required
+error: Cannot read properties of null (reading 'id_cart')
+error: Cannot read properties of null (reading 'id_cart')
+error: Cannot read properties of null (reading 'id_cart')
+error: Cannot read properties of null (reading 'id_cart')
+error: Expected "payload" to be a plain object.
+error: Expected "payload" to be a plain object.
+error: Expected "payload" to be a plain object.
+error: Found non-callable @@iterator
+error: Expected "payload" to be a plain object.
+error: Expected "payload" to be a plain object.
+error: Expected "payload" to be a plain object.
+error: Expected "payload" to be a plain object.
+error: Expected "payload" to be a plain object.
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"643ef56bb0d990bb924063\"","value":"643ef56bb0d990bb924063","valueType":"string"}
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined {"code":"ERR_HTTP_HEADERS_SENT"}
+error: undefined {"code":"ERR_HTTP_HEADERS_SENT"}
+error: undefined {"code":"ERR_HTTP_HEADERS_SENT"}
+error: undefined
+error: undefined
+error: undefined

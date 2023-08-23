@@ -3,3 +3,213 @@
 #   title: API Products
 #   version: "1.0"
 # paths:
+openapi: 3.1.0
+info:
+  title: User Management API
+  version: 1.0.0
+paths:
+  /api/users:
+    get:
+      summary: Get all users (Admin access required)
+      tags:
+        - Users
+      security:      
+        - jwtAuth: []
+      responses:
+        '201':
+          description: Successfully retrieved users
+          content:
+            application/json:
+              example:
+                status: success
+                message: Users retrieved successfully
+                data: []
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                status: error
+                message: Internal server error
+    post:
+      summary: Register a new user
+      tags:
+        - Users
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                other_properties_here: 
+                  type: string
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              example:
+                status: success
+                message: User registered successfully
+                data: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              example:
+                status: error
+                message: Bad request
+    delete:
+      summary: Delete inactive users (Admin access required)
+      tags:
+        - Users
+      security:
+        - jwtAuth: []
+      responses:
+        '200':
+          description: Users deleted successfully
+          content:
+            application/json:
+              example:
+                status: success
+                message: Users deleted successfully
+                data: {}
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                status: error
+                message: Internal server error
+
+  /api/users/premium/{uid}:
+    get:
+      summary: Switch user to premium (User or Premium access required)
+      tags:
+        - Users
+      security:
+        - jwtAuth: []
+      parameters:
+        - in: path
+          name: uid
+          schema:
+            type: string
+          required: true
+          description: User ID
+      responses:
+        '200':
+          description: User role switched to premium
+          content:
+            application/json:
+              example:
+                status: success
+                message: User role switched to premium
+                data: {}
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                status: error
+                message: Internal server error
+
+  /api/users/{uid}/documents:
+    post:
+      summary: Upload documents for a user (User access required)
+      tags:
+        - Users
+      security:
+        - jwtAuth: []
+      parameters:
+        - in: path
+          name: uid
+          schema:
+            type: string
+          required: true
+          description: User ID
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                identity:
+                  type: string
+                  format: binary
+                address:
+                  type: string
+                  format: binary
+                account:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Documents uploaded successfully
+          content:
+            application/json:
+              example:
+                status: success
+                message: Documents uploaded successfully
+                data: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              example:
+                status: error
+                message: Bad request
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                status: error
+                message: Internal server error
+
+  /api/users/{uid}:
+    delete:
+      summary: Delete a user (Admin access required)
+      tags:
+        - Users
+      security:
+        - jwtAuth: []
+      parameters:
+        - in: path
+          name: uid
+          schema:
+            type: string
+          required: true
+          description: User ID
+      responses:
+        '200':
+          description: User deleted successfully
+          content:
+            application/json:
+              example:
+                status: success
+                message: User deleted successfully
+                data: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              example:
+                status: error
+                message: Bad request
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                status: error
+                message: Internal server error
+
+securitySchemes:
+  jwtAuth:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT
+

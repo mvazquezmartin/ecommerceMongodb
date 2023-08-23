@@ -1,22 +1,28 @@
-const UsersDao = require("../dao/mongoDb/manager/users.manager.mongo");
-
-const Users = new UsersDao();
+const { userManager } = require("../repositories/index");
 
 const create = async (newUserInfo) => {
-  return await Users.create(newUserInfo);
+  return await userManager.create(newUserInfo);
 };
 
 const getOne = async (item) => {
   const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(item);
 
   if (isEmail) {
-    return await Users.getOne({ email: item });
+    return await userManager.getOne({ email: item });
   } else {
-    return await Users.getOneById(item);
+    return await userManager.getOneById(item);
   }
+};
+
+const getOneByToken = async (token) => {
+  return await userManager.getOne({
+    recoveryToken: token,
+    recoveryTokenExpires: { $gt: Date.now() },
+  });
 };
 
 module.exports = {
   create,
-  getOne
-}
+  getOne,
+  getOneByToken,
+};

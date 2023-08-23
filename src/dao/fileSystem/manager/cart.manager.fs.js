@@ -2,8 +2,9 @@ const fs = require("fs");
 const file = "./file/cart.json";
 
 class Cart {
-  constructor() {
+  constructor(path) {
     this.carts = [];
+    this.path = path;
     this.idCounter = 1;
   }
 

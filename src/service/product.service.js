@@ -49,8 +49,8 @@ const getOneById = async (id) => {
     if (!data) {
       return {
         status: "error",
-        _id: id,
         message: "Product not found",
+        data: [],
       };
     }
     return {
@@ -65,10 +65,26 @@ const getOneById = async (id) => {
 
 const update = async (id, update) => {
   try {
-    const data = await productManager.update(id, update);
+    const product = await productManager.getOneById(id);
+
+    if (!product) {
+      return {
+        status: "error",
+        message: "Product not found",
+        data: [],
+      };
+    }
+
+    Object.keys(update).forEach((key) => {
+      if (update[key] && update[key] !== product[key])
+        product[key] = update[key];
+    });
+    console.log(product);
+    const data = await productManager.update(id, product);
+
     return {
       status: "success",
-      messages: "Product successfully modified",
+      message: "Product successfully modified",
       data: data,
     };
   } catch (error) {
@@ -78,6 +94,16 @@ const update = async (id, update) => {
 
 const deleteOne = async (id) => {
   try {
+    const product = await productManager.getOneById(id);
+
+    if (!product) {
+      return {
+        status: "error",
+        message: "Product not found",
+        data: [],
+      };
+    }
+
     const data = await productManager.delete(id);
     return { status: "success", message: "Product removed", data: data };
   } catch (error) {

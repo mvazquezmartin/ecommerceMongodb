@@ -9,9 +9,9 @@ class UsersManager {
       throw error;
     }
   }
-  async getOne(user) {
+  async getOne(userInfo) {
     try {
-      const data = await Users.findOne(user);
+      const data = await Users.findOne(userInfo);
       return data;
     } catch (error) {
       throw error;

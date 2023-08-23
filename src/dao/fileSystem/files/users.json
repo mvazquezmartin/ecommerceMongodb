@@ -1,0 +1,15 @@
+[
+  {
+    "_id": "10396177-0c63-472e-ad4e-4c575905b6c6",
+    "first_name": "admin",
+    "last_name": "admin",
+    "email": "admin@deprueba.com",
+    "age": 18,
+    "password": "$2b$10$A7qB7yihJyGrfciVemEY9u.AWbLq6w4672bitE65Agv8Ki7tJ.6tO",
+    "role": "admin",
+    "id_cart": "e844b8ac-053a-46d9-b641-23229e1040c0",
+    "documents": [],
+    "recoveryToken": "",
+    "recoveryTokenExpires": ""
+  }
+]

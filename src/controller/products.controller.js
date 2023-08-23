@@ -28,6 +28,7 @@ router.get("/", async (req, res) => {
       data: response.data,
     });
   } catch (error) {
+    console.log(error);
     req.logger.error(error);
     res.status(500).json({ status: "error", message: "Internal server error" });
   }
@@ -38,7 +39,7 @@ router.get("/:pid", async (req, res) => {
   try {
     const { pid } = req.params;
 
-    if (productValidation.validId(pid)) {
+    if (!(productValidation.validId(pid) || productValidation.validIdFs(pid))) {
       return res.status(400).json({
         status: "error",
         message: "The product ID is invalid",
@@ -109,7 +110,7 @@ router.patch(
       const { pid } = req.params;
       const user = req.user;
 
-      if (productValidation.validId(pid)) {
+      if (!(productValidation.validId(pid) || productValidation.validIdFs(pid))) {
         return res.status(400).json({
           status: "error",
           message: "The product ID is invalid",
@@ -137,7 +138,7 @@ router.patch(
 
       res.status(201).json({
         status: response.status,
-        message: response.messages,
+        message: response.message,
         data: response.data,
       });
     } catch (error) {
@@ -159,7 +160,7 @@ router.delete(
       const { pid } = req.params;
       const user = req.user;
 
-      if (productValidation.validId(pid)) {
+      if (!(productValidation.validId(pid) || productValidation.validIdFs(pid))) {
         return res.status(400).json({
           status: "error",
           message: "The product ID is invalid",
@@ -197,7 +198,7 @@ router.delete(
       }
 
       if (user.role === "admin") {
-        await message.alertDelete(product.data);
+        //await message.alertDelete(product.data);
       }
 
       const response = await productService.deleteOne(pid);
@@ -208,6 +209,7 @@ router.delete(
         data: response.data,
       });
     } catch (error) {
+      console.log(error)
       req.logger.error(error);
       res
         .status(500)

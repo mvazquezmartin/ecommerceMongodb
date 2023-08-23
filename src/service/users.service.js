@@ -42,6 +42,7 @@ const create = async (userInfo) => {
     newUserInfo.password = pwHashed;
 
     const cart = await cartService.create();
+    console.log(cart)
     newUserInfo.id_cart = cart.data._id;
     newUserInfo.last_connection = new Date();
 
@@ -51,7 +52,7 @@ const create = async (userInfo) => {
     const data = UserDTO.getData(newUser);
     data.access_token = access_token;
 
-    await message.send(newUser);
+    //await message.send(newUser);
 
     return {
       status: "success",

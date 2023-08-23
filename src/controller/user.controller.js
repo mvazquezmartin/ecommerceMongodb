@@ -45,11 +45,11 @@ router.get(
 );
 
 //REGISTER USER
-router.post("/", imgUploader.single("image"), async (req, res, next) => {
+router.post("/", imgUploader.single("image"), async (req, res) => {
   try {
     const newUserInfo = UserDTO.create(req.body);
 
-    userError.info(newUserInfo);
+    //userError.info(newUserInfo);
 
     if (req.file) {
       const file = req.file;
@@ -58,7 +58,7 @@ router.post("/", imgUploader.single("image"), async (req, res, next) => {
 
     const response = await userService.create(newUserInfo);
 
-    userError.unique(response);
+    //userError.unique(response);
 
     res.status(201).json({
       status: response.status,
@@ -67,7 +67,7 @@ router.post("/", imgUploader.single("image"), async (req, res, next) => {
     });
   } catch (error) {
     req.logger.error(error.message);
-    next(error);
+    res.status(500).json({ status: "error", message: "Internal server error" });
   }
 });
 

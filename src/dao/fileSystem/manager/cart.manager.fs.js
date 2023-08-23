@@ -1,33 +1,35 @@
 const fs = require("fs");
-const file = "./file/cart.json";
+const { v4: uuidv4 } = require("uuid");
 
 class Cart {
   constructor(path) {
     this.carts = [];
     this.path = path;
-    this.idCounter = 1;
   }
 
-  async createCart() {
+  async create() {
     try {
       await this.readFile();
-      const carrito = { id: this.idCounter, products: [] };
-      this.carts.push(carrito);
-      this.idCounter++;
+
+      const _id = uuidv4();
+      const newCart = { _id, products: [] };
+
+      this.carts.push(newCart);
+
       await this.saveFile();
-      return carrito;
+
+      return newCart;
     } catch (error) {
-      console.log(error);
-      return null;
+      throw error;
     }
   }
 
-  async getCarts() {
+  async getAll() {
     try {
       await this.readFile();
       return this.carts;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 
@@ -35,10 +37,9 @@ class Cart {
     try {
       await this.readFile();
       const carrito = this.carts.find((cart) => cart.id === cid);
-      return carrito ? carrito : null;
+      return carrito ? carrito : [];
     } catch (error) {
-      console.log(error);
-      return null;
+      throw error;
     }
   }
 
@@ -46,7 +47,7 @@ class Cart {
     try {
       await this.readFile();
       const cartIndex = this.carts.findIndex((cart) => cart.id === cid);
-      if (cartIndex === -1) return null;
+      if (cartIndex === -1) return [];
       const productIndex = this.carts[cartIndex].products.findIndex(
         (prod) => prod.id === pid
       );
@@ -59,33 +60,24 @@ class Cart {
       await this.saveFile();
       return this.carts[cartIndex];
     } catch (error) {
-      console.log(error);
-      return null;
+      throw error;
     }
   }
 
   async readFile() {
     try {
-      const data = await fs.promises.readFile(file, "utf-8");
-      this.carts = JSON.parse(data);
-      if (this.carts.length === 0) {
-        this.idCounter = 1;
-      } else {
-        const lastCarrito = this.carts[this.carts.length - 1];
-        this.idCounter = parseInt(lastCarrito.id) + 1;
-      }
+      const data = await fs.promises.readFile(this.path, "utf-8");
+      if (data) this.carts = JSON.parse(data);
     } catch (error) {
-      console.log(error);
-      this.carts = [];
-      this.idCounter = 1;
+      throw error;
     }
   }
 
   async saveFile() {
     try {
-      await fs.promises.writeFile(file, JSON.stringify(this.carts));
+      await fs.promises.writeFile(this.path, JSON.stringify(this.carts));
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 
@@ -94,7 +86,7 @@ class Cart {
       await fs.promises.writeFile(file, "");
       this.carts = [];
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 }

@@ -42,7 +42,7 @@ const create = async (userInfo) => {
     newUserInfo.password = pwHashed;
 
     const cart = await cartService.create();
-    console.log(cart)
+
     newUserInfo.id_cart = cart.data._id;
     newUserInfo.last_connection = new Date();
 

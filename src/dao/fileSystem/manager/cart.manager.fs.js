@@ -33,32 +33,27 @@ class Cart {
     }
   }
 
-  async getCartById(cid) {
+  async getOne(cid) {
     try {
       await this.readFile();
-      const carrito = this.carts.find((cart) => cart.id === cid);
+      const carrito = this.carts.find((cart) => cart._id === cid);
       return carrito ? carrito : [];
     } catch (error) {
       throw error;
     }
   }
 
-  async addProductCart(cid, pid, quantity) {
+  async update(cid, update) {
     try {
       await this.readFile();
-      const cartIndex = this.carts.findIndex((cart) => cart.id === cid);
-      if (cartIndex === -1) return [];
-      const productIndex = this.carts[cartIndex].products.findIndex(
-        (prod) => prod.id === pid
-      );
-      if (productIndex === -1) {
-        const product = { id: pid, quantity };
-        this.carts[cartIndex].products.push(product);
-      } else {
-        this.carts[cartIndex].products[productIndex].quantity += quantity;
-      }
+
+      const cartIndex = this.carts.findIndex((cart) => cart._id === cid);
+      this.carts[cartIndex] = update;
+
       await this.saveFile();
-      return this.carts[cartIndex];
+
+      const cart = this.carts[cartIndex];
+      return cart;
     } catch (error) {
       throw error;
     }

@@ -1,3 +1,5 @@
+// ----------------- DEPRECADO ---------------------------
+
 const { isValidObjectId } = require("mongoose");
 const CustomError = require("../CustomError");
 const EnumErrors = require("../enumError");

@@ -1,15 +1,1 @@
-[
-  {
-    "_id": "10396177-0c63-472e-ad4e-4c575905b6c6",
-    "first_name": "admin",
-    "last_name": "admin",
-    "email": "admin@deprueba.com",
-    "age": 18,
-    "password": "$2b$10$A7qB7yihJyGrfciVemEY9u.AWbLq6w4672bitE65Agv8Ki7tJ.6tO",
-    "role": "admin",
-    "id_cart": "e844b8ac-053a-46d9-b641-23229e1040c0",
-    "documents": [],
-    "recoveryToken": "",
-    "recoveryTokenExpires": ""
-  }
-]
+[{"_id":"10396177-0c63-472e-ad4e-4c575905b6c6","first_name":"admin","last_name":"admin","email":"admin@deprueba.com","age":18,"password":"$2b$10$A7qB7yihJyGrfciVemEY9u.AWbLq6w4672bitE65Agv8Ki7tJ.6tO","role":"admin","id_cart":"e844b8ac-053a-46d9-b641-23229e1040c0","documents":[],"recoveryToken":"","recoveryTokenExpires":""},{"_id":"530ef862-e46b-48fe-bb8e-7b69e6417803","first_name":"prueba1","last_name":"prueba1","email":"prueba1@deprueba.com","age":18,"password":"$2b$10$Ic.7b6j8rhCqfgPyJza.FeHYKd/wSL3fTMw5fscvcb5AlPnykhnH.","role":"user","id_cart":"0560d947-ff22-4ccb-a189-4515b0824866","documents":[],"recoveryToken":"","recoveryTokenExpires":""},{"_id":"d470b15f-bd1a-499b-9c7a-afcb66a2b76c","first_name":"prueba2","last_name":"prueba2","email":"prueba2@deprueba.com","age":18,"password":"$2b$10$BH1Q4WPNYkrg5jHAGZPjjOaTdCHjejgy8kCatWKe5xRT7HtqXXqsi","role":"user","id_cart":"dfd1d2ea-6235-4ed4-bd00-089a69f2d350","documents":[],"recoveryToken":"","recoveryTokenExpires":""}]

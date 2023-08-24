@@ -1,3 +1,5 @@
+// ----------------- DEPRECADO ---------------------------
+
 class CustomError {
   static create({ status, name = "error", cause, message, code = 1 }) {
     const error = new Error(message);

@@ -148,10 +148,10 @@ class ProductManager {
     try {
       await this.readFile();
       const index = this.products.findIndex((prod) => prod._id === id);
-      
+
       this.products[index].status = false;
       await this.saveFile();
-      
+
       const product = this.products[index];
       console.log(product);
       return product;

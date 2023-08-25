@@ -111,7 +111,7 @@ ___
 
 ### **Eliminar productos**
 ```http
-  DELETE /api/product/{pid}
+  DELETE /api/products/{pid}
 ```
 
 | Parameter | Type     | Description                       |
@@ -130,7 +130,7 @@ ___
 ## 🛒 **Carrito**
 ### **Obtener carritos**
 ```http
-  GET /api/cart/{cid}
+  GET /api/carts/{cid}
 ```
 
 | Parameter | Type     | Description                       |
@@ -164,7 +164,7 @@ ___
 
 ### **Agregar productos**
 ```http
-  POST /api/cart/{cid}/product/{pid}
+  POST /api/carts/{cid}/product/{pid}
 ```
 
 | Parameter | Type     | Description                       |
@@ -189,7 +189,7 @@ ___
 
 ### **Eliminar Productos**
 ```http
-  DELETE /api/cart/{cid}/product/{pid}
+  DELETE /api/carts/{cid}/product/{pid}
 ```
 
 | Parameter | Type     | Description                       |
@@ -214,11 +214,11 @@ ___
 
 ### **Finalizar compra**
 ```http
-  GET /api/cart/{cid}/purchase
+  GET /api/carts/{cid}/purchase
 ```
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `cid`      | `Mongo ObjectId` | **Required**: Id del carrito a generer ticket|
+| `cid`      | `Mongo ObjectId` | **Required**: Id del carrito a generar ticket|
 
 ### Response example:
 ```json
@@ -244,7 +244,34 @@ ___
 <br/>
 
 ## 👥 User 
-- Crear usuario
+### **Crear usuario**
+```http
+  POST /api/user/
+```
+### Request body example:
+```json
+{
+    "first_name": "name",
+    "last_name":"last name",        
+    "email": "test@email.com",
+    "age": 18,
+    "password": "123456"
+}
+```
+### Response example:
+```json
+{
+  "status": "success",
+    "message": "Successfully registered user",
+    "data": {
+        "first_name": "name",
+        "last_name": "last name",
+        "email": "test@email.com",
+        "id_cart": "c764e94e-b4d7-4731-96c0-cc82fe3fdc8b",
+        "role": "user",
+    }
+}
+```
 - Actualizar documentacion
 - Cambiar roles
 - Eliminar usuario  

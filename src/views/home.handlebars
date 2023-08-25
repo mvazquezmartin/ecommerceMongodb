@@ -14,6 +14,11 @@
       </div>
     </div>
   </div>
+  {{#if user}}
+    <div class="row">
+      <h5 class="text-end">BIENVENIDO {{this.first_name}}</h5>
+    </div>
+  {{/if}}
   <div class="row">
     <h1 class="text-center">Listado de productos</h1>
   </div>
@@ -28,9 +33,10 @@
       />
       <br />
       <br />
-      <form action="">
+      <form action="/" method="GET">
         <label for="cars">Category</label>
         <select name="category" id="category">
+          <option value="null">ALL PRODUCTS</option>
           <option value="Movies">Movies</option>
           <option value="Baby">Baby</option>
           <option value="Computers">Computers</option>
@@ -39,17 +45,42 @@
           <option value="Grocery">Grocery</option>
           <option value="Tools">Tools</option>
           <option value="Games">Games</option>
-        </select>        
+        </select>
         <label for="minPrice" class="form-label">MinPrice</label>
-        <input type="text" class="form-control" name="" id="minPrice" />
+        <input type="text" class="form-control" name="priceMin" id="minPrice" />
         <label for="maxPrice" class="form-label">MaxPrice</label>
-        <input type="text" class="form-control" name="" id="maxPrice" />
+        <input type="text" class="form-control" name="priceMax" id="maxPrice" />
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="sort"
+            value="asc"
+            id="flexRadioDefault1"
+            checked
+          />
+          <label class="form-check-label" for="flexRadioDefault1">
+            Asc
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="sort"
+            value="des"
+            id="flexRadioDefault2"            
+          />
+          <label class="form-check-label" for="flexRadioDefault2">
+            Des
+          </label>
+        </div>
         <input
-        class="m-1 btn btn-primary"
-        type="submit"
-        value="Filter"
-        id="btnFilter"
-      />
+          class="m-1 btn btn-primary"
+          type="submit"
+          value="Filter"
+          id="btnFilter"
+        />
       </form>
     </div>
     <div class="col-10">
@@ -57,10 +88,40 @@
         id="cardProductos"
         class="container d-flex flex-wrap justify-content-center"
       >
+        {{#each products}}
+          <div
+            class="card m-1 rounded-3 border border-3"
+            style="width: 16rem;"
+          ><img
+              class="img-fluid rounded-3 rounted-top border-bottom border-2"
+              src="{{this.thumbnail}}"
+              alt="Bandage - Finger Cots"
+            />
+            <div class="card-body">
+              <h5 class="cartd-title">{{this.title}}</h5>
+              <p class="card-text">PROD ID: {{this.id}}</p>
+              <p class="cart-text">CATEGORY: {{this.category}}</p>
+              <p class="card-text">{{this.description}}</p>
+              <p class="card-text">Unidades: {{this.stock}}</p>
+              <p class="card-text">Precio unitario: ${{this.price}} </p>
+              <a class="btn btn-primary" href="#">Add Cart</a>
+            </div>
+          </div>
+        {{/each}}
       </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 d-flex justify-content-between mt-2">
+      {{#if hasPrevPage}}
+        <a href="{{prevPageLink}}" class="btn btn-secondary">Previous Page</a>
+      {{/if}}
+      {{#if hasNextPage}}
+        <a href="{{nextPageLink}}" class="btn btn-primary">Next Page</a>
+      {{/if}}
     </div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script type="module" src="../public/js/home.js"></script>
+{{! <script type="module" src="../public/js/home.js"></script> }}

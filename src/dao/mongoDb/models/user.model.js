@@ -47,10 +47,6 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// userSchema.pre("find", function () {
-//   this.populate("carts");
-// });
-
 const Users = mongoose.model(userCollection, userSchema);
 
 module.exports = Users;

@@ -27,10 +27,15 @@ productsSchema.statics.filterProducts = async function (params) {
 
   pipeline.push({ $match: { status: true } });
 
-  if (params.category !== null)
+  if (params.category !== null && params.category !== "null")
     pipeline.push({ $match: { category: params.category } });
 
-  if (params.priceMin !== null && params.priceMax !== null) {
+  if (
+    params.priceMin !== null &&
+    params.priceMax !== null &&
+    params.priceMin !== "null" &&
+    params.priceMax !== "null"
+  ) {
     const priceFilter = {
       $gte: parseInt(params.priceMin),
       $lte: parseInt(params.priceMax),

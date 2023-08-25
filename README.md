@@ -43,7 +43,6 @@ _A continuación estan las principales funcionalidades de la api, para mas detal
   "thumbnail": "http://dummyimage.com/x.png/5fa2dd/ffffff"
 }
 ```
-
 #### Response example:
 
 ```json
@@ -65,9 +64,7 @@ _A continuación estan las principales funcionalidades de la api, para mas detal
   }
 }
 ```
-
 ---
-
 <br/>
 
 ### **Actualizar productos:**
@@ -90,7 +87,6 @@ _A continuación estan las principales funcionalidades de la api, para mas detal
   "stock": 50
 }
 ```
-
 #### Response example:
 
 ```json
@@ -112,9 +108,7 @@ _A continuación estan las principales funcionalidades de la api, para mas detal
   }
 }
 ```
-
 ---
-
 <br/>
 
 ### **Obener productos:**
@@ -165,9 +159,7 @@ _A continuación estan las principales funcionalidades de la api, para mas detal
   }
 }
 ```
-
 ---
-
 <br/>
 
 ### **Eliminar productos**
@@ -201,9 +193,7 @@ _A continuación estan las principales funcionalidades de la api, para mas detal
     }
 }
 ```
-
 ---
-
 <br/>
 
 ## 🛒 **Carrito**
@@ -231,9 +221,7 @@ _A continuación estan las principales funcionalidades de la api, para mas detal
   }
 }
 ```
-
 ---
-
 <br/>
 
 ### **Agregar productos**
@@ -254,7 +242,6 @@ _A continuación estan las principales funcionalidades de la api, para mas detal
   "quantity": 1
 }
 ```
-
 #### Response example:
 
 ```json
@@ -274,9 +261,7 @@ _A continuación estan las principales funcionalidades de la api, para mas detal
   }
 }
 ```
-
 ---
-
 <br/>
 
 ### **Eliminar Productos**
@@ -311,9 +296,7 @@ _A continuación estan las principales funcionalidades de la api, para mas detal
     }
 }
 ```
-
 ---
-
 <br/>
 
 ### **Finalizar compra**
@@ -408,8 +391,6 @@ Instalar dependecias:
 ```bash
   npm install
 ```
-
-<br/>
 <br/>
 
 ## ⚙ Deploy 🖥
@@ -425,8 +406,6 @@ Para ejecutar en modo developer con persistencias en MongoDB:
 ```
 npm run start:dev
 ```
-
-<br/>
 <br/>
 
 ## 🔧 Running Tests 🔨
@@ -436,8 +415,6 @@ Para realizar un test completo de la API (_mocha, chai y supertest_) ejecute el 
 ```bash
   npm run test
 ```
-
-<br/>
 <br/>
 
 ## 🧾 Authors ✍

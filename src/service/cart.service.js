@@ -3,10 +3,20 @@ const { cartManager } = require("../repositories/index");
 const getAll = async () => {
   try {
     const data = await cartManager.getAll();
+    
     if (data.length === 0) {
-      return { status: "error", message: "No hay carritos", data: {} };
+      return {
+        status: "error",
+        message: "No hay carritos",
+        data: [],
+      };
     }
-    return { status: "success", message: "Carts found", data: data };
+    
+    return {
+      status: "success",
+      message: "Carts found",
+      data: data,
+    };
   } catch (error) {
     throw error;
   }
@@ -24,14 +34,6 @@ const getOneById = async (id) => {
         data: [],
       };
     }
-
-    // if (data.products.length === 0) {
-    //   return {
-    //     status: "success",
-    //     message: "There are no products in the cart",
-    //     data: [],
-    //   };
-    // }
 
     return {
       status: "success",

@@ -7,23 +7,6 @@ class Cart {
     this.path = path;
   }
 
-  async create() {
-    try {
-      await this.readFile();
-
-      const _id = uuidv4();
-      const newCart = { _id, products: [] };
-
-      this.carts.push(newCart);
-
-      await this.saveFile();
-
-      return newCart;
-    } catch (error) {
-      throw error;
-    }
-  }
-
   async getAll() {
     try {
       await this.readFile();
@@ -43,6 +26,23 @@ class Cart {
     }
   }
 
+  async create() {
+    try {
+      await this.readFile();
+
+      const _id = uuidv4();
+      const newCart = { _id, products: [] };
+
+      this.carts.push(newCart);
+
+      await this.saveFile();
+
+      return newCart;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async update(cid, update) {
     try {
       await this.readFile();
@@ -53,6 +53,23 @@ class Cart {
       await this.saveFile();
 
       const cart = this.carts[cartIndex];
+      return cart;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async delete(cid) {
+    try {
+      await this.readFile();
+
+      const cartIndex = this.carts.findIndex((cart) => cart._id === cid);
+      const cart = this.carts[cartIndex];
+
+      this.carts.splice(cartIndex, 1);
+
+      await this.saveFile();
+
       return cart;
     } catch (error) {
       throw error;

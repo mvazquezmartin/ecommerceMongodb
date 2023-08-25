@@ -7,7 +7,7 @@ form.addEventListener("submit", (e) => {
 
   data.forEach((value, key) => (obj[key] = value));
 
-  const url = "/auth";
+  const url = "/api/auths";
 
   fetch(url, {
     headers: {
@@ -21,6 +21,7 @@ form.addEventListener("submit", (e) => {
       if (data.error == "Failed login") {
         return alert("Error");
       } else {
+        console.log(data);
         form.innerHTML = "";
         const welcomeLabel = document.createElement("label");
         welcomeLabel.textContent = `Bienvenido ${data.name}`;

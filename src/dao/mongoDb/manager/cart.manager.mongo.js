@@ -37,7 +37,7 @@ class CartManager {
     }
   }
 
-  async deleteOne(id) {
+  async delete(id) {
     return await Carts.findByIdAndDelete(id);
   }
 

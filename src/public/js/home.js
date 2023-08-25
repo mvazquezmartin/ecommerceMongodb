@@ -7,7 +7,7 @@ const url = "/api/products/?category=&priceMin=&priceMax=&sort=&limit=&page=";
 fetch(url)
   .then((response) => response.json())
   .then((data) => {
-    console.log(data)
+    console.log(data.data);
     renderProductos(data.data.docs);
   })
   .catch((error) => {
@@ -17,19 +17,23 @@ fetch(url)
 btnFind.addEventListener("click", () => {
   const prodId = document.getElementById("prodId");
   const id = prodId.value;
-  console.log(id);
+
   fetch(`/api/products/${id}`)
     .then((response) => response.json())
     .then((data) => {
+      console.log(data);
+      if (data.status === "error") {
+        return Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: data.message,
+        });
+      }
+
       renderProductos(data.data);
     })
     .catch((error) => {
       console.log(error);
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: `No se encontro producto con el ID: ${id}`,
-      });
     });
 });
 

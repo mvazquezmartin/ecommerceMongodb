@@ -10,10 +10,13 @@ class ProductManager {
   async getAll() {
     try {
       await this.readFile();
+
       const productStatusTrue = this.products.filter(
         (prod) => prod.status === true
       );
+      
       this.products = productStatusTrue;
+      
       return this.products;
     } catch (error) {
       throw error;
@@ -98,7 +101,7 @@ class ProductManager {
         thumbnail,
         code,
         stock,
-        owner,
+        owner = "admin",
         status = true,
       } = item;
 

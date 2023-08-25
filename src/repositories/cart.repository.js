@@ -19,7 +19,7 @@ class CartManagerRepository {
     return await this.cartManager.update(id, update);
   }
 
-  async deleteOne(id) {
+  async delete(id) {
     return await this.cartManager.deleteOne(id);
   }
 

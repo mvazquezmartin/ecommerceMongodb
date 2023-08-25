@@ -6,6 +6,7 @@ const passport = require("passport");
 const authorization = require("../middlewares/authorization.middleware");
 const userError = require("../errorHandlers/user/user.error");
 const utilsMulter = require("../utils/multer.utils");
+const { validId } = require("../utils/idValidation");
 const imgUploader = multer({
   storage: utilsMulter.profileStorage,
   fileFilter: utilsMulter.imgFileFilter,
@@ -36,7 +37,7 @@ router.get(
         data: response.data,
       });
     } catch (error) {
-      req.logger.error(error.message);
+      req.logger.error(error);
       res
         .status(500)
         .json({ status: "error", message: "Internal server error" });
@@ -57,16 +58,14 @@ router.post("/", imgUploader.single("image"), async (req, res) => {
     }
 
     const response = await userService.create(newUserInfo);
-
     //userError.unique(response);
-
     res.status(201).json({
       status: response.status,
       message: response.message,
       data: response.data,
     });
   } catch (error) {
-    req.logger.error(error.message);
+    req.logger.error(error);
     res.status(500).json({ status: "error", message: "Internal server error" });
   }
 });
@@ -87,8 +86,10 @@ router.get(
         data: response.data,
       });
     } catch (error) {
-      req.logger.error(error.message);
-      res.json({ status: "error", message: "Internal server error" });
+      req.logger.error(error);
+      res
+        .status(500)
+        .json({ status: "error", message: "Internal server error" });
     }
   }
 );
@@ -121,14 +122,17 @@ router.post(
       };
 
       const response = await userService.uploadDoc(uid, file);
+
       res.json({
         status: response.status,
         message: response.message,
         data: response.data,
       });
     } catch (error) {
-      req.logger.error(error.message);
-      res.json({ status: "error", message: "Internal server error" });
+      req.logger.error(error);
+      res
+        .status(500)
+        .json({ status: "error", message: "Internal server error" });
     }
   }
 );
@@ -141,6 +145,7 @@ router.delete(
   async (req, res) => {
     try {
       const response = await userService.deleteInactivity();
+
       res.json({
         status: response.status,
         message: response.message,
@@ -148,8 +153,10 @@ router.delete(
       });
     } catch (error) {
       console.log(error);
-      req.logger.error(error.message);
-      res.json({ status: "error", message: "Internal server error" });
+      req.logger.error(error);
+      res
+        .status(500)
+        .json({ status: "error", message: "Internal server error" });
     }
   }
 );
@@ -159,11 +166,17 @@ router.delete(
   "/:uid",
   passport.authenticate("jwt", { session: false }),
   authorization("admin"),
-  async (req, res, next) => {
+  async (req, res) => {
     try {
       const { uid } = req.params;
 
-      userError.validId(uid);
+      if (!(validId(uid) || validIdFs(uid))) {
+        return res.status(400).json({
+          status: "error",
+          message: "The user ID is invalid",
+          data: [],
+        });
+      }
 
       const response = await userService.deleteOne(uid);
 
@@ -173,8 +186,10 @@ router.delete(
         data: response.data,
       });
     } catch (error) {
-      req.logger.error(error.message);
-      next(error);
+      req.logger.error(error);
+      res
+        .status(500)
+        .json({ status: "error", message: "Internal server error" });
     }
   }
 );

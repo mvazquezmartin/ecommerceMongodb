@@ -191,6 +191,7 @@ router.delete(
         }
         //await productError.owner(pid, user);
         const response = await productService.deleteOne(pid);
+        
         return res.status(200).json({
           status: response.status,
           message: response.message,

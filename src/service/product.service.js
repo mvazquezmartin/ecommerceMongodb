@@ -24,7 +24,11 @@ const filter = async (params) => {
     const mapDto = data.docs.map((doc) => new ProductDto(doc));
     data.docs = mapDto;
 
-    return { status: "success", message: "Products found", data: data };
+    return {
+      status: "success",
+      message: "Products found",
+      data: data,
+    };
   } catch (error) {
     throw error;
   }
@@ -115,7 +119,11 @@ const checkStock = async (id, quantity) => {
   try {
     const prod = await productManager.getOneById(id);
     if (prod.stock < quantity) {
-      return { status: "error", message: "Not enough stock", data: prod.title };
+      return {
+        status: "error",
+        message: "Not enough stock",
+        data: prod.title,
+      };
     }
     return { status: "success" };
   } catch (error) {

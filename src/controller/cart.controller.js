@@ -102,8 +102,8 @@ router.post(
       const user = req.user;
 
       if (
-        (validId(pid) && validId(cid)) ||
-        !(validIdFs(pid) && validIdFs(cid))
+        !(validId(pid) || validId(cid)) &&
+        !(validIdFs(pid) || validIdFs(cid))
       ) {
         return res.status(400).json({
           status: "error",
@@ -184,8 +184,8 @@ router.delete(
       const user = req.user;
 
       if (
-        (validId(pid) && validId(cid)) ||
-        !(validIdFs(pid) && validIdFs(cid))
+        !(validId(pid) || validId(cid)) &&
+        !(validIdFs(pid) || validIdFs(cid))
       ) {
         return res.status(400).json({
           status: "error",

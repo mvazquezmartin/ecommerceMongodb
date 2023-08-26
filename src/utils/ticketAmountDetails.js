@@ -3,29 +3,32 @@ const productService = require("../service/product.service");
 const amountAndDetails = async (cart) => {
   try {
     let amount = 0;
-
-    await cart.populate("products.product");
+    //await cart.populate("products.product");
+    const cartProducts = cart.products;
 
     const detailedItems = [];
     const notStock = [];
 
-    for (const item of cart.products) {
-      const prod = item.product;
-      const price = prod.price;
-      const quantity = item.quantity;
+    for (const item of cartProducts) {
+      const prodId = item.product;
 
+      const productData = await productService.getOneById(prodId);
+      const product = productData.data;
+
+      const price = product.price;
+      const quantity = item.quantity;
       amount += price * quantity;
 
-      const isStock = await productService.checkStock(prod._id, quantity);
+      const isStock = await productService.checkStock(prodId, quantity);
 
       if (isStock.status === "error") {
         notStock.push(isStock.data);
       } else {
-        const updateStock = prod.stock - quantity;
-        await productService.update(prod._id, { stock: updateStock });
+        const updateStock = product.stock - quantity;
+        await productService.update(product._id, { stock: updateStock });
 
         const detailedItem = {
-          product: prod.title,
+          product: product.title,
           quantity: quantity,
           unitPrice: price,
           totalPrice: quantity * price,

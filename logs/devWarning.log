@@ -11,3 +11,9 @@ error: Cast to ObjectId failed for value "0560d947-ff22-4ccb-a189-4515b0824866" 
 error: Cast to ObjectId failed for value "0560d947-ff22-4ccb-a189-4515b0824866" (type string) at path "_id" for model "carts"
 error: Cast to ObjectId failed for value "0560d947-ff22-4ccb-a189-4515b0824866" (type string) at path "_id" for model "carts"
 error: Cast to ObjectId failed for value "0560d947-ff22-4ccb-a189-4515b0824866" (type string) at path "_id" for model "carts"
+error: undefined
+error: undefined
+error: undefined
+error: tickets validation failed: amount: Cast to Number failed for value "NaN" (type number) at path "amount", detailedItems.0.totalPrice: Cast to Number failed for value "NaN" (type number) at path "totalPrice", detailedItems.1.totalPrice: Cast to Number failed for value "NaN" (type number) at path "totalPrice"
+error: tickets validation failed: amount: Cast to Number failed for value "NaN" (type number) at path "amount", detailedItems.0.totalPrice: Cast to Number failed for value "NaN" (type number) at path "totalPrice", detailedItems.1.totalPrice: Cast to Number failed for value "NaN" (type number) at path "totalPrice"
+error: tickets validation failed: amount: Cast to Number failed for value "NaN" (type number) at path "amount", detailedItems.0.totalPrice: Cast to Number failed for value "NaN" (type number) at path "totalPrice", detailedItems.1.totalPrice: Cast to Number failed for value "NaN" (type number) at path "totalPrice"

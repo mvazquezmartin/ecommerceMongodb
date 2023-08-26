@@ -55,7 +55,8 @@ class UsersManager {
         documents: [],
         recoveryToken: "",
         recoveryTokenExpires: "",
-      };      
+        last_connection: userInfo.last_connection,
+      };
 
       await this.readFile();
       this.users.push(newUser);
@@ -69,6 +70,16 @@ class UsersManager {
 
   async update(id, update) {
     try {
+      await this.readFile();
+
+      const userIndex = this.users.findIndex((user) => user._id === id);
+
+      this.users[userIndex] = { ...this.users[userIndex], ...update };
+
+      await this.saveFile();
+
+      const user = this.users[userIndex];
+      return user;
     } catch (error) {
       throw error;
     }

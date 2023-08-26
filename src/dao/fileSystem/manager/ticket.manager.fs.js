@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 class TicketsManager {
   constructor(path) {
     this.tickets = [];
-    this.paht = path;
+    this.path = path;
   }
 
   async create(ticket) {

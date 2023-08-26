@@ -4,9 +4,8 @@ const UserDTO = require("../dtos/user.dto");
 const userService = require("../service/users.service");
 const passport = require("passport");
 const authorization = require("../middlewares/authorization.middleware");
-const userError = require("../errorHandlers/user/user.error");
 const utilsMulter = require("../utils/multer.utils");
-const { validId } = require("../utils/idValidation");
+const { validId, validIdFs } = require("../utils/idValidation");
 const imgUploader = multer({
   storage: utilsMulter.profileStorage,
   fileFilter: utilsMulter.imgFileFilter,

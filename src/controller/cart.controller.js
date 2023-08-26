@@ -123,6 +123,7 @@ router.post(
         });
       }
       //cartError.status(cartData);
+      console.log(user.id_cart, cid);
 
       if (user.id_cart !== cid) {
         return res.status(401).json({
@@ -243,7 +244,7 @@ router.get(
       if (!(validId(cid) || validIdFs(cid))) {
         return res.status(400).json({
           status: "error",
-          message: "Some of the entered IDs are not valid",
+          message: "The cart ID is invalid",
           data: [],
         });
       }

@@ -6,10 +6,8 @@ const authorization = require("../middlewares/authorization.middleware");
 
 router.get("/", async (req, res) => {
   try {
+    const products = [];
     let user = null;
-    if (req.isAuthenticated()) {
-      user = req.user;
-    }
 
     const params = {
       category: req.query.category || null,
@@ -19,8 +17,6 @@ router.get("/", async (req, res) => {
       page: req.query.page,
       limit: req.query.limit,
     };
-    const products = [];
-    console.log(user);
 
     const data = await productService.filter(params);
     products.push(...data.data.docs);

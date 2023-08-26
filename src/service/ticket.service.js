@@ -29,7 +29,7 @@ const generate = async (cart, user) => {
   const data = new TicketDto(ticketData);
   await ticketManager.create(data);
 
-  await cartService.update(cart, { products: [] });
+  await cartService.update(cart._id, { products: [] });
 
   return {
     status: "success",

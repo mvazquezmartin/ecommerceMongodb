@@ -2,8 +2,8 @@ const axios = require("axios");
 const { Server } = require("socket.io");
 const chatService = require("../service/chat.service");
 
-const urlProducts =
-  "http://localhost:8080/api/products/?category=&priceMin=&priceMax=&sort=&limit=&page=";
+// const urlProducts =
+//   "http://localhost:8080/api/products/?category=&priceMin=&priceMax=&sort=&limit=&page=";
 
 const setUpSocket = (app) => {
   const io = new Server(app);

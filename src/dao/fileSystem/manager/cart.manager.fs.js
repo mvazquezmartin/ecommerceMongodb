@@ -20,7 +20,7 @@ class Cart {
     try {
       await this.readFile();
       const carrito = this.carts.find((cart) => cart._id === cid);
-      return carrito ? carrito : [];
+      return carrito;
     } catch (error) {
       throw error;
     }
@@ -48,7 +48,8 @@ class Cart {
       await this.readFile();
 
       const cartIndex = this.carts.findIndex((cart) => cart._id === cid);
-      this.carts[cartIndex] = update;
+
+      this.carts[cartIndex] = { ...this.carts[cartIndex], ...update };
 
       await this.saveFile();
 

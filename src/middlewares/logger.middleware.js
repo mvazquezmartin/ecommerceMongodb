@@ -1,4 +1,4 @@
-const logger = require("../logger/factory");
+const logger = require("../logger/logger.factory");
 
 const appLogger = (req, res, next) => {
   req.logger = logger;

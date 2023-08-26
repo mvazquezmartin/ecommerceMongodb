@@ -1,5 +1,5 @@
 const MessageAdapter = require("./msg.factory");
-const Dao = require("../dao/factory.dao");
+const Dao = require("../dao/dao.factory");
 const ProductManagerRepository = require("./product.repository");
 const MessageRepository = require("./message.repository");
 const CartManagerRepository = require("./cart.repository");

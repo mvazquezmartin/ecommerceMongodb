@@ -14,9 +14,9 @@ class ProductManager {
       const productStatusTrue = this.products.filter(
         (prod) => prod.status === true
       );
-      
+
       this.products = productStatusTrue;
-      
+
       return this.products;
     } catch (error) {
       throw error;
@@ -45,13 +45,18 @@ class ProductManager {
 
       let filteredProducts = [...this.products];
 
-      if (params.category !== null) {
+      if (params.category !== null && params.category !== "null") {
         filteredProducts = filteredProducts.filter(
           (product) => product.category === params.category
         );
       }
 
-      if (params.priceMin !== null && params.priceMax !== null) {
+      if (
+        params.priceMin !== null &&
+        params.priceMax !== null &&
+        params.priceMin !== "null" &&
+        params.priceMax !== "null"
+      ) {
         filteredProducts = filteredProducts.filter(
           (product) =>
             product.price >= parseInt(params.priceMin) &&
@@ -75,6 +80,9 @@ class ProductManager {
       const baseUrl = `?category=${params.category}&priceMin=${params.priceMin}&priceMax=${params.priceMax}&sort=${params.sort}`;
       const prevPage = page > 1 ? page - 1 : null;
       const nextPage = page < totalPages ? page + 1 : null;
+      const hasPrevPage = prevPage !== null;
+      const hasNextPage = nextPage !== null;
+      const pagingCounter = startIndex + 1; // Assuming 1-based index
       const prevPageLink = prevPage ? `${baseUrl}&page=${prevPage}` : null;
       const nextPageLink = nextPage ? `${baseUrl}&page=${nextPage}` : null;
 
@@ -84,6 +92,11 @@ class ProductManager {
         limit,
         totalPages,
         page,
+        pagingCounter,
+        hasPrevPage,
+        hasNextPage,
+        prevPage,
+        nextPage,
         prevPageLink,
         nextPageLink,
       };

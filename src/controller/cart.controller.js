@@ -72,9 +72,8 @@ router.get(
       //cartError.validId(cid);
 
       const response = await cartService.getOneById(cid);
-
       //cartError.status(response);
-
+      
       res.json({
         status: response.status,
         message: response.message,
